@@ -436,7 +436,9 @@ export default function HTPermitForm() {
     <div className="min-h-screen bg-[#f8fafc]">
       <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
         <div>
-          <h1 className="text-[20px] font-semibold">High Tension Line Work Permit Form</h1>
+          <h1 className="text-[20px] font-semibold">
+            High Tension Line Work Permit Form
+          </h1>
           <div className="text-sm text-gray-500">
             <p>
               <span className="text-sm">{`WCS-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`}</span>
@@ -445,11 +447,11 @@ export default function HTPermitForm() {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-          <div className="text-sm text-gray-700">
-            <p>
-              <strong>Work Permit Form Type:</strong>
-            </p>
-          </div>
+            <div className="text-sm text-gray-700">
+              <p>
+                <strong>Work Permit Form Type:</strong>
+              </p>
+            </div>
             <div className="w-[220px]">
               <Select
                 value={"highTension"}

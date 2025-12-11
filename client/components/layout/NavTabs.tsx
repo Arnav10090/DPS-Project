@@ -26,9 +26,7 @@ export default function NavTabs() {
       : role === "safety"
         ? "/safety-permit-details"
         : "/permit-details";
-  const baseTabs: TabItem[] = [
-    { to: "/", label: "Main Dashboard" },
-  ];
+  const baseTabs: TabItem[] = [{ to: "/", label: "Main Dashboard" }];
 
   const otherTabs: TabItem[] = [
     { to: "/overall-status", label: "Overall Permit Status" },
@@ -77,7 +75,11 @@ export default function NavTabs() {
 
   if (role !== "approver") {
     // Permit Details for non-approver roles (Requester, Safety Officer)
-    tabs.push({ to: permitDetailsPath, label: "Permit Details", hideForAdmin: true });
+    tabs.push({
+      to: permitDetailsPath,
+      label: "Permit Details",
+      hideForAdmin: true,
+    });
   }
 
   // Filter out tabs that should be hidden for specific roles
@@ -122,7 +124,8 @@ export default function NavTabs() {
                       t.to === "/approval-queue" &&
                       location.pathname.startsWith("/approver-permit-details");
 
-                    const active = isActive || manualActive || isApprovalQueueActive;
+                    const active =
+                      isActive || manualActive || isApprovalQueueActive;
                     return [
                       "inline-flex items-center rounded-full px-4 py-2 text-[14px] transition-colors",
                       active

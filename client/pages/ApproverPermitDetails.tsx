@@ -431,7 +431,528 @@ export default function ApproverPermitDetails() {
               </div>
 
               <div className="mt-6 space-y-4">
-                {/* Requester/Approver/Manager/Date fields remain here */}
+                {/* Top requester/approver fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Requester
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search user..."
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitRequester || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitRequester: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitRequester = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Approver 1
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Approver name or role"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitApprover1 || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitApprover1: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitApprover1 = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Approver 2
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Approver name or role"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitApprover2 || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitApprover2: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitApprover2 = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Safety Manager
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Safety Manager name/department"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.safetyManager || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ safetyManager: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.safetyManager = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Issue Date
+                    </div>
+                    <input
+                      type="date"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitIssueDate || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitIssueDate: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitIssueDate = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Expected Return Date
+                    </div>
+                    <input
+                      type="date"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.expectedReturnDate || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ expectedReturnDate: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.expectedReturnDate = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Comments from Requester — plain text only */}
+                <div className="mt-2 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments from Requester:
+                  </div>
+                  <div className="mt-2 space-y-1 text-sm">
+                    {form.requesterRequireUrgent && (
+                      <div>Require on urgent basis</div>
+                    )}
+                    {form.requesterSafetyManagerApproval && (
+                      <div>Safety Manager approval required</div>
+                    )}
+                    {(form.requesterPlannedShutdown ||
+                      form.requesterPlannedShutdownDate) && (
+                      <div>
+                        Planned shutdown on:{" "}
+                        {form.requesterPlannedShutdownDate || ""}
+                      </div>
+                    )}
+                    {(form.requesterCustomComments || []).map((it, idx) => (
+                      <div key={idx}>
+                        - {typeof it === "string" ? it : it.text}
+                      </div>
+                    ))}
+                    {!form.requesterRequireUrgent &&
+                      !form.requesterSafetyManagerApproval &&
+                      !(
+                        form.requesterPlannedShutdown ||
+                        form.requesterPlannedShutdownDate
+                      ) &&
+                      (form.requesterCustomComments || []).length === 0 && (
+                        <div className="text-gray-500">
+                          No comments from requester yet.
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                {/* Comments from Safety Officer — plain text only */}
+                <div className="mt-2 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments from Safety Officer:
+                  </div>
+                  <div className="mt-2 space-y-1 text-sm">
+                    {form.safetyFromOfficerRequireUrgent && (
+                      <div>Require on urgent basis</div>
+                    )}
+                    {form.safetyFromOfficerSafetyManagerApproval && (
+                      <div>Safety Manager approval required</div>
+                    )}
+                    {(form.safetyFromOfficerPlannedShutdown ||
+                      form.safetyFromOfficerPlannedShutdownDate) && (
+                      <div>
+                        Planned shutdown on:{" "}
+                        {form.safetyFromOfficerPlannedShutdownDate || ""}
+                      </div>
+                    )}
+                    {(form.safetyFromOfficerCustomComments || []).map(
+                      (it, idx) => (
+                        <div key={idx}>
+                          - {typeof it === "string" ? it : it.text}
+                        </div>
+                      ),
+                    )}
+                    {!form.safetyFromOfficerRequireUrgent &&
+                      !form.safetyFromOfficerSafetyManagerApproval &&
+                      !(
+                        form.safetyFromOfficerPlannedShutdown ||
+                        form.safetyFromOfficerPlannedShutdownDate
+                      ) &&
+                      (form.safetyFromOfficerCustomComments || []).length ===
+                        0 && (
+                        <div className="text-gray-500">
+                          No comments from safety officer yet.
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                {/* Specific Comments for Approver — approver can set for own role list */}
+                <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments for Requester:
+                  </div>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverRequireUrgent}
+                      onChange={(e) =>
+                        update({ approverRequireUrgent: e.target.checked })
+                      }
+                    />
+                    Require on urgent basis
+                  </label>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverSafetyManagerApproval}
+                      onChange={(e) =>
+                        update({
+                          approverSafetyManagerApproval: e.target.checked,
+                        })
+                      }
+                    />
+                    Safety Manager approval required
+                  </label>
+                  <div className="mt-2 text-md flex items-center gap-2">
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={!!form.approverPlannedShutdown}
+                        onChange={(e) =>
+                          update({ approverPlannedShutdown: e.target.checked })
+                        }
+                      />
+                      <span>Planned shutdown on:</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="rounded border px-2 py-1 text-sm"
+                      value={form.approverPlannedShutdownDate || ""}
+                      onChange={(e) =>
+                        update({ approverPlannedShutdownDate: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  {/* Approver custom comments */}
+                  <div className="mt-3">
+                    {/* Existing custom comments as checkbox list with delete */}
+                    <div className="mt-2 space-y-1">
+                      {(form.approverCustomComments || []).map(
+                        (item: any, idx: number) => {
+                          const text =
+                            typeof item === "string" ? item : item.text;
+                          const checked =
+                            typeof item === "string" ? false : !!item.checked;
+                          return (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between gap-2 w-full"
+                            >
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    const prev =
+                                      form.approverCustomComments || [];
+                                    const next = prev.map(
+                                      (it: any, i: number) => {
+                                        if (i !== idx) return it;
+                                        if (typeof it === "string")
+                                          return {
+                                            text: it,
+                                            checked: e.target.checked,
+                                          };
+                                        return {
+                                          ...it,
+                                          checked: e.target.checked,
+                                        };
+                                      },
+                                    );
+                                    update({ approverCustomComments: next });
+                                  }}
+                                />
+                                <span className="text-sm">{text}</span>
+                              </div>
+                              <div>
+                                <button
+                                  type="button"
+                                  aria-label={`Delete comment ${idx + 1}`}
+                                  onClick={() => {
+                                    const prev =
+                                      form.approverCustomComments || [];
+                                    const next = prev.filter(
+                                      (_: any, i: number) => i !== idx,
+                                    );
+                                    update({ approverCustomComments: next });
+                                  }}
+                                  className="text-xs text-red-600 hover:underline px-2 py-1"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+
+                    {/* Add new comment input */}
+                    <div className="text-xs font-medium mt-2">Add comment</div>
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Add comment"
+                        value={newApproverComment}
+                        onChange={(e) => setNewApproverComment(e.target.value)}
+                        className="flex-1 border rounded px-2 py-1"
+                      />
+                      <button
+                        className="px-3 py-1 rounded bg-white border text-sm"
+                        onClick={() => {
+                          const v = newApproverComment.trim();
+                          if (!v) return;
+                          const prev = form.approverCustomComments || [];
+                          const next = [...prev, { text: v, checked: false }];
+                          update({ approverCustomComments: next });
+                          setNewApproverComment("");
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Specific Comments for Safety Officer — set by approver */}
+                <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments for Safety Officer:
+                  </div>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverToSafetyRequireUrgent}
+                      onChange={(e) =>
+                        update({
+                          approverToSafetyRequireUrgent: e.target.checked,
+                        })
+                      }
+                    />
+                    Require on urgent basis
+                  </label>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverToSafetySafetyManagerApproval}
+                      onChange={(e) =>
+                        update({
+                          approverToSafetySafetyManagerApproval:
+                            e.target.checked,
+                        })
+                      }
+                    />
+                    Safety Manager approval required
+                  </label>
+                  <div className="mt-2 text-md flex items-center gap-2">
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={!!form.approverToSafetyPlannedShutdown}
+                        onChange={(e) =>
+                          update({
+                            approverToSafetyPlannedShutdown: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>Planned shutdown on:</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="rounded border px-2 py-1 text-sm"
+                      value={form.approverToSafetyPlannedShutdownDate || ""}
+                      onChange={(e) =>
+                        update({
+                          approverToSafetyPlannedShutdownDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  {/* Approver to Safety custom comments */}
+                  <div className="mt-3">
+                    <div className="mt-2 space-y-1">
+                      {(form.approverToSafetyCustomComments || []).map(
+                        (item: any, idx: number) => {
+                          const text =
+                            typeof item === "string" ? item : item.text;
+                          const checked =
+                            typeof item === "string" ? false : !!item.checked;
+                          return (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between gap-2 w-full"
+                            >
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    const prev =
+                                      form.approverToSafetyCustomComments || [];
+                                    const next = prev.map(
+                                      (it: any, i: number) => {
+                                        if (i !== idx) return it;
+                                        if (typeof it === "string")
+                                          return {
+                                            text: it,
+                                            checked: e.target.checked,
+                                          };
+                                        return {
+                                          ...it,
+                                          checked: e.target.checked,
+                                        };
+                                      },
+                                    );
+                                    update({
+                                      approverToSafetyCustomComments: next,
+                                    });
+                                  }}
+                                />
+                                <span className="text-sm">{text}</span>
+                              </div>
+                              <div>
+                                <button
+                                  type="button"
+                                  aria-label={`Delete comment ${idx + 1}`}
+                                  onClick={() => {
+                                    const prev =
+                                      form.approverToSafetyCustomComments || [];
+                                    const next = prev.filter(
+                                      (_: any, i: number) => i !== idx,
+                                    );
+                                    update({
+                                      approverToSafetyCustomComments: next,
+                                    });
+                                  }}
+                                  className="text-xs text-red-600 hover:underline px-2 py-1"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+
+                    <div className="text-xs font-medium mt-2">Add comment</div>
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Add comment"
+                        value={newApproverToSafetyComment}
+                        onChange={(e) =>
+                          setNewApproverToSafetyComment(e.target.value)
+                        }
+                        className="flex-1 border rounded px-2 py-1"
+                      />
+                      <button
+                        className="px-3 py-1 rounded bg-white border text-sm"
+                        onClick={() => {
+                          const v = newApproverToSafetyComment.trim();
+                          if (!v) return;
+                          const prev =
+                            form.approverToSafetyCustomComments || [];
+                          const next = [...prev, { text: v, checked: false }];
+                          update({ approverToSafetyCustomComments: next });
+                          setNewApproverToSafetyComment("");
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

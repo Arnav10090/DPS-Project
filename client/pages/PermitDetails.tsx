@@ -508,7 +508,8 @@ export default function CreatePermit() {
   const navigate = useNavigate();
   const [form, setForm] = useState<PermitForm>(() => DEFAULT_FORM());
   const [newRequesterComment, setNewRequesterComment] = useState("");
-  const [newRequesterSafetyComment, setNewRequesterSafetyComment] = useState("");
+  const [newRequesterSafetyComment, setNewRequesterSafetyComment] =
+    useState("");
   const [newApproverComment, setNewApproverComment] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
@@ -536,7 +537,10 @@ export default function CreatePermit() {
         requesterCustomComments: form.requesterCustomComments || [],
       };
       if (typeof window !== "undefined") {
-        localStorage.setItem("dps_requester_comments_work", JSON.stringify(payload));
+        localStorage.setItem(
+          "dps_requester_comments_work",
+          JSON.stringify(payload),
+        );
       }
     } catch {}
   }, [
@@ -552,7 +556,8 @@ export default function CreatePermit() {
     try {
       const payload = {
         requesterSafetyRequireUrgent: !!form.requesterSafetyRequireUrgent,
-        requesterSafetySafetyManagerApproval: !!form.requesterSafetySafetyManagerApproval,
+        requesterSafetySafetyManagerApproval:
+          !!form.requesterSafetySafetyManagerApproval,
         requesterSafetyPlannedShutdown: !!form.requesterSafetyPlannedShutdown,
         requesterSafetyPlannedShutdownDate:
           form.requesterSafetyPlannedShutdownDate || "",
@@ -561,7 +566,7 @@ export default function CreatePermit() {
       if (typeof window !== "undefined") {
         localStorage.setItem(
           "dps_requester_safety_comments_work",
-          JSON.stringify(payload)
+          JSON.stringify(payload),
         );
       }
     } catch {}
@@ -1261,11 +1266,16 @@ export default function CreatePermit() {
         requesterPlannedShutdownDate: form.requesterPlannedShutdownDate || "",
         requesterCustomComments: form.requesterCustomComments || [],
         // Include Safety-specific requester comments so SafetyOfficer can read them
-        requesterSafetyRequireUrgent: !!(form as any).requesterSafetyRequireUrgent,
-        requesterSafetySafetyManagerApproval: !!(form as any).requesterSafetySafetyManagerApproval,
-        requesterSafetyPlannedShutdown: !!(form as any).requesterSafetyPlannedShutdown,
-        requesterSafetyPlannedShutdownDate: (form as any).requesterSafetyPlannedShutdownDate || "",
-        requesterSafetyCustomComments: (form as any).requesterSafetyCustomComments || [],
+        requesterSafetyRequireUrgent: !!(form as any)
+          .requesterSafetyRequireUrgent,
+        requesterSafetySafetyManagerApproval: !!(form as any)
+          .requesterSafetySafetyManagerApproval,
+        requesterSafetyPlannedShutdown: !!(form as any)
+          .requesterSafetyPlannedShutdown,
+        requesterSafetyPlannedShutdownDate:
+          (form as any).requesterSafetyPlannedShutdownDate || "",
+        requesterSafetyCustomComments:
+          (form as any).requesterSafetyCustomComments || [],
       };
       localStorage.setItem("dps_requester_comments", JSON.stringify(payload));
     } catch (e) {
@@ -1567,253 +1577,2311 @@ export default function CreatePermit() {
         </div>
       </header>
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+        <ModernPagination
+          steps={steps}
+          currentStep={currentStep}
+          onStepChange={setCurrentStep}
+          showProgress={!isApprover}
+          allowClickNavigation={true}
+          variant="numbered"
+        />
 
-      <ModernPagination
-        steps={steps}
-        currentStep={currentStep}
-        onStepChange={setCurrentStep}
-        showProgress={!isApprover}
-        allowClickNavigation={true}
-        variant="numbered"
-      />
-
-      {/* Company header, matching HT header style (moved below progress) */}
-      <div className="bg-white mt-3">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img src="/placeholder.svg" alt="AM/NS INDIA logo" className="h-[60px] w-auto" />
-          </div>
-          <div className="text-center">
-            <div className="font-bold text-gray-900">ArcelorMittal Nippon Steel India Limited</div>
-            <div className="text-gray-600">HAZIRA</div>
-            <div className="mt-1 text-[20px] font-bold text-gray-900">
-              {form.permitDocType === "highTension"
-                ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
-                : form.permitDocType === "gasLine"
-                ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
-                : "PERMIT TO WORK"}
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 w-[240px]">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Certificate No.</label>
-              <input
-                value={form.certificateNumber || ""}
-                onChange={(e) => update({ certificateNumber: e.target.value })}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+        {/* Company header, matching HT header style (moved below progress) */}
+        <div className="bg-white mt-3">
+          <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg"
+                alt="AM/NS INDIA logo"
+                className="h-[60px] w-auto"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Permit No.</label>
-              <input
-                value={form.permitNumber || ""}
-                onChange={(e) => update({ permitNumber: e.target.value })}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-              />
+            <div className="text-center">
+              <div className="font-bold text-gray-900">
+                ArcelorMittal Nippon Steel India Limited
+              </div>
+              <div className="text-gray-600">HAZIRA</div>
+              <div className="mt-1 text-[20px] font-bold text-gray-900">
+                {form.permitDocType === "highTension"
+                  ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
+                  : form.permitDocType === "gasLine"
+                    ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
+                    : "PERMIT TO WORK"}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 w-[240px]">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Certificate No.
+                </label>
+                <input
+                  value={form.certificateNumber || ""}
+                  onChange={(e) =>
+                    update({ certificateNumber: e.target.value })
+                  }
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Permit No.
+                </label>
+                <input
+                  value={form.permitNumber || ""}
+                  onChange={(e) => update({ permitNumber: e.target.value })}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {showPreviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div
-            className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm"
-            onClick={handleClosePreview}
-          />
+        {showPreviewModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm"
+              onClick={handleClosePreview}
+            />
 
-          <div className="relative bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto p-6 z-10">
-            <div className="flex items-center justify-between mb-4" />
+            <div className="relative bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto p-6 z-10">
+              <div className="flex items-center justify-between mb-4" />
 
-            <PermitPreview form={form} />
+              <PermitPreview form={form} />
 
-            <div className="w-full hidden" style={{ maxWidth: 900 }}>
-              <div className="border border-black p-4 bg-white shadow-sm">
-                {/* Header */}
-                <div className="flex items-center justify-between border-b pb-2">
-                  <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 bg-gray-100 flex items-center justify-center text-sm border">
-                      Logo
-                    </div>
-                    <div className="text-center">
-                      <div className="text-sm font-semibold">
-                        ArcelorMittal Nippon Steel India Limited
+              <div className="w-full hidden" style={{ maxWidth: 900 }}>
+                <div className="border border-black p-4 bg-white shadow-sm">
+                  {/* Header */}
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <div className="flex items-center gap-4">
+                      <div className="w-20 h-20 bg-gray-100 flex items-center justify-center text-sm border">
+                        Logo
                       </div>
-                      <div className="text-xs">
-                        (Formerly Essar Steel India Limited)
+                      <div className="text-center">
+                        <div className="text-sm font-semibold">
+                          ArcelorMittal Nippon Steel India Limited
+                        </div>
+                        <div className="text-xs">
+                          (Formerly Essar Steel India Limited)
+                        </div>
+                        <div className="text-xs">Hazira</div>
                       </div>
-                      <div className="text-xs">Hazira</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs">AMNSIL/SAFE/F/01</div>
+                      <div className="text-xs">Rev. No. 13</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs">AMNSIL/SAFE/F/01</div>
-                    <div className="text-xs">Rev. No. 13</div>
-                  </div>
-                </div>
 
-                {/* Title area */}
-                <div className="text-center mt-3 mb-3">
-                  <div className="text-xl font-bold">PERMIT TO WORK</div>
-                </div>
+                  {/* Title area */}
+                  <div className="text-center mt-3 mb-3">
+                    <div className="text-xl font-bold">PERMIT TO WORK</div>
+                  </div>
 
-                {/* Main info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <div className="font-medium">Permit No.</div>
-                    <div className="mt-1">{form.permitNumber}</div>
-                  </div>
-                  <div>
-                    <div className="font-medium">Certificate No.</div>
-                    <div className="mt-1">{form.certificateNumber || ""}</div>
-                  </div>
-                </div>
-
-                {/* Application and work description */}
-                <div className="mt-4 text-sm">
-                  <div className="font-medium">
-                    APPLICATION AND WORK DESCRIPTION (Filled by Applicant):
-                  </div>
-                  <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {/* Main info */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <div className="text-xs text-gray-600">
-                        Planned Work Schedule
-                      </div>
-                      <div className="mt-1">
-                        From {form.startDate || ""} {form.startTime || ""} To{" "}
-                        {form.endDate || ""} {form.endTime || ""}
-                      </div>
+                      <div className="font-medium">Permit No.</div>
+                      <div className="mt-1">{form.permitNumber}</div>
                     </div>
                     <div>
-                      <div className="text-xs text-gray-600">
-                        Plant / Location
-                      </div>
-                      <div className="mt-1">
-                        {form.plant || ""} / {form.location || ""}
-                      </div>
+                      <div className="font-medium">Certificate No.</div>
+                      <div className="mt-1">{form.certificateNumber || ""}</div>
                     </div>
                   </div>
 
-                  <div className="mt-3">
-                    <div className="text-xs text-gray-600">
-                      Work Description
+                  {/* Application and work description */}
+                  <div className="mt-4 text-sm">
+                    <div className="font-medium">
+                      APPLICATION AND WORK DESCRIPTION (Filled by Applicant):
                     </div>
-                    <div className="mt-1 p-3 border rounded text-sm min-h-[60px]">
-                      {form.description || ""}
-                    </div>
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
-                    <div>
-                      <div className="text-xs text-gray-600">
-                        Equipment Name
-                      </div>
-                      <div className="mt-1">
-                        {form.equipmentName || form.equipment || ""}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-600">
-                        Equipment ID No.
-                      </div>
-                      <div className="mt-1">{form.equipmentId || ""}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-600">Applicant</div>
-                      <div className="mt-1">{form.applicantName || ""}</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Safety Measures table - render simplified grid */}
-                <div className="mt-4 text-sm">
-                  <div className="font-medium mb-2">
-                    SAFETY MEASURES TAKEN / SPECIAL PRECAUTIONS & POTENTIAL
-                    HAZARDS
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {(form.safetyTable || []).map((r, i) => (
-                      <div key={i} className="p-2 border rounded bg-gray-50">
-                        <div className="text-xs text-gray-600">{`Item ${i + 1}`}</div>
-                        <div className="text-sm">
-                          {r.left} {r.remark ? ` - ${r.remark}` : ""}{" "}
-                          {r.right ? ` - ${r.right}` : ""}
+                    <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div>
+                        <div className="text-xs text-gray-600">
+                          Planned Work Schedule
+                        </div>
+                        <div className="mt-1">
+                          From {form.startDate || ""} {form.startTime || ""} To{" "}
+                          {form.endDate || ""} {form.endTime || ""}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      <div>
+                        <div className="text-xs text-gray-600">
+                          Plant / Location
+                        </div>
+                        <div className="mt-1">
+                          {form.plant || ""} / {form.location || ""}
+                        </div>
+                      </div>
+                    </div>
 
-                {/* PPE and Certificates summary */}
-                <div className="mt-4 text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <div className="font-medium">PPE & Fire Precautions</div>
-                    <ul className="list-disc pl-5 mt-2 text-sm">
-                      {Object.entries(form.ppeItems || {}).map(
-                        ([k, v]: any) =>
-                          v.checked && (
-                            <li key={k}>
-                              {k}
-                              {v.remarks ? ` - ${v.remarks}` : ""}
-                            </li>
-                          ),
-                      )}
-                      {Object.entries(form.firePrecautions || {}).map(
-                        ([k, v]: any) =>
-                          v.checked && (
-                            <li key={k}>
-                              {k}
-                              {v.remarks ? ` - ${v.remarks}` : ""}
-                            </li>
-                          ),
-                      )}
-                    </ul>
-                  </div>
-                  <div>
-                    <div className="font-medium">Certificates</div>
-                    <ul className="list-disc pl-5 mt-2 text-sm">
-                      {Object.entries(form.certificates || {}).map(
-                        ([k, v]: any) =>
-                          v.checked && (
-                            <li key={k}>
-                              {k}
-                              {v.number ? ` - ${v.number}` : ""}
-                            </li>
-                          ),
-                      )}
-                    </ul>
-                  </div>
-                </div>
+                    <div className="mt-3">
+                      <div className="text-xs text-gray-600">
+                        Work Description
+                      </div>
+                      <div className="mt-1 p-3 border rounded text-sm min-h-[60px]">
+                        {form.description || ""}
+                      </div>
+                    </div>
 
-                {/* Permit returns & revalidations (condensed) */}
-                <div className="mt-4 text-sm">
-                  <div className="font-medium">Permit Re-validations</div>
-                  <div className="mt-2 grid grid-cols-1 gap-2">
-                    {((form.permitStatus || {}).revalidations || []).map(
-                      (rv: any, idx: number) => (
-                        <div
-                          key={idx}
-                          className="p-2 border rounded bg-gray-50"
-                        >
-                          <div className="text-xs text-gray-600">
-                            {rv.date} {rv.timeFrom} - {rv.timeTo}
-                          </div>
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                      <div>
+                        <div className="text-xs text-gray-600">
+                          Equipment Name
+                        </div>
+                        <div className="mt-1">
+                          {form.equipmentName || form.equipment || ""}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-600">
+                          Equipment ID No.
+                        </div>
+                        <div className="mt-1">{form.equipmentId || ""}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-600">Applicant</div>
+                        <div className="mt-1">{form.applicantName || ""}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Safety Measures table - render simplified grid */}
+                  <div className="mt-4 text-sm">
+                    <div className="font-medium mb-2">
+                      SAFETY MEASURES TAKEN / SPECIAL PRECAUTIONS & POTENTIAL
+                      HAZARDS
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {(form.safetyTable || []).map((r, i) => (
+                        <div key={i} className="p-2 border rounded bg-gray-50">
+                          <div className="text-xs text-gray-600">{`Item ${i + 1}`}</div>
                           <div className="text-sm">
-                            Applicant: {rv.applicant?.name || ""} | Holder:{" "}
-                            {rv.holder?.name || ""} | Authoriser:{" "}
-                            {rv.authoriser?.name || ""}
+                            {r.left} {r.remark ? ` - ${r.remark}` : ""}{" "}
+                            {r.right ? ` - ${r.right}` : ""}
                           </div>
                         </div>
-                      ),
-                    )}
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* PPE and Certificates summary */}
+                  <div className="mt-4 text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <div className="font-medium">PPE & Fire Precautions</div>
+                      <ul className="list-disc pl-5 mt-2 text-sm">
+                        {Object.entries(form.ppeItems || {}).map(
+                          ([k, v]: any) =>
+                            v.checked && (
+                              <li key={k}>
+                                {k}
+                                {v.remarks ? ` - ${v.remarks}` : ""}
+                              </li>
+                            ),
+                        )}
+                        {Object.entries(form.firePrecautions || {}).map(
+                          ([k, v]: any) =>
+                            v.checked && (
+                              <li key={k}>
+                                {k}
+                                {v.remarks ? ` - ${v.remarks}` : ""}
+                              </li>
+                            ),
+                        )}
+                      </ul>
+                    </div>
+                    <div>
+                      <div className="font-medium">Certificates</div>
+                      <ul className="list-disc pl-5 mt-2 text-sm">
+                        {Object.entries(form.certificates || {}).map(
+                          ([k, v]: any) =>
+                            v.checked && (
+                              <li key={k}>
+                                {k}
+                                {v.number ? ` - ${v.number}` : ""}
+                              </li>
+                            ),
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Permit returns & revalidations (condensed) */}
+                  <div className="mt-4 text-sm">
+                    <div className="font-medium">Permit Re-validations</div>
+                    <div className="mt-2 grid grid-cols-1 gap-2">
+                      {((form.permitStatus || {}).revalidations || []).map(
+                        (rv: any, idx: number) => (
+                          <div
+                            key={idx}
+                            className="p-2 border rounded bg-gray-50"
+                          >
+                            <div className="text-xs text-gray-600">
+                              {rv.date} {rv.timeFrom} - {rv.timeTo}
+                            </div>
+                            <div className="text-sm">
+                              Applicant: {rv.applicant?.name || ""} | Holder:{" "}
+                              {rv.holder?.name || ""} | Authoriser:{" "}
+                              {rv.authoriser?.name || ""}
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Safe Limits table and Important Instructions */}
+                  <div className="mt-6 border rounded p-4 bg-gray-50">
+                    <div className="text-sm font-semibold">
+                      SAFE LIMIT OF GASES / VAPOURS
+                    </div>
+                    <div className="mt-2 overflow-x-auto">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr className="bg-gray-800 text-white">
+                            <th className="text-left px-2 py-2 border border-gray-300">
+                              GAS
+                            </th>
+                            <th className="text-center px-2 py-2 border border-gray-300">
+                              SAFE CONCENTRATION FOR 8 HRS DURATION
+                            </th>
+                            <th className="text-center px-2 py-2 border border-gray-300">
+                              FLAMMABLE LIMITS (LOWER / UPPER)
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="odd:bg-white even:bg-gray-50">
+                            <td className="px-2 py-2 border">
+                              CARBON MONOXIDE
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              50 PPM
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              12.5% / 74.2%
+                            </td>
+                          </tr>
+                          <tr className="odd:bg-white even:bg-gray-50">
+                            <td className="px-2 py-2 border">HYDROGEN</td>
+                            <td className="px-2 py-2 border text-center">
+                              12.5% / 74.2%
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              4.0% / 75%
+                            </td>
+                          </tr>
+                          <tr className="odd:bg-white even:bg-gray-50">
+                            <td className="px-2 py-2 border">
+                              METHANE / NATURAL GAS
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              1000 PPM
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              5.9% / 14%
+                            </td>
+                          </tr>
+                          <tr className="odd:bg-white even:bg-gray-50">
+                            <td className="px-2 py-2 border">AMMONIA</td>
+                            <td className="px-2 py-2 border text-center">
+                              25 PPM
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              16% / 23%
+                            </td>
+                          </tr>
+                          <tr className="odd:bg-white even:bg-gray-50">
+                            <td className="px-2 py-2 border">CHLORINE</td>
+                            <td className="px-2 py-2 border text-center">
+                              1 PPM
+                            </td>
+                            <td className="px-2 py-2 border text-center">
+                              &nbsp;
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="mt-4">
+                      <div className="font-semibold">
+                        IMPORTANT INSTRUCTIONS:
+                      </div>
+                      <ol className="list-decimal list-inside mt-2 text-sm space-y-1 text-slate-700">
+                        <li>
+                          A Permit-to-Work or Certificate is normally valid for
+                          one shift only. However, it can be extended for a
+                          maximum of seven days more with appropriate renewals.
+                        </li>
+                        <li>
+                          Permit is not valid in the event, if conditions in the
+                          incident area become Hazardous from conditions not
+                          existing when this permit was issued or in the event
+                          of any Emergency / Fire.
+                        </li>
+                        <li>The authorized person should issue permit only.</li>
+                        <li>
+                          Work Instructions &amp; Protocol procedures are to be
+                          strictly followed.
+                        </li>
+                        <li>
+                          If job is not completed within the validity time
+                          period, the authorized person incorporating necessary
+                          changes must extend the permit.
+                        </li>
+                        <li>
+                          Permit must be returned by the applicant to the
+                          issuing authority after completion of the job.
+                        </li>
+                        <li>
+                          When more than one agency is working at a place the
+                          concerned agencies must co-ordinate among themselves
+                          for safety of the persons working there.
+                        </li>
+                        <li>
+                          No job should be attempted / to be done for which
+                          permit is not issued.
+                        </li>
+                        <li>
+                          Workers must be briefed about imminent dangers
+                          involved in the job.
+                        </li>
+                        <li>
+                          Persons working at height and Confined Space should be
+                          medically checked for acrophobia and claustrophobia
+                          respectively.
+                        </li>
+                        <li>
+                          Separate Certificates are to be taken for the jobs
+                          involving Excavation, Confined Space Entry, Working at
+                          Height, Radiography, Electrical, LOTO, Road Closure
+                          &amp; Heavy Lift jobs.
+                        </li>
+                        <li>
+                          Results for the Confined Space Entry to be
+                          periodically recorded in the Certificate.
+                        </li>
+                      </ol>
+
+                      <p className="mt-2 text-xs italic">
+                        NOTE: If the Applicant does not fill it, Authorizer can
+                        fill it up if necessary or write "NIL"
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Footer signatures */}
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div className="border p-3 text-center">
+                      <div className="text-xs text-gray-600">
+                        Permit Applicant
+                      </div>
+                      <div className="font-medium mt-2">
+                        {form.applicantName || ""}
+                      </div>
+                    </div>
+                    <div className="border p-3 text-center">
+                      <div className="text-xs text-gray-600">Permit Holder</div>
+                      <div className="font-medium mt-2">
+                        {(form.permitData as any)?.holder?.name || ""}
+                      </div>
+                    </div>
+                    <div className="border p-3 text-center">
+                      <div className="text-xs text-gray-600">Authoriser</div>
+                      <div className="font-medium mt-2">
+                        {form.authorizerName ||
+                          (form.permitData as any)?.authoriser?.contact?.name ||
+                          ""}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 text-xs text-gray-500 text-center">
+                    Generated preview — printable layout
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="rounded-xl border bg-white p-4 shadow-sm mt-6">
+          {/* Step Content */}
+          <div>
+            {effectiveStep === 0 && (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="space-y-4 pb-14">
+                  <div className="border rounded-lg p-4 bg-white">
+                    <div className="mb-2 font-medium">Permit Type</div>
+                    <div className="flex gap-2">
+                      <button
+                        className={`flex-1 p-3 rounded border ${form.permitType === "hot" ? "bg-blue-50 border-blue-300" : "bg-white"}`}
+                        onClick={() => update({ permitType: "hot" })}
+                      >
+                        <div className="font-semibold">Hot Work</div>
+                        <div className="text-xs text-gray-500">
+                          Use for welding, cutting, flame work
+                        </div>
+                      </button>
+                      <button
+                        className={`flex-1 p-3 rounded border ${form.permitType === "cold" ? "bg-blue-50 border-blue-300" : "bg-white"}`}
+                        onClick={() => update({ permitType: "cold" })}
+                      >
+                        <div className="font-semibold">Cold Work</div>
+                        <div className="text-xs text-gray-500">
+                          Non-thermal mechanical work
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="border rounded-lg p-4 bg-white grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <div>
+                      <label className="text-xs text-gray-500">
+                        Permit No. <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        required
+                        aria-required
+                        className="mt-1 w-full border rounded px-2 py-1"
+                        value={form.permitNumber}
+                        onChange={(e) =>
+                          update({ permitNumber: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-500">
+                        Certificate No. <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        required
+                        aria-required
+                        className="mt-1 w-full border rounded px-2 py-1"
+                        value={form.certificateNumber || ""}
+                        onChange={(e) =>
+                          update({ certificateNumber: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border rounded-lg p-4 bg-white">
+                    <div className="mb-2 font-medium flex items-center gap-1">
+                      <div className="block font-medium">
+                        <p className="m-0">Planned Work Schedule:</p>
+                      </div>
+                      <input
+                        className="border border-gray-200 rounded px-2 py-1 w-36 block font-normal"
+                        value={form.plannedWorkPrefix || ""}
+                        onChange={(e) =>
+                          update({ plannedWorkPrefix: e.target.value })
+                        }
+                        aria-label="Planned work schedule prefix"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+                        <div>
+                          <label className="text-xs text-gray-500">
+                            Date — Start <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            aria-required
+                            type="date"
+                            className="mt-1 w-full border rounded px-2 py-1"
+                            value={form.startDate || ""}
+                            onChange={(e) =>
+                              update({ startDate: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500">
+                            Date — End <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            aria-required
+                            type="date"
+                            className="mt-1 w-full border rounded px-2 py-1"
+                            value={form.endDate || ""}
+                            onChange={(e) =>
+                              update({ endDate: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500">
+                            Time — Start <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            aria-required
+                            type="time"
+                            className="mt-1 w-full border rounded px-2 py-1"
+                            value={form.startTime || ""}
+                            onChange={(e) =>
+                              update({ startTime: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500">
+                            Time — End <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            aria-required
+                            type="time"
+                            className="mt-1 w-full border rounded px-2 py-1"
+                            value={form.endTime || ""}
+                            onChange={(e) =>
+                              update({ endTime: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-2 text-sm text-gray-500">
+                      Ensure start and end times are correct. Conflicts will be
+                      highlighted on save.
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-gray-500">
+                          Plant <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          required
+                          aria-required
+                          className="mt-1 w-full border rounded px-2 py-1"
+                          value={form.plant || ""}
+                          onChange={(e) => update({ plant: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500">
+                          Location <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          required
+                          aria-required
+                          className="mt-1 w-full border rounded px-2 py-1"
+                          value={form.location || ""}
+                          onChange={(e) => update({ location: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-gray-500">
+                          Equipment Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          required
+                          aria-required
+                          className="mt-1 w-full border rounded px-2 py-1"
+                          value={form.equipmentName || ""}
+                          onChange={(e) =>
+                            update({ equipmentName: e.target.value })
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500">
+                          Equipment ID No.{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          required
+                          aria-required
+                          className="mt-1 w-full border rounded px-2 py-1"
+                          value={form.equipmentId || ""}
+                          onChange={(e) =>
+                            update({ equipmentId: e.target.value })
+                          }
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Safe Limits table and Important Instructions */}
-                <div className="mt-6 border rounded p-4 bg-gray-50">
-                  <div className="text-sm font-semibold">
+                <div className="space-y-4">
+                  <div className="border rounded-lg p-4 bg-white">
+                    <div className="mb-2 font-medium">
+                      Work Description <span className="text-red-500">*</span>
+                    </div>
+                    <div className="flex gap-2 mb-2">
+                      <button
+                        type="button"
+                        onClick={() => exec("bold")}
+                        className="px-2 py-1 rounded border"
+                      >
+                        B
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => exec("italic")}
+                        className="px-2 py-1 rounded border"
+                      >
+                        I
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => exec("insertUnorderedList")}
+                        className="px-2 py-1 rounded border"
+                      >
+                        • List
+                      </button>
+                    </div>
+                    <div
+                      ref={descRef}
+                      contentEditable
+                      onInput={() =>
+                        descRef.current &&
+                        update({
+                          descriptionHtml: descRef.current.innerHTML,
+                          description: descRef.current.innerText || "",
+                        })
+                      }
+                      className="min-h-[120px] border rounded p-3 bg-white"
+                      aria-label="Work description"
+                      suppressContentEditableWarning
+                    />
+
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="text-sm text-gray-500">
+                        Provide detailed description of work to be performed.
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {(form.description || "").length}/2000
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <label className="text-xs text-gray-500">
+                        Attachments
+                      </label>
+                      <div
+                        className="mt-2 border-dashed border-2 rounded p-4 text-center cursor-pointer"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <div className="text-sm">
+                          Drag & drop files here or click to upload
+                        </div>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          className="hidden"
+                          onChange={(e) => {
+                            const files = e.target.files;
+                            if (!files) return;
+                            const arr = Array.from(files);
+                            arr.forEach((f) => {
+                              const reader = new FileReader();
+                              reader.onload = () =>
+                                update({
+                                  attachments: [
+                                    ...form.attachments,
+                                    {
+                                      name: f.name,
+                                      url: String(reader.result),
+                                    },
+                                  ],
+                                });
+                              reader.readAsDataURL(f);
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="mt-2 space-y-1">
+                        {form.attachments.map((a, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center justify-between border rounded px-2 py-1"
+                          >
+                            <div className="truncate">{a.name}</div>
+                            <div className="flex items-center gap-2">
+                              <a
+                                className="text-sm text-blue-600"
+                                href={a.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Preview
+                              </a>
+                              <Button
+                                variant="ghost"
+                                className="text-sm"
+                                onClick={() => {
+                                  const copy = [...form.attachments];
+                                  copy.splice(i, 1);
+                                  update({ attachments: copy });
+                                }}
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-sm font-medium mb-2">
+                            Applicant Sign{" "}
+                            <span className="text-red-500">*</span>
+                          </div>
+                          <SignaturePad
+                            value={form.applicantSignature || null}
+                            onChange={(d) => update({ applicantSignature: d })}
+                          />
+                          <div className="mt-2">
+                            <label className="text-xs text-gray-500">
+                              Name <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              required
+                              aria-required
+                              className="mt-1 w-full border rounded px-2 py-1"
+                              value={form.applicantName || ""}
+                              onChange={(e) =>
+                                update({ applicantName: e.target.value })
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="text-sm font-medium mb-2">
+                            Authorisation for shut down Sign{" "}
+                            <span className="text-red-500">*</span>
+                          </div>
+                          <SignaturePad
+                            value={form.authorizerSignature || null}
+                            onChange={(d) => update({ authorizerSignature: d })}
+                          />
+                          <div className="mt-2">
+                            <label className="text-xs text-gray-500">
+                              Name <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              required
+                              aria-required
+                              className="mt-1 w-full border rounded px-2 py-1"
+                              value={form.authorizerName || ""}
+                              onChange={(e) =>
+                                update({ authorizerName: e.target.value })
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 1 && (
+              <div className="space-y-4" ref={safetyRef}>
+                <div className="bg-white rounded-xl shadow-lg p-4 relative">
+                  <div className="bg-gradient-to-r from-slate-50 to-slate-100 -mx-4 mt-0 mb-4 p-3 rounded-t-md flex items-center justify-between">
+                    <div className="text-sm font-semibold text-slate-700">
+                      Safety Measures & Precautions
+                    </div>
+                    <div className="text-sm text-slate-500">
+                      Rows:{" "}
+                      <span className="font-medium text-slate-700">
+                        {(form.safetyTable || []).length}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <div className="w-full">
+                      <div className="grid grid-cols-1 md:grid-cols-5">
+                        <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
+                          1
+                        </div>
+                        <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
+                          SAFETY MEASURES TAKEN
+                          <br />
+                          BY OPERATIONS
+                        </div>
+                        <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
+                          REMARKS
+                        </div>
+                        <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
+                          2
+                        </div>
+                        <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
+                          SPECIAL PRECAUTIONS &amp; POTENTIAL
+                          <br />
+                          HAZARDS
+                          <br />
+                          FILLED BY APPLICANT / AUTHORISER
+                        </div>
+                      </div>
+
+                      {(form.safetyTable || []).map((row, index) => {
+                        const leftNum = `1.${index + 1}`;
+                        const rightNum = `2.${index + 1}`;
+                        return (
+                          <div
+                            key={index}
+                            className="grid grid-cols-5 items-start gap-2 border-b border-slate-200 p-3 transition-opacity duration-200"
+                          >
+                            <div className="flex items-center justify-center text-sm font-semibold text-slate-700">
+                              {leftNum}
+                            </div>
+
+                            <div>
+                              <input
+                                aria-label={`Safety measure ${index + 1}`}
+                                type="text"
+                                value={row.left || ""}
+                                onChange={(e) =>
+                                  updateSafetyRow(index, "left", e.target.value)
+                                }
+                                className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+
+                            <div>
+                              <input
+                                aria-label={`Remarks ${index + 1}`}
+                                type="text"
+                                value={row.remark || ""}
+                                onChange={(e) =>
+                                  updateSafetyRow(
+                                    index,
+                                    "remark",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+
+                            <div className="flex items-center justify-center text-sm font-semibold text-slate-700">
+                              {rightNum}
+                            </div>
+
+                            <div className="relative">
+                              {index === 0 && (
+                                <div>
+                                  <label className="text-xs text-slate-500 font-medium">
+                                    HIRAC No.
+                                  </label>
+                                  <input
+                                    aria-label="HIRAC No"
+                                    type="text"
+                                    value={form.hiracNo || ""}
+                                    onChange={(e) =>
+                                      update({ hiracNo: e.target.value })
+                                    }
+                                    className="mt-1 w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                                  />
+                                </div>
+                              )}
+                              {index === 1 && (
+                                <div>
+                                  <label className="text-xs text-slate-500 font-medium">
+                                    SOP No.
+                                  </label>
+                                  <input
+                                    aria-label="SOP No"
+                                    type="text"
+                                    value={form.sopNo || ""}
+                                    onChange={(e) =>
+                                      update({ sopNo: e.target.value })
+                                    }
+                                    className="mt-1 w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                                  />
+                                </div>
+                              )}
+                              {index === 2 && (
+                                <div>
+                                  <label className="text-xs text-slate-500 font-medium">
+                                    TBT Conducted
+                                  </label>
+                                  <input
+                                    aria-label="TBT Conducted"
+                                    type="text"
+                                    value={form.tbtConducted || ""}
+                                    onChange={(e) =>
+                                      update({ tbtConducted: e.target.value })
+                                    }
+                                    className="mt-1 w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                                  />
+                                </div>
+                              )}
+                              {index > 2 && (
+                                <input
+                                  aria-label={`Special precautions ${index + 1}`}
+                                  type="text"
+                                  value={row.right || ""}
+                                  onChange={(e) =>
+                                    updateSafetyRow(
+                                      index,
+                                      "right",
+                                      e.target.value,
+                                    )
+                                  }
+                                  className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                                />
+                              )}
+
+                              {index > 2 && (
+                                <button
+                                  type="button"
+                                  aria-label={`Remove row ${index + 1}`}
+                                  onClick={() => {
+                                    const table = (
+                                      form.safetyTable || []
+                                    ).slice();
+                                    table.splice(index, 1);
+                                    update({ safetyTable: table });
+                                  }}
+                                  className="absolute -right-2 -top-2 w-6 h-6 rounded-full text-sm flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition"
+                                >
+                                  ×
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      <button
+                        type="button"
+                        aria-label="Add row"
+                        onClick={() => {
+                          const table = (form.safetyTable || []).slice();
+                          table.push({ left: "", remark: "", right: "" });
+                          update({ safetyTable: table });
+                        }}
+                        className="absolute right-4 bottom-4 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 2 && (
+              <div className="space-y-4">
+                <div className="bg-white rounded-2xl shadow-xl p-4 relative">
+                  <div className="w-full text-center text-white font-semibold text-lg rounded-t-2xl bg-gradient-to-r from-blue-900 to-blue-700 py-4">
+                    PPE, FIRE PRECAUTIONS, GAS TEST &amp; ASSOCIATED
+                    CERTIFICATES TO BE FILLED BY PERMIT APPLICANT
+                  </div>
+
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-sm text-slate-700 font-medium">
+                        Checklist
+                      </div>
+                      <div className="text-sm text-slate-500">
+                        Completion:{" "}
+                        <span className="font-semibold text-blue-600">
+                          {step3Progress}%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <div className="w-full border border-slate-200 rounded-md">
+                        <div className="grid grid-cols-1 md:grid-cols-5 text-sm font-semibold text-white">
+                          <div className="bg-slate-50 text-slate-700 p-3 border-r border-slate-200">
+                            #
+                          </div>
+                          <div className="bg-white text-slate-700 p-3 border-r border-slate-200">
+                            3A - PPE &amp; OTHERS
+                          </div>
+                          <div className="bg-slate-50 text-slate-700 p-3 border-r border-slate-200">
+                            REMARKS
+                          </div>
+                          <div className="bg-white text-slate-700 p-3 border-r border-slate-200">
+                            3B - FIRE PRECAUTIONS &amp; GAS TESTS
+                          </div>
+                          <div className="bg-slate-50 text-slate-700 p-3">
+                            REMARKS
+                          </div>
+                        </div>
+
+                        {[
+                          {
+                            key: "eyeProtection",
+                            leftLabel: "Eye, Face & Ear Protection",
+                            rightKey: "fireWatcher",
+                            rightLabel: "Competent Fire Watcher",
+                          },
+                          {
+                            key: "headProtection",
+                            leftLabel: "Head Protection",
+                            rightKey: "fireExtinguishers",
+                            rightLabel: "Fire Extinguishers",
+                          },
+                          {
+                            key: "bodyProtection",
+                            leftLabel:
+                              "Body Protection, Full Body Safety Harness",
+                            rightKey: "pressureFireHose",
+                            rightLabel: "Pressure Fire Hose",
+                          },
+                          {
+                            key: "respiratoryProtection",
+                            leftLabel: "Respiratory Protection (BA Set)",
+                            rightKey: "fireTender",
+                            rightLabel: "Fire Tender",
+                          },
+                          {
+                            key: "legProtection",
+                            leftLabel: "Leg Protection",
+                            rightKey: "screenOffArea",
+                            rightLabel: "Screen off Area",
+                          },
+                          {
+                            key: "portableCOMeter",
+                            leftLabel: "Portable CO Meter",
+                            rightKey: "explosiveTest",
+                            rightLabel: "Explosive Test",
+                          },
+                          {
+                            key: "roofLadder",
+                            leftLabel: "Roof Ladder/Gas Cutting Sets",
+                            rightKey: "carbonMonoxideTest",
+                            rightLabel: "Carbon Monoxide Test",
+                          },
+                          {
+                            key: "safeAccess",
+                            leftLabel:
+                              "Safe means of access/Scaffolding/Enclosures",
+                            rightKey: "oxygenTest",
+                            rightLabel: "Oxygen Test",
+                          },
+                        ].map((r, idx) => (
+                          <div
+                            key={r.key}
+                            className={`grid grid-cols-5 items-center border-t border-slate-200 ${idx % 2 === 0 ? "bg-slate-50" : "bg-white"}`}
+                            style={{
+                              gridTemplateColumns: "10% 25% 20% 25% 20%",
+                            }}
+                          >
+                            <div className="p-3 text-center text-slate-700">{`3.${idx + 1}`}</div>
+                            <div className="p-3 flex items-center gap-3">
+                              <input
+                                id={`ppe-${r.key}`}
+                                type="checkbox"
+                                checked={
+                                  (form.ppeItems &&
+                                    (form.ppeItems as any)[r.key] &&
+                                    (form.ppeItems as any)[r.key].checked) ||
+                                  false
+                                }
+                                onChange={() => togglePPE(r.key)}
+                                className="w-5 h-5 border-2 border-slate-300 rounded-md transition-all duration-200 checked:bg-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30"
+                              />
+                              <label
+                                htmlFor={`ppe-${r.key}`}
+                                className="text-slate-700"
+                              >
+                                {r.leftLabel}
+                              </label>
+                            </div>
+                            <div className="p-3">
+                              <textarea
+                                aria-label={`ppe-remarks-${r.key}`}
+                                value={
+                                  (form.ppeItems as any)?.[r.key]?.remarks || ""
+                                }
+                                onChange={(e) =>
+                                  updatePPERemarks(r.key, e.target.value)
+                                }
+                                onInput={(e) => {
+                                  const t = e.target as HTMLTextAreaElement;
+                                  t.style.height = "auto";
+                                  t.style.height = `${t.scrollHeight}px`;
+                                }}
+                                placeholder="Enter remarks..."
+                                className="w-full min-h-[44px] resize-none border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+                            <div className="p-3 flex items-center gap-3">
+                              <input
+                                id={`fire-${r.rightKey}`}
+                                type="checkbox"
+                                checked={
+                                  (form.firePrecautions &&
+                                    (form.firePrecautions as any)[r.rightKey] &&
+                                    (form.firePrecautions as any)[r.rightKey]
+                                      .checked) ||
+                                  false
+                                }
+                                onChange={() => toggleFire(r.rightKey)}
+                                className="w-5 h-5 border-2 border-slate-300 rounded-md transition-all duration-200 checked:bg-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30"
+                              />
+                              <label
+                                htmlFor={`fire-${r.rightKey}`}
+                                className="text-slate-700"
+                              >
+                                {r.rightLabel}
+                              </label>
+                            </div>
+                            <div className="p-3">
+                              <textarea
+                                aria-label={`fire-remarks-${r.rightKey}`}
+                                value={
+                                  (form.firePrecautions as any)?.[r.rightKey]
+                                    ?.remarks || ""
+                                }
+                                onChange={(e) =>
+                                  updateFireRemarks(r.rightKey, e.target.value)
+                                }
+                                onInput={(e) => {
+                                  const t = e.target as HTMLTextAreaElement;
+                                  t.style.height = "auto";
+                                  t.style.height = `${t.scrollHeight}px`;
+                                }}
+                                placeholder="Enter remarks..."
+                                className="w-full min-h-[44px] resize-none border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+                          </div>
+                        ))}
+
+                        {(form.customItems || []).map((c, i) => (
+                          <div
+                            key={c.id}
+                            className={`grid grid-cols-5 items-center border-t border-slate-200 ${(8 + i) % 2 === 0 ? "bg-slate-50" : "bg-white"}`}
+                            style={{
+                              gridTemplateColumns: "10% 25% 20% 25% 20%",
+                            }}
+                          >
+                            <div className="p-3 text-center text-slate-700">{`3.${9 + i}`}</div>
+                            <div className="p-3">
+                              <input
+                                aria-label={`custom-ppe-${c.id}`}
+                                type="text"
+                                value={c.ppeItem}
+                                onChange={(e) =>
+                                  updateCustomItem(
+                                    c.id,
+                                    "ppeItem",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Enter custom PPE item..."
+                                className="w-full border border-slate-200 bg-slate-100 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+                            <div className="p-3">
+                              <input
+                                aria-label={`custom-ppe-remarks-${c.id}`}
+                                type="text"
+                                value={c.ppeRemarks}
+                                onChange={(e) =>
+                                  updateCustomItem(
+                                    c.id,
+                                    "ppeRemarks",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Enter remarks..."
+                                className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+                            <div className="p-3">
+                              <input
+                                aria-label={`custom-fire-${c.id}`}
+                                type="text"
+                                value={c.fireItem}
+                                onChange={(e) =>
+                                  updateCustomItem(
+                                    c.id,
+                                    "fireItem",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Enter custom fire precaution..."
+                                className="w-full border border-slate-200 bg-slate-100 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                            </div>
+                            <div className="p-3 flex items-center gap-2">
+                              <input
+                                aria-label={`custom-fire-remarks-${c.id}`}
+                                type="text"
+                                value={c.fireRemarks}
+                                onChange={(e) =>
+                                  updateCustomItem(
+                                    c.id,
+                                    "fireRemarks",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Enter remarks..."
+                                className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
+                              />
+                              <button
+                                type="button"
+                                aria-label={`Remove custom ${c.id}`}
+                                onClick={() => removeCustomItem(c.id)}
+                                className="text-red-600 hover:text-white hover:bg-red-600 rounded-full w-7 h-7 flex items-center justify-center ml-2 transition"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="relative mt-4">
+                      <button
+                        type="button"
+                        aria-label="Add custom row"
+                        onClick={addCustomItem}
+                        className="absolute right-0 -bottom-6 bg-blue-600 text-white w-12 h-12 rounded-full shadow-xl flex items-center justify-center hover:scale-105 transition-transform"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 3 && (
+              <div className="space-y-4">
+                <div className="bg-white rounded-xl shadow-lg p-6 relative">
+                  <div className="w-full text-left text-slate-800 font-bold text-lg rounded-t-md bg-gradient-to-r from-slate-100 to-slate-200 py-4 px-4">
+                    3C - CERTIFICATES
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="text-sm text-slate-700 font-medium">
+                      Certificates
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={checkAllCertificates}
+                        className="text-sm px-3 py-1 bg-blue-600 text-white rounded-md"
+                      >
+                        Check All
+                      </button>
+                      <button
+                        type="button"
+                        onClick={uncheckAllCertificates}
+                        className="text-sm px-3 py-1 border border-slate-200 rounded-md text-slate-700"
+                      >
+                        Uncheck All
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 overflow-x-auto">
+                    <div className="w-full border border-slate-200 rounded-md">
+                      <div className="grid grid-cols-1 md:grid-cols-12 text-sm font-bold text-slate-800">
+                        <div className="p-4 border-b border-r border-slate-200 md:col-span-5">
+                          3C - CERTIFICATES
+                        </div>
+                        <div className="p-4 border-b border-slate-200">
+                          CERTIFICATE NOS.
+                        </div>
+                      </div>
+
+                      {[
+                        { key: "confinedSpace", label: "Confined Space Entry" },
+                        { key: "loto", label: "LOTO (Lock Out Tag Out)" },
+                        { key: "electrical", label: "Electrical" },
+                        { key: "workingAtHeight", label: "Working at Height" },
+                        { key: "excavation", label: "Excavation" },
+                        { key: "heavyLift", label: "Heavy Lift" },
+                        { key: "roadClosure", label: "Road Closure" },
+                        { key: "radiography", label: "Radiography" },
+                        { key: "gasLine", label: "Gas Line" },
+                        { key: "highTension", label: "High Tension" },
+                      ].map((c, idx) => {
+                        const cert = (form.certificates as any) || {};
+                        const data = cert[c.key] || {
+                          checked: false,
+                          number: "",
+                        };
+                        return (
+                          <div
+                            key={c.key}
+                            className={`grid grid-cols-12 items-center ${idx % 2 === 0 ? "bg-white" : "bg-slate-50"} border-b border-slate-200`}
+                            style={{ gridTemplateColumns: "40% 60%" }}
+                          >
+                            <div
+                              className={`p-4 flex items-center gap-3 ${data.checked ? "bg-blue-50" : ""}`}
+                            >
+                              <input
+                                id={`cert-${c.key}`}
+                                type="checkbox"
+                                checked={data.checked}
+                                onChange={() => toggleCertificate(c.key)}
+                                className="w-5 h-5 border-2 border-slate-300 rounded-md transition-all duration-200 checked:bg-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30"
+                                aria-label={`${c.label} checkbox`}
+                              />
+                              <label
+                                htmlFor={`cert-${c.key}`}
+                                className="text-sm text-slate-800"
+                              >
+                                {c.label}
+                              </label>
+                            </div>
+
+                            <div className="p-4">
+                              <input
+                                id={`cert-${c.key}-num`}
+                                type="text"
+                                value={data.number || ""}
+                                onChange={(e) =>
+                                  updateCertificateNumber(c.key, e.target.value)
+                                }
+                                placeholder="Enter certificate number..."
+                                className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 placeholder-slate-400 text-sm transition"
+                                aria-label={`${c.label} certificate number`}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 4 && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
+                    <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
+                      PERMIT APPLICANT
+                    </div>
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          SIGN
+                        </div>
+                        <SignaturePad
+                          value={
+                            (form.permitData as any)?.applicant?.signature ||
+                            null
+                          }
+                          onChange={saveApplicantSignature}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          NAME
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            (form.permitData as any)?.applicant?.name || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField("applicant.name", e.target.value)
+                          }
+                          placeholder="Full name"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Contact No.
+                        </label>
+                        <input
+                          type="tel"
+                          value={
+                            (form.permitData as any)?.applicant?.contactNo || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "applicant.contactNo",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Phone number"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
+                    <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
+                      PERMIT HOLDER
+                    </div>
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          SIGN
+                        </div>
+                        <SignaturePad
+                          value={
+                            (form.permitData as any)?.holder?.signature || null
+                          }
+                          onChange={saveHolderSignature}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          NAME
+                        </label>
+                        <input
+                          type="text"
+                          value={(form.permitData as any)?.holder?.name || ""}
+                          onChange={(e) =>
+                            updatePermitField("holder.name", e.target.value)
+                          }
+                          placeholder="Full name"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Contact No.
+                        </label>
+                        <input
+                          type="tel"
+                          value={
+                            (form.permitData as any)?.holder?.contactNo || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "holder.contactNo",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Phone number"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
+                  <div className="text-center bg-gradient-to-r from-blue-700 to-blue-800 text-white font-bold py-3 rounded-md">
+                    PERMIT AUTHORISER
+                  </div>
+
+                  <div className="mt-4">
+                    <div className="text-sm text-slate-800 font-semibold">
+                      PERMIT VALIDITY
+                    </div>
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-4 gap-3">
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Date From
+                        </label>
+                        <input
+                          type="date"
+                          value={
+                            (form.permitData as any)?.authoriser?.validity
+                              ?.dateFrom || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.validity.dateFrom",
+                              e.target.value,
+                            )
+                          }
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Date To
+                        </label>
+                        <input
+                          type="date"
+                          value={
+                            (form.permitData as any)?.authoriser?.validity
+                              ?.dateTo || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.validity.dateTo",
+                              e.target.value,
+                            )
+                          }
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Time From
+                        </label>
+                        <input
+                          type="time"
+                          value={
+                            (form.permitData as any)?.authoriser?.validity
+                              ?.timeFrom || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.validity.timeFrom",
+                              e.target.value,
+                            )
+                          }
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Time To
+                        </label>
+                        <input
+                          type="time"
+                          value={
+                            (form.permitData as any)?.authoriser?.validity
+                              ?.timeTo || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.validity.timeTo",
+                              e.target.value,
+                            )
+                          }
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          SIGN
+                        </div>
+                        <SignaturePad
+                          value={
+                            (form.permitData as any)?.authoriser?.contact
+                              ?.sign || null
+                          }
+                          onChange={saveAuthoriserSign}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          NAME
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            (form.permitData as any)?.authoriser?.contact
+                              ?.name || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.contact.name",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Full name"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          CONTACT NO.
+                        </label>
+                        <input
+                          type="tel"
+                          value={
+                            (form.permitData as any)?.authoriser?.contact
+                              ?.contactNo || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.contact.contactNo",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Phone number"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          AUTHORISER NOMINEE SIGN
+                        </div>
+                        <SignaturePad
+                          value={
+                            (form.permitData as any)?.authoriser?.nominee
+                              ?.sign || null
+                          }
+                          onChange={saveNomineeSign}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          NAME
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            (form.permitData as any)?.authoriser?.nominee
+                              ?.name || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.nominee.name",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Full name"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          SAP ID
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            (form.permitData as any)?.authoriser?.nominee
+                              ?.sapId || ""
+                          }
+                          onChange={(e) =>
+                            updatePermitField(
+                              "authoriser.nominee.sapId",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="SAP ID"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 5 && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+                    <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
+                      4A - PERMIT RETURN - WORK COMPLETE
+                    </div>
+                    <div className="mt-4 space-y-4">
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          4.1 - Permit Return by Permit Holder
+                        </div>
+                        <div className="mt-2 grid grid-cols-1 gap-2">
+                          <div>
+                            <div className="text-sm text-slate-700 font-medium">
+                              SIGN
+                            </div>
+                            <SignaturePad
+                              value={
+                                (form.permitStatus as any)?.workComplete?.holder
+                                  ?.sign || null
+                              }
+                              onChange={(d) =>
+                                updatePermitStatusField(
+                                  "workComplete.holder.sign",
+                                  d,
+                                )
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm text-slate-700 font-medium">
+                              NAME
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                (form.permitStatus as any)?.workComplete?.holder
+                                  ?.name || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.holder.name",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="date"
+                              value={
+                                (form.permitStatus as any)?.workComplete?.holder
+                                  ?.date || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.holder.date",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                            <input
+                              type="time"
+                              value={
+                                (form.permitStatus as any)?.workComplete?.holder
+                                  ?.time || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.holder.time",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          4.2 - Permit Return by Applicant
+                        </div>
+                        <div className="mt-2 grid grid-cols-1 gap-2">
+                          <div>
+                            <div className="text-sm text-slate-700 font-medium">
+                              SIGN
+                            </div>
+                            <SignaturePad
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.applicant?.sign || null
+                              }
+                              onChange={(d) =>
+                                updatePermitStatusField(
+                                  "workComplete.applicant.sign",
+                                  d,
+                                )
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm text-slate-700 font-medium">
+                              NAME
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.applicant?.name || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.applicant.name",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="date"
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.applicant?.date || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.applicant.date",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                            <input
+                              type="time"
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.applicant?.time || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.applicant.time",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-sm text-slate-700 font-medium">
+                          4.3 - Permit Accepted by Authoriser
+                        </div>
+                        <div className="mt-2 grid grid-cols-1 gap-2">
+                          <div>
+                            <div className="text-sm text-slate-700 font-medium">
+                              SIGN
+                            </div>
+                            <SignaturePad
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.authoriser?.sign || null
+                              }
+                              onChange={(d) =>
+                                updatePermitStatusField(
+                                  "workComplete.authoriser.sign",
+                                  d,
+                                )
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm text-slate-700 font-medium">
+                              NAME
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.authoriser?.name || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.authoriser.name",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="date"
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.authoriser?.date || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.authoriser.date",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                            <input
+                              type="time"
+                              value={
+                                (form.permitStatus as any)?.workComplete
+                                  ?.authoriser?.time || ""
+                              }
+                              onChange={(e) =>
+                                updatePermitStatusField(
+                                  "workComplete.authoriser.time",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+                    <div className="text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-md">
+                      4B - PERMIT RETURN - WNC
+                    </div>
+                    <div className="mt-4 space-y-4">
+                      {["holder", "applicant", "authoriser"].map((k) => (
+                        <div key={k}>
+                          <div className="text-sm text-slate-700 font-medium">{`${k === "holder" ? "5.1" : k === "applicant" ? "5.2" : "5.3"} - ${k.charAt(0).toUpperCase() + k.slice(1)} Return`}</div>
+                          <div className="mt-2 grid grid-cols-1 gap-2">
+                            <div>
+                              <div className="text-sm text-slate-700 font-medium">
+                                SIGN
+                              </div>
+                              <SignaturePad
+                                value={
+                                  (form.permitStatus as any)?.workNotComplete?.[
+                                    k
+                                  ]?.sign || null
+                                }
+                                onChange={(d) =>
+                                  updatePermitStatusField(
+                                    `workNotComplete.${k}.sign`,
+                                    d,
+                                  )
+                                }
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm text-slate-700 font-medium">
+                                NAME
+                              </label>
+                              <input
+                                type="text"
+                                value={
+                                  (form.permitStatus as any)?.workNotComplete?.[
+                                    k
+                                  ]?.name || ""
+                                }
+                                onChange={(e) =>
+                                  updatePermitStatusField(
+                                    `workNotComplete.${k}.name`,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <input
+                                type="date"
+                                value={
+                                  (form.permitStatus as any)?.workNotComplete?.[
+                                    k
+                                  ]?.date || ""
+                                }
+                                onChange={(e) =>
+                                  updatePermitStatusField(
+                                    `workNotComplete.${k}.date`,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                              />
+                              <input
+                                type="time"
+                                value={
+                                  (form.permitStatus as any)?.workNotComplete?.[
+                                    k
+                                  ]?.time || ""
+                                }
+                                onChange={(e) =>
+                                  updatePermitStatusField(
+                                    `workNotComplete.${k}.time`,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+                    <div className="text-center bg-gradient-to-r from-red-500 to-red-600 text-white font-bold py-3 rounded-md">
+                      PERMIT CANCELLATION
+                    </div>
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <label className="text-sm text-slate-700 font-medium">
+                          Reason
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            (form.permitStatus as any)?.cancellation?.reason ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            updatePermitStatusField(
+                              "cancellation.reason",
+                              e.target.value,
+                            )
+                          }
+                          className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        <div>
+                          <div className="text-sm text-slate-700 font-medium">
+                            SIGN
+                          </div>
+                          <SignaturePad
+                            value={
+                              (form.permitStatus as any)?.cancellation?.sign ||
+                              null
+                            }
+                            onChange={(d) =>
+                              updatePermitStatusField("cancellation.sign", d)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm text-slate-700 font-medium">
+                            NAME
+                          </label>
+                          <input
+                            type="text"
+                            value={
+                              (form.permitStatus as any)?.cancellation?.name ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePermitStatusField(
+                                "cancellation.name",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="date"
+                            value={
+                              (form.permitStatus as any)?.cancellation?.date ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePermitStatusField(
+                                "cancellation.date",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                          />
+                          <input
+                            type="time"
+                            value={
+                              (form.permitStatus as any)?.cancellation?.time ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePermitStatusField(
+                                "cancellation.time",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+                  <div className="text-center bg-gradient-to-r from-slate-700 to-slate-800 text-white font-bold py-3 rounded-md">
+                    PERMIT RE-VALIDATION
+                  </div>
+                  <div className="mt-4 overflow-x-auto">
+                    <div className="min-w-[1000px] md:min-w-0 border border-slate-200 rounded-md">
+                      <div className="grid grid-cols-9 text-sm font-semibold text-slate-700">
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words md:col-span-1">
+                          DATE
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          Time From
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          Time To
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          APPLICANT
+                          <br />
+                          SIGN
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          APPLICANT
+                          <br />
+                          NAME
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          HOLDER
+                          <br />
+                          SIGN
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          HOLDER
+                          <br />
+                          NAME
+                        </div>
+                        <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          AUTHORISER
+                          <br />
+                          SIGN
+                        </div>
+                        <div className="p-3 border-b border-slate-200 text-xs md:text-sm whitespace-normal break-words">
+                          AUTHORISER
+                          <br />
+                          NAME
+                        </div>
+                      </div>
+
+                      {((form.permitStatus as any)?.revalidations || []).map(
+                        (r: any) => (
+                          <div
+                            key={r.id}
+                            className="grid grid-cols-9 items-center border-t border-slate-200 p-2"
+                          >
+                            <div className="p-2 md:p-2">
+                              <input
+                                type="date"
+                                value={r.date || ""}
+                                onChange={(e) =>
+                                  updateRevalidationRow(
+                                    r.id,
+                                    "date",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <input
+                                type="time"
+                                value={r.timeFrom || ""}
+                                onChange={(e) =>
+                                  updateRevalidationRow(
+                                    r.id,
+                                    "timeFrom",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <input
+                                type="time"
+                                value={r.timeTo || ""}
+                                onChange={(e) =>
+                                  updateRevalidationRow(
+                                    r.id,
+                                    "timeTo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <SignaturePad
+                                value={r.applicant?.sign || null}
+                                onChange={(d) =>
+                                  updateRevalidationRow(r.id, "applicant", {
+                                    ...r.applicant,
+                                    sign: d,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <input
+                                type="text"
+                                value={r.applicant?.name || ""}
+                                onChange={(e) =>
+                                  updateRevalidationRow(r.id, "applicant", {
+                                    ...r.applicant,
+                                    name: e.target.value,
+                                  })
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <SignaturePad
+                                value={r.holder?.sign || null}
+                                onChange={(d) =>
+                                  updateRevalidationRow(r.id, "holder", {
+                                    ...r.holder,
+                                    sign: d,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <input
+                                type="text"
+                                value={r.holder?.name || ""}
+                                onChange={(e) =>
+                                  updateRevalidationRow(r.id, "holder", {
+                                    ...r.holder,
+                                    name: e.target.value,
+                                  })
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
+                              />
+                            </div>
+                            <div className="p-2 md:p-2">
+                              <SignaturePad
+                                value={r.authoriser?.sign || null}
+                                onChange={(d) =>
+                                  updateRevalidationRow(r.id, "authoriser", {
+                                    ...r.authoriser,
+                                    sign: d,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="p-2 md:p-2 flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={r.authoriser?.name || ""}
+                                onChange={(e) =>
+                                  updateRevalidationRow(r.id, "authoriser", {
+                                    ...r.authoriser,
+                                    name: e.target.value,
+                                  })
+                                }
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
+                              />
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={addRevalidationRow}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                    >
+                      + Add Row
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 6 && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6 mx-auto max-w-3xl">
+                  <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md shadow-sm">
                     SAFE LIMIT OF GASES / VAPOURS
                   </div>
-                  <div className="mt-2 overflow-x-auto">
+
+                  <div className="mt-4 overflow-x-auto">
                     <table className="w-full border-collapse text-sm">
                       <thead>
                         <tr className="bg-gray-800 text-white">
@@ -1824,55 +3892,63 @@ export default function CreatePermit() {
                             SAFE CONCENTRATION FOR 8 HRS DURATION
                           </th>
                           <th className="text-center px-2 py-2 border border-gray-300">
-                            FLAMMABLE LIMITS (LOWER / UPPER)
+                            FLAMMABLE LIMITS
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr className="odd:bg-white even:bg-gray-50">
-                          <td className="px-2 py-2 border">CARBON MONOXIDE</td>
-                          <td className="px-2 py-2 border text-center">
+                        <tr className="odd:bg-white even:bg-gray-50 text-sm">
+                          <td className="px-2 py-2 border border-gray-300">
+                            CARBON MONOXIDE
+                          </td>
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             50 PPM
                           </td>
-                          <td className="px-2 py-2 border text-center">
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             12.5% / 74.2%
                           </td>
                         </tr>
-                        <tr className="odd:bg-white even:bg-gray-50">
-                          <td className="px-2 py-2 border">HYDROGEN</td>
-                          <td className="px-2 py-2 border text-center">
-                            12.5% / 74.2%
+                        <tr className="odd:bg-white even:bg-gray-50 text-sm">
+                          <td className="px-2 py-2 border border-gray-300">
+                            HYDROGEN
                           </td>
-                          <td className="px-2 py-2 border text-center">
+                          <td className="px-2 py-2 border border-gray-300 text-center">
+                            -
+                          </td>
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             4.0% / 75%
                           </td>
                         </tr>
-                        <tr className="odd:bg-white even:bg-gray-50">
-                          <td className="px-2 py-2 border">
+                        <tr className="odd:bg-white even:bg-gray-50 text-sm">
+                          <td className="px-2 py-2 border border-gray-300">
                             METHANE / NATURAL GAS
                           </td>
-                          <td className="px-2 py-2 border text-center">
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             1000 PPM
                           </td>
-                          <td className="px-2 py-2 border text-center">
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             5.9% / 14%
                           </td>
                         </tr>
-                        <tr className="odd:bg-white even:bg-gray-50">
-                          <td className="px-2 py-2 border">AMMONIA</td>
-                          <td className="px-2 py-2 border text-center">
+                        <tr className="odd:bg-white even:bg-gray-50 text-sm">
+                          <td className="px-2 py-2 border border-gray-300">
+                            AMMONIA
+                          </td>
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             25 PPM
                           </td>
-                          <td className="px-2 py-2 border text-center">
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             16% / 23%
                           </td>
                         </tr>
-                        <tr className="odd:bg-white even:bg-gray-50">
-                          <td className="px-2 py-2 border">CHLORINE</td>
-                          <td className="px-2 py-2 border text-center">
+                        <tr className="odd:bg-white even:bg-gray-50 text-sm">
+                          <td className="px-2 py-2 border border-gray-300">
+                            CHLORINE
+                          </td>
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             1 PPM
                           </td>
-                          <td className="px-2 py-2 border text-center">
+                          <td className="px-2 py-2 border border-gray-300 text-center">
                             &nbsp;
                           </td>
                         </tr>
@@ -1880,8 +3956,10 @@ export default function CreatePermit() {
                     </table>
                   </div>
 
-                  <div className="mt-4">
-                    <div className="font-semibold">IMPORTANT INSTRUCTIONS:</div>
+                  <div className="mt-6">
+                    <div className="text-sm font-semibold">
+                      IMPORTANT INSTRUCTIONS:
+                    </div>
                     <ol className="list-decimal list-inside mt-2 text-sm space-y-1 text-slate-700">
                       <li>
                         A Permit-to-Work or Certificate is normally valid for
@@ -1943,2554 +4021,630 @@ export default function CreatePermit() {
                       fill it up if necessary or write "NIL"
                     </p>
                   </div>
-                </div>
 
-                {/* Footer signatures */}
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                  <div className="border p-3 text-center">
-                    <div className="text-xs text-gray-600">
-                      Permit Applicant
-                    </div>
-                    <div className="font-medium mt-2">
-                      {form.applicantName || ""}
-                    </div>
-                  </div>
-                  <div className="border p-3 text-center">
-                    <div className="text-xs text-gray-600">Permit Holder</div>
-                    <div className="font-medium mt-2">
-                      {(form.permitData as any)?.holder?.name || ""}
-                    </div>
-                  </div>
-                  <div className="border p-3 text-center">
-                    <div className="text-xs text-gray-600">Authoriser</div>
-                    <div className="font-medium mt-2">
-                      {form.authorizerName ||
-                        (form.permitData as any)?.authoriser?.contact?.name ||
-                        ""}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-3 text-xs text-gray-500 text-center">
-                  Generated preview — printable layout
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="rounded-xl border bg-white p-4 shadow-sm mt-6">
-        {/* Step Content */}
-        <div>
-          {effectiveStep === 0 && (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="space-y-4 pb-14">
-                <div className="border rounded-lg p-4 bg-white">
-                  <div className="mb-2 font-medium">Permit Type</div>
-                  <div className="flex gap-2">
-                    <button
-                      className={`flex-1 p-3 rounded border ${form.permitType === "hot" ? "bg-blue-50 border-blue-300" : "bg-white"}`}
-                      onClick={() => update({ permitType: "hot" })}
-                    >
-                      <div className="font-semibold">Hot Work</div>
-                      <div className="text-xs text-gray-500">
-                        Use for welding, cutting, flame work
-                      </div>
-                    </button>
-                    <button
-                      className={`flex-1 p-3 rounded border ${form.permitType === "cold" ? "bg-blue-50 border-blue-300" : "bg-white"}`}
-                      onClick={() => update({ permitType: "cold" })}
-                    >
-                      <div className="font-semibold">Cold Work</div>
-                      <div className="text-xs text-gray-500">
-                        Non-thermal mechanical work
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="border rounded-lg p-4 bg-white grid grid-cols-1 gap-3 md:grid-cols-2">
-                  <div>
-                    <label className="text-xs text-gray-500">
-                      Permit No. <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      required
-                      aria-required
-                      className="mt-1 w-full border rounded px-2 py-1"
-                      value={form.permitNumber}
-                      onChange={(e) => update({ permitNumber: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500">
-                      Certificate No. <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      required
-                      aria-required
-                      className="mt-1 w-full border rounded px-2 py-1"
-                      value={form.certificateNumber || ""}
-                      onChange={(e) =>
-                        update({ certificateNumber: e.target.value })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="border rounded-lg p-4 bg-white">
-                  <div className="mb-2 font-medium flex items-center gap-1">
-                    <div className="block font-medium">
-                      <p className="m-0">Planned Work Schedule:</p>
-                    </div>
-                    <input
-                      className="border border-gray-200 rounded px-2 py-1 w-36 block font-normal"
-                      value={form.plannedWorkPrefix || ""}
-                      onChange={(e) =>
-                        update({ plannedWorkPrefix: e.target.value })
-                      }
-                      aria-label="Planned work schedule prefix"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 gap-2">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-                      <div>
-                        <label className="text-xs text-gray-500">
-                          Date — Start <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          required
-                          aria-required
-                          type="date"
-                          className="mt-1 w-full border rounded px-2 py-1"
-                          value={form.startDate || ""}
-                          onChange={(e) =>
-                            update({ startDate: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-500">
-                          Date — End <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          required
-                          aria-required
-                          type="date"
-                          className="mt-1 w-full border rounded px-2 py-1"
-                          value={form.endDate || ""}
-                          onChange={(e) => update({ endDate: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-500">
-                          Time — Start <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          required
-                          aria-required
-                          type="time"
-                          className="mt-1 w-full border rounded px-2 py-1"
-                          value={form.startTime || ""}
-                          onChange={(e) =>
-                            update({ startTime: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-500">
-                          Time — End <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          required
-                          aria-required
-                          type="time"
-                          className="mt-1 w-full border rounded px-2 py-1"
-                          value={form.endTime || ""}
-                          onChange={(e) => update({ endTime: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-2 text-sm text-gray-500">
-                    Ensure start and end times are correct. Conflicts will be
-                    highlighted on save.
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs text-gray-500">
-                        Plant <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        required
-                        aria-required
-                        className="mt-1 w-full border rounded px-2 py-1"
-                        value={form.plant || ""}
-                        onChange={(e) => update({ plant: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs text-gray-500">
-                        Location <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        required
-                        aria-required
-                        className="mt-1 w-full border rounded px-2 py-1"
-                        value={form.location || ""}
-                        onChange={(e) => update({ location: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs text-gray-500">
-                        Equipment Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        required
-                        aria-required
-                        className="mt-1 w-full border rounded px-2 py-1"
-                        value={form.equipmentName || ""}
-                        onChange={(e) =>
-                          update({ equipmentName: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs text-gray-500">
-                        Equipment ID No. <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        required
-                        aria-required
-                        className="mt-1 w-full border rounded px-2 py-1"
-                        value={form.equipmentId || ""}
-                        onChange={(e) =>
-                          update({ equipmentId: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="border rounded-lg p-4 bg-white">
-                  <div className="mb-2 font-medium">
-                    Work Description <span className="text-red-500">*</span>
-                  </div>
-                  <div className="flex gap-2 mb-2">
-                    <button
-                      type="button"
-                      onClick={() => exec("bold")}
-                      className="px-2 py-1 rounded border"
-                    >
-                      B
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => exec("italic")}
-                      className="px-2 py-1 rounded border"
-                    >
-                      I
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => exec("insertUnorderedList")}
-                      className="px-2 py-1 rounded border"
-                    >
-                      • List
-                    </button>
-                  </div>
-                  <div
-                    ref={descRef}
-                    contentEditable
-                    onInput={() =>
-                      descRef.current &&
-                      update({
-                        descriptionHtml: descRef.current.innerHTML,
-                        description: descRef.current.innerText || "",
-                      })
-                    }
-                    className="min-h-[120px] border rounded p-3 bg-white"
-                    aria-label="Work description"
-                    suppressContentEditableWarning
-                  />
-
-                  <div className="mt-2 flex items-center justify-between">
-                    <div className="text-sm text-gray-500">
-                      Provide detailed description of work to be performed.
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {(form.description || "").length}/2000
-                    </div>
-                  </div>
-
-                  <div className="mt-3">
-                    <label className="text-xs text-gray-500">Attachments</label>
-                    <div
-                      className="mt-2 border-dashed border-2 rounded p-4 text-center cursor-pointer"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <div className="text-sm">
-                        Drag & drop files here or click to upload
-                      </div>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        multiple
-                        className="hidden"
-                        onChange={(e) => {
-                          const files = e.target.files;
-                          if (!files) return;
-                          const arr = Array.from(files);
-                          arr.forEach((f) => {
-                            const reader = new FileReader();
-                            reader.onload = () =>
-                              update({
-                                attachments: [
-                                  ...form.attachments,
-                                  { name: f.name, url: String(reader.result) },
-                                ],
-                              });
-                            reader.readAsDataURL(f);
-                          });
-                        }}
-                      />
-                    </div>
-                    <div className="mt-2 space-y-1">
-                      {form.attachments.map((a, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-between border rounded px-2 py-1"
-                        >
-                          <div className="truncate">{a.name}</div>
-                          <div className="flex items-center gap-2">
-                            <a
-                              className="text-sm text-blue-600"
-                              href={a.url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Preview
-                            </a>
-                            <Button
-                              variant="ghost"
-                              className="text-sm"
-                              onClick={() => {
-                                const copy = [...form.attachments];
-                                copy.splice(i, 1);
-                                update({ attachments: copy });
-                              }}
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-sm font-medium mb-2">
-                          Applicant Sign <span className="text-red-500">*</span>
-                        </div>
-                        <SignaturePad
-                          value={form.applicantSignature || null}
-                          onChange={(d) => update({ applicantSignature: d })}
-                        />
-                        <div className="mt-2">
-                          <label className="text-xs text-gray-500">
-                            Name <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            required
-                            aria-required
-                            className="mt-1 w-full border rounded px-2 py-1"
-                            value={form.applicantName || ""}
-                            onChange={(e) =>
-                              update({ applicantName: e.target.value })
-                            }
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <div className="text-sm font-medium mb-2">
-                          Authorisation for shut down Sign{" "}
-                          <span className="text-red-500">*</span>
-                        </div>
-                        <SignaturePad
-                          value={form.authorizerSignature || null}
-                          onChange={(d) => update({ authorizerSignature: d })}
-                        />
-                        <div className="mt-2">
-                          <label className="text-xs text-gray-500">
-                            Name <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            required
-                            aria-required
-                            className="mt-1 w-full border rounded px-2 py-1"
-                            value={form.authorizerName || ""}
-                            onChange={(e) =>
-                              update({ authorizerName: e.target.value })
-                            }
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {effectiveStep === 1 && (
-            <div className="space-y-4" ref={safetyRef}>
-              <div className="bg-white rounded-xl shadow-lg p-4 relative">
-                <div className="bg-gradient-to-r from-slate-50 to-slate-100 -mx-4 mt-0 mb-4 p-3 rounded-t-md flex items-center justify-between">
-                  <div className="text-sm font-semibold text-slate-700">
-                    Safety Measures & Precautions
-                  </div>
-                  <div className="text-sm text-slate-500">
-                    Rows:{" "}
-                    <span className="font-medium text-slate-700">
-                      {(form.safetyTable || []).length}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <div className="w-full">
-                    <div className="grid grid-cols-1 md:grid-cols-5">
-                      <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
-                        1
-                      </div>
-                      <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
-                        SAFETY MEASURES TAKEN
-                        <br />
-                        BY OPERATIONS
-                      </div>
-                      <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
-                        REMARKS
-                      </div>
-                      <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
-                        2
-                      </div>
-                      <div className="p-3 text-center font-semibold text-slate-700 border border-slate-200 bg-slate-50">
-                        SPECIAL PRECAUTIONS &amp; POTENTIAL
-                        <br />
-                        HAZARDS
-                        <br />
-                        FILLED BY APPLICANT / AUTHORISER
-                      </div>
-                    </div>
-
-                    {(form.safetyTable || []).map((row, index) => {
-                      const leftNum = `1.${index + 1}`;
-                      const rightNum = `2.${index + 1}`;
-                      return (
-                        <div
-                          key={index}
-                          className="grid grid-cols-5 items-start gap-2 border-b border-slate-200 p-3 transition-opacity duration-200"
-                        >
-                          <div className="flex items-center justify-center text-sm font-semibold text-slate-700">
-                            {leftNum}
-                          </div>
-
-                          <div>
-                            <input
-                              aria-label={`Safety measure ${index + 1}`}
-                              type="text"
-                              value={row.left || ""}
-                              onChange={(e) =>
-                                updateSafetyRow(index, "left", e.target.value)
-                              }
-                              className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                            />
-                          </div>
-
-                          <div>
-                            <input
-                              aria-label={`Remarks ${index + 1}`}
-                              type="text"
-                              value={row.remark || ""}
-                              onChange={(e) =>
-                                updateSafetyRow(index, "remark", e.target.value)
-                              }
-                              className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                            />
-                          </div>
-
-                          <div className="flex items-center justify-center text-sm font-semibold text-slate-700">
-                            {rightNum}
-                          </div>
-
-                          <div className="relative">
-                            {index === 0 && (
-                              <div>
-                                <label className="text-xs text-slate-500 font-medium">
-                                  HIRAC No.
-                                </label>
-                                <input
-                                  aria-label="HIRAC No"
-                                  type="text"
-                                  value={form.hiracNo || ""}
-                                  onChange={(e) =>
-                                    update({ hiracNo: e.target.value })
-                                  }
-                                  className="mt-1 w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                                />
-                              </div>
-                            )}
-                            {index === 1 && (
-                              <div>
-                                <label className="text-xs text-slate-500 font-medium">
-                                  SOP No.
-                                </label>
-                                <input
-                                  aria-label="SOP No"
-                                  type="text"
-                                  value={form.sopNo || ""}
-                                  onChange={(e) =>
-                                    update({ sopNo: e.target.value })
-                                  }
-                                  className="mt-1 w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                                />
-                              </div>
-                            )}
-                            {index === 2 && (
-                              <div>
-                                <label className="text-xs text-slate-500 font-medium">
-                                  TBT Conducted
-                                </label>
-                                <input
-                                  aria-label="TBT Conducted"
-                                  type="text"
-                                  value={form.tbtConducted || ""}
-                                  onChange={(e) =>
-                                    update({ tbtConducted: e.target.value })
-                                  }
-                                  className="mt-1 w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                                />
-                              </div>
-                            )}
-                            {index > 2 && (
-                              <input
-                                aria-label={`Special precautions ${index + 1}`}
-                                type="text"
-                                value={row.right || ""}
-                                onChange={(e) =>
-                                  updateSafetyRow(
-                                    index,
-                                    "right",
-                                    e.target.value,
-                                  )
-                                }
-                                className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                              />
-                            )}
-
-                            {index > 2 && (
-                              <button
-                                type="button"
-                                aria-label={`Remove row ${index + 1}`}
-                                onClick={() => {
-                                  const table = (
-                                    form.safetyTable || []
-                                  ).slice();
-                                  table.splice(index, 1);
-                                  update({ safetyTable: table });
-                                }}
-                                className="absolute -right-2 -top-2 w-6 h-6 rounded-full text-sm flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition"
-                              >
-                                ×
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    <button
-                      type="button"
-                      aria-label="Add row"
-                      onClick={() => {
-                        const table = (form.safetyTable || []).slice();
-                        table.push({ left: "", remark: "", right: "" });
-                        update({ safetyTable: table });
-                      }}
-                      className="absolute right-4 bottom-4 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {effectiveStep === 2 && (
-            <div className="space-y-4">
-              <div className="bg-white rounded-2xl shadow-xl p-4 relative">
-                <div className="w-full text-center text-white font-semibold text-lg rounded-t-2xl bg-gradient-to-r from-blue-900 to-blue-700 py-4">
-                  PPE, FIRE PRECAUTIONS, GAS TEST &amp; ASSOCIATED CERTIFICATES
-                  TO BE FILLED BY PERMIT APPLICANT
-                </div>
-
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="text-sm text-slate-700 font-medium">
-                      Checklist
-                    </div>
-                    <div className="text-sm text-slate-500">
-                      Completion:{" "}
-                      <span className="font-semibold text-blue-600">
-                        {step3Progress}%
+                  <div className="mt-6 text-center">
+                    <div className="border p-4 rounded font-semibold text-center">
+                      BEFORE AUTHORISING THE PERMIT
+                      <br />
+                      <span className="block mt-2">
+                        ENSURE THAT SITE IS SAFE TO WORK &amp; SAFE WORKING
+                        CONDITIONS ARE MAINTAINED
                       </span>
                     </div>
                   </div>
 
-                  <div className="overflow-x-auto">
-                    <div className="w-full border border-slate-200 rounded-md">
-                      <div className="grid grid-cols-1 md:grid-cols-5 text-sm font-semibold text-white">
-                        <div className="bg-slate-50 text-slate-700 p-3 border-r border-slate-200">
-                          #
+                  <div className="mt-6">
+                    <div className="text-sm font-semibold">Legend</div>
+                    <div className="mt-2 grid grid-cols-3 gap-4 text-sm">
+                      <div className="flex items-start gap-2">
+                        <div className="text-green-600 font-bold">✓</div>
+                        <div>Measures Taken</div>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="text-red-600 font-bold">X</div>
+                        <div>Measures Not Required</div>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="font-semibold">NA</div>
+                        <div>Not Applicable</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {effectiveStep === 7 && (
+              <StepSection title="Details of such permit">
+                <div className="space-y-6">
+                  <div className="bg-white rounded-lg shadow-md border border-slate-200 p-4 sm:p-6">
+                    <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
+                      Details of such permit
+                    </div>
+                    <div className="mt-4 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-xs text-gray-500">
+                            Permit Requester
+                          </div>
+                          <div className="mt-1 flex items-center gap-2">
+                            <input
+                              placeholder="Search user..."
+                              className="w-full rounded border px-3 py-2 text-sm"
+                            />
+                          </div>
                         </div>
-                        <div className="bg-white text-slate-700 p-3 border-r border-slate-200">
-                          3A - PPE &amp; OTHERS
+
+                        <div>
+                          <div className="text-xs text-gray-500">
+                            Permit Approver 1
+                          </div>
+                          <input
+                            aria-label="Permit Approver 1"
+                            value={form.permitApprover1 || ""}
+                            onChange={(e) =>
+                              update({ permitApprover1: e.target.value })
+                            }
+                            className="w-full mt-1 rounded border px-3 py-2 text-sm"
+                            placeholder="Approver name or role"
+                          />
                         </div>
-                        <div className="bg-slate-50 text-slate-700 p-3 border-r border-slate-200">
-                          REMARKS
+
+                        <div>
+                          <div className="text-xs text-gray-500">
+                            Permit Approver 2
+                          </div>
+                          <input
+                            aria-label="Permit Approver 2"
+                            value={form.permitApprover2 || ""}
+                            onChange={(e) =>
+                              update({ permitApprover2: e.target.value })
+                            }
+                            className="w-full mt-1 rounded border px-3 py-2 text-sm"
+                            placeholder="Approver name or role"
+                          />
                         </div>
-                        <div className="bg-white text-slate-700 p-3 border-r border-slate-200">
-                          3B - FIRE PRECAUTIONS &amp; GAS TESTS
-                        </div>
-                        <div className="bg-slate-50 text-slate-700 p-3">
-                          REMARKS
+
+                        <div>
+                          <div className="text-xs text-gray-500">
+                            Safety Manager
+                          </div>
+                          <input
+                            aria-label="Safety Manager"
+                            value={form.safetyManager || ""}
+                            onChange={(e) =>
+                              update({ safetyManager: e.target.value })
+                            }
+                            className="w-full mt-1 rounded border px-3 py-2 text-sm"
+                            placeholder="Safety Manager name/department"
+                          />
                         </div>
                       </div>
 
-                      {[
-                        {
-                          key: "eyeProtection",
-                          leftLabel: "Eye, Face & Ear Protection",
-                          rightKey: "fireWatcher",
-                          rightLabel: "Competent Fire Watcher",
-                        },
-                        {
-                          key: "headProtection",
-                          leftLabel: "Head Protection",
-                          rightKey: "fireExtinguishers",
-                          rightLabel: "Fire Extinguishers",
-                        },
-                        {
-                          key: "bodyProtection",
-                          leftLabel:
-                            "Body Protection, Full Body Safety Harness",
-                          rightKey: "pressureFireHose",
-                          rightLabel: "Pressure Fire Hose",
-                        },
-                        {
-                          key: "respiratoryProtection",
-                          leftLabel: "Respiratory Protection (BA Set)",
-                          rightKey: "fireTender",
-                          rightLabel: "Fire Tender",
-                        },
-                        {
-                          key: "legProtection",
-                          leftLabel: "Leg Protection",
-                          rightKey: "screenOffArea",
-                          rightLabel: "Screen off Area",
-                        },
-                        {
-                          key: "portableCOMeter",
-                          leftLabel: "Portable CO Meter",
-                          rightKey: "explosiveTest",
-                          rightLabel: "Explosive Test",
-                        },
-                        {
-                          key: "roofLadder",
-                          leftLabel: "Roof Ladder/Gas Cutting Sets",
-                          rightKey: "carbonMonoxideTest",
-                          rightLabel: "Carbon Monoxide Test",
-                        },
-                        {
-                          key: "safeAccess",
-                          leftLabel:
-                            "Safe means of access/Scaffolding/Enclosures",
-                          rightKey: "oxygenTest",
-                          rightLabel: "Oxygen Test",
-                        },
-                      ].map((r, idx) => (
-                        <div
-                          key={r.key}
-                          className={`grid grid-cols-5 items-center border-t border-slate-200 ${idx % 2 === 0 ? "bg-slate-50" : "bg-white"}`}
-                          style={{ gridTemplateColumns: "10% 25% 20% 25% 20%" }}
-                        >
-                          <div className="p-3 text-center text-slate-700">{`3.${idx + 1}`}</div>
-                          <div className="p-3 flex items-center gap-3">
-                            <input
-                              id={`ppe-${r.key}`}
-                              type="checkbox"
-                              checked={
-                                (form.ppeItems &&
-                                  (form.ppeItems as any)[r.key] &&
-                                  (form.ppeItems as any)[r.key].checked) ||
-                                false
-                              }
-                              onChange={() => togglePPE(r.key)}
-                              className="w-5 h-5 border-2 border-slate-300 rounded-md transition-all duration-200 checked:bg-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30"
-                            />
-                            <label
-                              htmlFor={`ppe-${r.key}`}
-                              className="text-slate-700"
-                            >
-                              {r.leftLabel}
-                            </label>
-                          </div>
-                          <div className="p-3">
-                            <textarea
-                              aria-label={`ppe-remarks-${r.key}`}
-                              value={
-                                (form.ppeItems as any)?.[r.key]?.remarks || ""
-                              }
-                              onChange={(e) =>
-                                updatePPERemarks(r.key, e.target.value)
-                              }
-                              onInput={(e) => {
-                                const t = e.target as HTMLTextAreaElement;
-                                t.style.height = "auto";
-                                t.style.height = `${t.scrollHeight}px`;
-                              }}
-                              placeholder="Enter remarks..."
-                              className="w-full min-h-[44px] resize-none border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                            />
-                          </div>
-                          <div className="p-3 flex items-center gap-3">
-                            <input
-                              id={`fire-${r.rightKey}`}
-                              type="checkbox"
-                              checked={
-                                (form.firePrecautions &&
-                                  (form.firePrecautions as any)[r.rightKey] &&
-                                  (form.firePrecautions as any)[r.rightKey]
-                                    .checked) ||
-                                false
-                              }
-                              onChange={() => toggleFire(r.rightKey)}
-                              className="w-5 h-5 border-2 border-slate-300 rounded-md transition-all duration-200 checked:bg-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30"
-                            />
-                            <label
-                              htmlFor={`fire-${r.rightKey}`}
-                              className="text-slate-700"
-                            >
-                              {r.rightLabel}
-                            </label>
-                          </div>
-                          <div className="p-3">
-                            <textarea
-                              aria-label={`fire-remarks-${r.rightKey}`}
-                              value={
-                                (form.firePrecautions as any)?.[r.rightKey]
-                                  ?.remarks || ""
-                              }
-                              onChange={(e) =>
-                                updateFireRemarks(r.rightKey, e.target.value)
-                              }
-                              onInput={(e) => {
-                                const t = e.target as HTMLTextAreaElement;
-                                t.style.height = "auto";
-                                t.style.height = `${t.scrollHeight}px`;
-                              }}
-                              placeholder="Enter remarks..."
-                              className="w-full min-h-[44px] resize-none border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                            />
-                          </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-xs text-gray-500">
+                            Permit Issue Date
+                          </label>
+                          <input
+                            type="date"
+                            value={form.permitIssueDate || ""}
+                            onChange={(e) =>
+                              update({ permitIssueDate: e.target.value })
+                            }
+                            className="w-full mt-1 rounded border px-3 py-2 text-sm"
+                          />
                         </div>
-                      ))}
+                        <div>
+                          <label className="text-xs text-gray-500">
+                            Expected Return Date
+                          </label>
+                          <input
+                            type="date"
+                            value={form.expectedReturnDate || ""}
+                            onChange={(e) =>
+                              update({ expectedReturnDate: e.target.value })
+                            }
+                            className="w-full mt-1 rounded border px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
 
-                      {(form.customItems || []).map((c, i) => (
-                        <div
-                          key={c.id}
-                          className={`grid grid-cols-5 items-center border-t border-slate-200 ${(8 + i) % 2 === 0 ? "bg-slate-50" : "bg-white"}`}
-                          style={{ gridTemplateColumns: "10% 25% 20% 25% 20%" }}
-                        >
-                          <div className="p-3 text-center text-slate-700">{`3.${9 + i}`}</div>
-                          <div className="p-3">
-                            <input
-                              aria-label={`custom-ppe-${c.id}`}
-                              type="text"
-                              value={c.ppeItem}
-                              onChange={(e) =>
-                                updateCustomItem(
-                                  c.id,
-                                  "ppeItem",
-                                  e.target.value,
+                      {/* Comments from Approver (read-only) */}
+                      {(() => {
+                        try {
+                          const raw =
+                            typeof window !== "undefined"
+                              ? localStorage.getItem(
+                                  "dps_approver_comments_work",
                                 )
+                              : null;
+                          const aData = raw ? JSON.parse(raw) : null;
+                          const hasAny = !!(
+                            aData &&
+                            (aData.approverRequireUrgent ||
+                              aData.approverSafetyManagerApproval ||
+                              aData.approverPlannedShutdown ||
+                              (aData.approverCustomComments || []).length > 0)
+                          );
+                          return (
+                            <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                              <div className="text-md font-medium">
+                                Comments from Approver:
+                              </div>
+                              <div className="mt-2 space-y-1 text-sm">
+                                {hasAny ? (
+                                  <>
+                                    {aData?.approverRequireUrgent && (
+                                      <div>Require on urgent basis</div>
+                                    )}
+                                    {aData?.approverSafetyManagerApproval && (
+                                      <div>
+                                        Safety Manager approval required
+                                      </div>
+                                    )}
+                                    {(aData?.approverPlannedShutdown ||
+                                      aData?.approverPlannedShutdownDate) && (
+                                      <div>
+                                        Planned shutdown on:{" "}
+                                        {aData?.approverPlannedShutdownDate ||
+                                          ""}
+                                      </div>
+                                    )}
+                                    {(aData?.approverCustomComments || []).map(
+                                      (it: any, i: number) => (
+                                        <div key={i}>
+                                          -{" "}
+                                          {typeof it === "string"
+                                            ? it
+                                            : it.text}
+                                        </div>
+                                      ),
+                                    )}
+                                  </>
+                                ) : (
+                                  <div className="text-gray-500">
+                                    No comments from approver yet
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        } catch (e) {
+                          return (
+                            <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                              <div className="text-md font-medium">
+                                Comments from Approver:
+                              </div>
+                              <div className="mt-2 space-y-1 text-sm text-gray-500">
+                                No comments from approver yet
+                              </div>
+                            </div>
+                          );
+                        }
+                      })()}
+
+                      {(() => {
+                        try {
+                          const raw =
+                            typeof window !== "undefined"
+                              ? localStorage.getItem(
+                                  "dps_safety_to_requester_comments_work",
+                                )
+                              : null;
+                          const sData = raw ? JSON.parse(raw) : null;
+                          return (
+                            <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                              <div className="text-md font-medium">
+                                Comments from Safety Officer:
+                              </div>
+                              <div className="mt-2 space-y-1 text-sm">
+                                {sData?.safetyToRequesterRequireUrgent && (
+                                  <div>Require on urgent basis</div>
+                                )}
+                                {sData?.safetyToRequesterSafetyManagerApproval && (
+                                  <div>Safety Manager approval required</div>
+                                )}
+                                {(sData?.safetyToRequesterPlannedShutdown ||
+                                  sData?.safetyToRequesterPlannedShutdownDate) && (
+                                  <div>
+                                    Planned shutdown on:{" "}
+                                    {sData?.safetyToRequesterPlannedShutdownDate ||
+                                      ""}
+                                  </div>
+                                )}
+                                {(
+                                  sData?.safetyToRequesterCustomComments || []
+                                ).map((it: any, i: number) => (
+                                  <div key={i}>
+                                    - {typeof it === "string" ? it : it.text}
+                                  </div>
+                                ))}
+                                {!sData?.safetyToRequesterRequireUrgent &&
+                                  !sData?.safetyToRequesterSafetyManagerApproval &&
+                                  !(
+                                    sData?.safetyToRequesterPlannedShutdown ||
+                                    sData?.safetyToRequesterPlannedShutdownDate
+                                  ) &&
+                                  (sData?.safetyToRequesterCustomComments || [])
+                                    .length === 0 && (
+                                    <div className="text-gray-500">
+                                      No comments from safety officer yet
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+                          );
+                        } catch (e) {
+                          return (
+                            <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                              <div className="text-md font-medium">
+                                Comments from Safety Officer:
+                              </div>
+                              <div className="mt-2 space-y-1 text-sm text-gray-500">
+                                No comments from safety officer yet
+                              </div>
+                            </div>
+                          );
+                        }
+                      })()}
+
+                      <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                        <div className="text-md font-medium">
+                          Comments for Approver:
+                        </div>
+                        <label className="flex items-center gap-2 mt-2">
+                          <input
+                            type="checkbox"
+                            checked={!!form.requesterRequireUrgent}
+                            onChange={(e) =>
+                              update({
+                                requesterRequireUrgent: e.target.checked,
+                              })
+                            }
+                          />
+                          Require on urgent basis
+                        </label>
+                        <label className="flex items-center gap-2 mt-2">
+                          <input
+                            type="checkbox"
+                            checked={!!form.requesterSafetyManagerApproval}
+                            onChange={(e) =>
+                              update({
+                                requesterSafetyManagerApproval:
+                                  e.target.checked,
+                              })
+                            }
+                          />
+                          Safety Manager approval required
+                        </label>
+                        <div className="mt-2 text-md flex items-center gap-2">
+                          <label className="inline-flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={!!form.requesterPlannedShutdown}
+                              onChange={(e) =>
+                                update({
+                                  requesterPlannedShutdown: e.target.checked,
+                                })
                               }
-                              placeholder="Enter custom PPE item..."
-                              className="w-full border border-slate-200 bg-slate-100 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
                             />
+                            <span>Planned shutdown on:</span>
+                          </label>
+                          <input
+                            type="date"
+                            className="rounded border px-2 py-1 text-sm"
+                            value={form.requesterPlannedShutdownDate || ""}
+                            onChange={(e) =>
+                              update({
+                                requesterPlannedShutdownDate: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="mt-3">
+                          <div className="mt-2 space-y-1">
+                            {(form.requesterCustomComments || []).map(
+                              (item: any, idx: number) => {
+                                const text =
+                                  typeof item === "string" ? item : item.text;
+                                const checked =
+                                  typeof item === "string"
+                                    ? false
+                                    : !!item.checked;
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="flex items-center justify-between gap-2 w-full"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        onChange={(e) => {
+                                          const prev =
+                                            form.requesterCustomComments || [];
+                                          const next = prev.map(
+                                            (it: any, i: number) => {
+                                              if (i !== idx) return it;
+                                              if (typeof it === "string")
+                                                return {
+                                                  text: it,
+                                                  checked: e.target.checked,
+                                                };
+                                              return {
+                                                ...it,
+                                                checked: e.target.checked,
+                                              };
+                                            },
+                                          );
+                                          update({
+                                            requesterCustomComments: next,
+                                          });
+                                        }}
+                                      />
+                                      <span className="text-sm">{text}</span>
+                                    </div>
+                                    <div>
+                                      <button
+                                        type="button"
+                                        aria-label={`Delete comment ${idx + 1}`}
+                                        onClick={() => {
+                                          const prev =
+                                            form.requesterCustomComments || [];
+                                          const next = prev.filter(
+                                            (_: any, i: number) => i !== idx,
+                                          );
+                                          update({
+                                            requesterCustomComments: next,
+                                          });
+                                        }}
+                                        className="text-xs text-red-600 hover:underline px-2 py-1"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </div>
+                                );
+                              },
+                            )}
                           </div>
-                          <div className="p-3">
+
+                          <p className="text-xs font-medium mt-2">
+                            Add comment
+                          </p>
+                          <div className="flex gap-2 mt-2">
                             <input
-                              aria-label={`custom-ppe-remarks-${c.id}`}
-                              type="text"
-                              value={c.ppeRemarks}
+                              placeholder="Add comment"
+                              className="flex-1 rounded border px-3 py-2 text-sm"
+                              value={newRequesterComment}
                               onChange={(e) =>
-                                updateCustomItem(
-                                  c.id,
-                                  "ppeRemarks",
-                                  e.target.value,
-                                )
+                                setNewRequesterComment(e.target.value)
                               }
-                              placeholder="Enter remarks..."
-                              className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                            />
-                          </div>
-                          <div className="p-3">
-                            <input
-                              aria-label={`custom-fire-${c.id}`}
-                              type="text"
-                              value={c.fireItem}
-                              onChange={(e) =>
-                                updateCustomItem(
-                                  c.id,
-                                  "fireItem",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Enter custom fire precaution..."
-                              className="w-full border border-slate-200 bg-slate-100 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
-                            />
-                          </div>
-                          <div className="p-3 flex items-center gap-2">
-                            <input
-                              aria-label={`custom-fire-remarks-${c.id}`}
-                              type="text"
-                              value={c.fireRemarks}
-                              onChange={(e) =>
-                                updateCustomItem(
-                                  c.id,
-                                  "fireRemarks",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Enter remarks..."
-                              className="w-full border border-slate-200 bg-slate-50 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 focus:bg-white placeholder-slate-400 transition"
                             />
                             <button
-                              type="button"
-                              aria-label={`Remove custom ${c.id}`}
-                              onClick={() => removeCustomItem(c.id)}
-                              className="text-red-600 hover:text-white hover:bg-red-600 rounded-full w-7 h-7 flex items-center justify-center ml-2 transition"
+                              onClick={() => {
+                                const v = newRequesterComment.trim();
+                                if (!v) return;
+                                const prev = form.requesterCustomComments || [];
+                                update({
+                                  requesterCustomComments: [
+                                    ...prev,
+                                    { text: v, checked: false },
+                                  ],
+                                });
+                                setNewRequesterComment("");
+                              }}
+                              className="px-3 py-1 rounded bg-white border text-sm"
                             >
-                              ×
+                              Add
                             </button>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="relative mt-4">
-                    <button
-                      type="button"
-                      aria-label="Add custom row"
-                      onClick={addCustomItem}
-                      className="absolute right-0 -bottom-6 bg-blue-600 text-white w-12 h-12 rounded-full shadow-xl flex items-center justify-center hover:scale-105 transition-transform"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {effectiveStep === 3 && (
-            <div className="space-y-4">
-              <div className="bg-white rounded-xl shadow-lg p-6 relative">
-                <div className="w-full text-left text-slate-800 font-bold text-lg rounded-t-md bg-gradient-to-r from-slate-100 to-slate-200 py-4 px-4">
-                  3C - CERTIFICATES
-                </div>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="text-sm text-slate-700 font-medium">
-                    Certificates
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={checkAllCertificates}
-                      className="text-sm px-3 py-1 bg-blue-600 text-white rounded-md"
-                    >
-                      Check All
-                    </button>
-                    <button
-                      type="button"
-                      onClick={uncheckAllCertificates}
-                      className="text-sm px-3 py-1 border border-slate-200 rounded-md text-slate-700"
-                    >
-                      Uncheck All
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mt-4 overflow-x-auto">
-                  <div className="w-full border border-slate-200 rounded-md">
-                    <div className="grid grid-cols-1 md:grid-cols-12 text-sm font-bold text-slate-800">
-                      <div className="p-4 border-b border-r border-slate-200 md:col-span-5">
-                        3C - CERTIFICATES
                       </div>
-                      <div className="p-4 border-b border-slate-200">
-                        CERTIFICATE NOS.
-                      </div>
-                    </div>
 
-                    {[
-                      { key: "confinedSpace", label: "Confined Space Entry" },
-                      { key: "loto", label: "LOTO (Lock Out Tag Out)" },
-                      { key: "electrical", label: "Electrical" },
-                      { key: "workingAtHeight", label: "Working at Height" },
-                      { key: "excavation", label: "Excavation" },
-                      { key: "heavyLift", label: "Heavy Lift" },
-                      { key: "roadClosure", label: "Road Closure" },
-                      { key: "radiography", label: "Radiography" },
-                      { key: "gasLine", label: "Gas Line" },
-                      { key: "highTension", label: "High Tension" },
-                    ].map((c, idx) => {
-                      const cert = (form.certificates as any) || {};
-                      const data = cert[c.key] || {
-                        checked: false,
-                        number: "",
-                      };
-                      return (
-                        <div
-                          key={c.key}
-                          className={`grid grid-cols-12 items-center ${idx % 2 === 0 ? "bg-white" : "bg-slate-50"} border-b border-slate-200`}
-                          style={{ gridTemplateColumns: "40% 60%" }}
-                        >
-                          <div
-                            className={`p-4 flex items-center gap-3 ${data.checked ? "bg-blue-50" : ""}`}
-                          >
+                      {/* Comments for Safety Officer (interactive) */}
+                      <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                        <div className="text-md font-medium">
+                          Comments for Safety Officer:
+                        </div>
+                        <label className="flex items-center gap-2 mt-2">
+                          <input
+                            type="checkbox"
+                            checked={
+                              !!(form as any).requesterSafetyRequireUrgent
+                            }
+                            onChange={(e) =>
+                              update({
+                                requesterSafetyRequireUrgent: e.target.checked,
+                              } as any)
+                            }
+                          />
+                          Require on urgent basis
+                        </label>
+                        <label className="flex items-center gap-2 mt-2">
+                          <input
+                            type="checkbox"
+                            checked={
+                              !!(form as any)
+                                .requesterSafetySafetyManagerApproval
+                            }
+                            onChange={(e) =>
+                              update({
+                                requesterSafetySafetyManagerApproval:
+                                  e.target.checked,
+                              } as any)
+                            }
+                          />
+                          Approver approval required
+                        </label>
+                        <div className="mt-2 text-md flex items-center gap-2">
+                          <label className="inline-flex items-center gap-2">
                             <input
-                              id={`cert-${c.key}`}
                               type="checkbox"
-                              checked={data.checked}
-                              onChange={() => toggleCertificate(c.key)}
-                              className="w-5 h-5 border-2 border-slate-300 rounded-md transition-all duration-200 checked:bg-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30"
-                              aria-label={`${c.label} checkbox`}
-                            />
-                            <label
-                              htmlFor={`cert-${c.key}`}
-                              className="text-sm text-slate-800"
-                            >
-                              {c.label}
-                            </label>
-                          </div>
-
-                          <div className="p-4">
-                            <input
-                              id={`cert-${c.key}-num`}
-                              type="text"
-                              value={data.number || ""}
-                              onChange={(e) =>
-                                updateCertificateNumber(c.key, e.target.value)
+                              checked={
+                                !!(form as any).requesterSafetyPlannedShutdown
                               }
-                              placeholder="Enter certificate number..."
-                              className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 placeholder-slate-400 text-sm transition"
-                              aria-label={`${c.label} certificate number`}
+                              onChange={(e) =>
+                                update({
+                                  requesterSafetyPlannedShutdown:
+                                    e.target.checked,
+                                } as any)
+                              }
                             />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {effectiveStep === 4 && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-                  <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
-                    PERMIT APPLICANT
-                  </div>
-                  <div className="mt-4 space-y-3">
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        SIGN
-                      </div>
-                      <SignaturePad
-                        value={
-                          (form.permitData as any)?.applicant?.signature || null
-                        }
-                        onChange={saveApplicantSignature}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        NAME
-                      </label>
-                      <input
-                        type="text"
-                        value={(form.permitData as any)?.applicant?.name || ""}
-                        onChange={(e) =>
-                          updatePermitField("applicant.name", e.target.value)
-                        }
-                        placeholder="Full name"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Contact No.
-                      </label>
-                      <input
-                        type="tel"
-                        value={
-                          (form.permitData as any)?.applicant?.contactNo || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "applicant.contactNo",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Phone number"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-                  <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
-                    PERMIT HOLDER
-                  </div>
-                  <div className="mt-4 space-y-3">
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        SIGN
-                      </div>
-                      <SignaturePad
-                        value={
-                          (form.permitData as any)?.holder?.signature || null
-                        }
-                        onChange={saveHolderSignature}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        NAME
-                      </label>
-                      <input
-                        type="text"
-                        value={(form.permitData as any)?.holder?.name || ""}
-                        onChange={(e) =>
-                          updatePermitField("holder.name", e.target.value)
-                        }
-                        placeholder="Full name"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Contact No.
-                      </label>
-                      <input
-                        type="tel"
-                        value={
-                          (form.permitData as any)?.holder?.contactNo || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField("holder.contactNo", e.target.value)
-                        }
-                        placeholder="Phone number"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-                <div className="text-center bg-gradient-to-r from-blue-700 to-blue-800 text-white font-bold py-3 rounded-md">
-                  PERMIT AUTHORISER
-                </div>
-
-                <div className="mt-4">
-                  <div className="text-sm text-slate-800 font-semibold">
-                    PERMIT VALIDITY
-                  </div>
-                  <div className="mt-3 grid grid-cols-1 md:grid-cols-4 gap-3">
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Date From
-                      </label>
-                      <input
-                        type="date"
-                        value={
-                          (form.permitData as any)?.authoriser?.validity
-                            ?.dateFrom || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.validity.dateFrom",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Date To
-                      </label>
-                      <input
-                        type="date"
-                        value={
-                          (form.permitData as any)?.authoriser?.validity
-                            ?.dateTo || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.validity.dateTo",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Time From
-                      </label>
-                      <input
-                        type="time"
-                        value={
-                          (form.permitData as any)?.authoriser?.validity
-                            ?.timeFrom || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.validity.timeFrom",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Time To
-                      </label>
-                      <input
-                        type="time"
-                        value={
-                          (form.permitData as any)?.authoriser?.validity
-                            ?.timeTo || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.validity.timeTo",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        SIGN
-                      </div>
-                      <SignaturePad
-                        value={
-                          (form.permitData as any)?.authoriser?.contact?.sign ||
-                          null
-                        }
-                        onChange={saveAuthoriserSign}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        NAME
-                      </label>
-                      <input
-                        type="text"
-                        value={
-                          (form.permitData as any)?.authoriser?.contact?.name ||
-                          ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.contact.name",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Full name"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        CONTACT NO.
-                      </label>
-                      <input
-                        type="tel"
-                        value={
-                          (form.permitData as any)?.authoriser?.contact
-                            ?.contactNo || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.contact.contactNo",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Phone number"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        AUTHORISER NOMINEE SIGN
-                      </div>
-                      <SignaturePad
-                        value={
-                          (form.permitData as any)?.authoriser?.nominee?.sign ||
-                          null
-                        }
-                        onChange={saveNomineeSign}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        NAME
-                      </label>
-                      <input
-                        type="text"
-                        value={
-                          (form.permitData as any)?.authoriser?.nominee?.name ||
-                          ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.nominee.name",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Full name"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        SAP ID
-                      </label>
-                      <input
-                        type="text"
-                        value={
-                          (form.permitData as any)?.authoriser?.nominee
-                            ?.sapId || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitField(
-                            "authoriser.nominee.sapId",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="SAP ID"
-                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder-slate-400 text-sm transition"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {effectiveStep === 5 && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-                  <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
-                    4A - PERMIT RETURN - WORK COMPLETE
-                  </div>
-                  <div className="mt-4 space-y-4">
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        4.1 - Permit Return by Permit Holder
-                      </div>
-                      <div className="mt-2 grid grid-cols-1 gap-2">
-                        <div>
-                          <div className="text-sm text-slate-700 font-medium">
-                            SIGN
-                          </div>
-                          <SignaturePad
-                            value={
-                              (form.permitStatus as any)?.workComplete?.holder
-                                ?.sign || null
-                            }
-                            onChange={(d) =>
-                              updatePermitStatusField(
-                                "workComplete.holder.sign",
-                                d,
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          <label className="text-sm text-slate-700 font-medium">
-                            NAME
+                            <span>Planned shutdown on:</span>
                           </label>
                           <input
-                            type="text"
-                            value={
-                              (form.permitStatus as any)?.workComplete?.holder
-                                ?.name || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.holder.name",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
                             type="date"
+                            className="rounded border px-2 py-1 text-sm"
                             value={
-                              (form.permitStatus as any)?.workComplete?.holder
-                                ?.date || ""
+                              (form as any)
+                                .requesterSafetyPlannedShutdownDate || ""
                             }
                             onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.holder.date",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                          <input
-                            type="time"
-                            value={
-                              (form.permitStatus as any)?.workComplete?.holder
-                                ?.time || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.holder.time",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        4.2 - Permit Return by Applicant
-                      </div>
-                      <div className="mt-2 grid grid-cols-1 gap-2">
-                        <div>
-                          <div className="text-sm text-slate-700 font-medium">
-                            SIGN
-                          </div>
-                          <SignaturePad
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.applicant?.sign || null
-                            }
-                            onChange={(d) =>
-                              updatePermitStatusField(
-                                "workComplete.applicant.sign",
-                                d,
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          <label className="text-sm text-slate-700 font-medium">
-                            NAME
-                          </label>
-                          <input
-                            type="text"
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.applicant?.name || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.applicant.name",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="date"
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.applicant?.date || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.applicant.date",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                          <input
-                            type="time"
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.applicant?.time || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.applicant.time",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="text-sm text-slate-700 font-medium">
-                        4.3 - Permit Accepted by Authoriser
-                      </div>
-                      <div className="mt-2 grid grid-cols-1 gap-2">
-                        <div>
-                          <div className="text-sm text-slate-700 font-medium">
-                            SIGN
-                          </div>
-                          <SignaturePad
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.authoriser?.sign || null
-                            }
-                            onChange={(d) =>
-                              updatePermitStatusField(
-                                "workComplete.authoriser.sign",
-                                d,
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          <label className="text-sm text-slate-700 font-medium">
-                            NAME
-                          </label>
-                          <input
-                            type="text"
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.authoriser?.name || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.authoriser.name",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="date"
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.authoriser?.date || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.authoriser.date",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                          <input
-                            type="time"
-                            value={
-                              (form.permitStatus as any)?.workComplete
-                                ?.authoriser?.time || ""
-                            }
-                            onChange={(e) =>
-                              updatePermitStatusField(
-                                "workComplete.authoriser.time",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-                  <div className="text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-md">
-                    4B - PERMIT RETURN - WNC
-                  </div>
-                  <div className="mt-4 space-y-4">
-                    {["holder", "applicant", "authoriser"].map((k) => (
-                      <div key={k}>
-                        <div className="text-sm text-slate-700 font-medium">{`${k === "holder" ? "5.1" : k === "applicant" ? "5.2" : "5.3"} - ${k.charAt(0).toUpperCase() + k.slice(1)} Return`}</div>
-                        <div className="mt-2 grid grid-cols-1 gap-2">
-                          <div>
-                            <div className="text-sm text-slate-700 font-medium">
-                              SIGN
-                            </div>
-                            <SignaturePad
-                              value={
-                                (form.permitStatus as any)?.workNotComplete?.[k]
-                                  ?.sign || null
-                              }
-                              onChange={(d) =>
-                                updatePermitStatusField(
-                                  `workNotComplete.${k}.sign`,
-                                  d,
-                                )
-                              }
-                            />
-                          </div>
-                          <div>
-                            <label className="text-sm text-slate-700 font-medium">
-                              NAME
-                            </label>
-                            <input
-                              type="text"
-                              value={
-                                (form.permitStatus as any)?.workNotComplete?.[k]
-                                  ?.name || ""
-                              }
-                              onChange={(e) =>
-                                updatePermitStatusField(
-                                  `workNotComplete.${k}.name`,
+                              update({
+                                requesterSafetyPlannedShutdownDate:
                                   e.target.value,
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <input
-                              type="date"
-                              value={
-                                (form.permitStatus as any)?.workNotComplete?.[k]
-                                  ?.date || ""
-                              }
-                              onChange={(e) =>
-                                updatePermitStatusField(
-                                  `workNotComplete.${k}.date`,
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                            />
-                            <input
-                              type="time"
-                              value={
-                                (form.permitStatus as any)?.workNotComplete?.[k]
-                                  ?.time || ""
-                              }
-                              onChange={(e) =>
-                                updatePermitStatusField(
-                                  `workNotComplete.${k}.time`,
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-                  <div className="text-center bg-gradient-to-r from-red-500 to-red-600 text-white font-bold py-3 rounded-md">
-                    PERMIT CANCELLATION
-                  </div>
-                  <div className="mt-4 space-y-3">
-                    <div>
-                      <label className="text-sm text-slate-700 font-medium">
-                        Reason
-                      </label>
-                      <input
-                        type="text"
-                        value={
-                          (form.permitStatus as any)?.cancellation?.reason || ""
-                        }
-                        onChange={(e) =>
-                          updatePermitStatusField(
-                            "cancellation.reason",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 gap-2">
-                      <div>
-                        <div className="text-sm text-slate-700 font-medium">
-                          SIGN
-                        </div>
-                        <SignaturePad
-                          value={
-                            (form.permitStatus as any)?.cancellation?.sign ||
-                            null
-                          }
-                          onChange={(d) =>
-                            updatePermitStatusField("cancellation.sign", d)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className="text-sm text-slate-700 font-medium">
-                          NAME
-                        </label>
-                        <input
-                          type="text"
-                          value={
-                            (form.permitStatus as any)?.cancellation?.name || ""
-                          }
-                          onChange={(e) =>
-                            updatePermitStatusField(
-                              "cancellation.name",
-                              e.target.value,
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <input
-                          type="date"
-                          value={
-                            (form.permitStatus as any)?.cancellation?.date || ""
-                          }
-                          onChange={(e) =>
-                            updatePermitStatusField(
-                              "cancellation.date",
-                              e.target.value,
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                        />
-                        <input
-                          type="time"
-                          value={
-                            (form.permitStatus as any)?.cancellation?.time || ""
-                          }
-                          onChange={(e) =>
-                            updatePermitStatusField(
-                              "cancellation.time",
-                              e.target.value,
-                            )
-                          }
-                          className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white transition"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-                <div className="text-center bg-gradient-to-r from-slate-700 to-slate-800 text-white font-bold py-3 rounded-md">
-                  PERMIT RE-VALIDATION
-                </div>
-                <div className="mt-4 overflow-x-auto">
-                  <div className="min-w-[1000px] md:min-w-0 border border-slate-200 rounded-md">
-                    <div className="grid grid-cols-9 text-sm font-semibold text-slate-700">
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words md:col-span-1">
-                        DATE
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        Time From
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        Time To
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        APPLICANT
-                        <br />
-                        SIGN
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        APPLICANT
-                        <br />
-                        NAME
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        HOLDER
-                        <br />
-                        SIGN
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        HOLDER
-                        <br />
-                        NAME
-                      </div>
-                      <div className="p-3 border-b border-r border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        AUTHORISER
-                        <br />
-                        SIGN
-                      </div>
-                      <div className="p-3 border-b border-slate-200 text-xs md:text-sm whitespace-normal break-words">
-                        AUTHORISER
-                        <br />
-                        NAME
-                      </div>
-                    </div>
-
-                    {((form.permitStatus as any)?.revalidations || []).map(
-                      (r: any) => (
-                        <div
-                          key={r.id}
-                          className="grid grid-cols-9 items-center border-t border-slate-200 p-2"
-                        >
-                          <div className="p-2 md:p-2">
-                            <input
-                              type="date"
-                              value={r.date || ""}
-                              onChange={(e) =>
-                                updateRevalidationRow(
-                                  r.id,
-                                  "date",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <input
-                              type="time"
-                              value={r.timeFrom || ""}
-                              onChange={(e) =>
-                                updateRevalidationRow(
-                                  r.id,
-                                  "timeFrom",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <input
-                              type="time"
-                              value={r.timeTo || ""}
-                              onChange={(e) =>
-                                updateRevalidationRow(
-                                  r.id,
-                                  "timeTo",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <SignaturePad
-                              value={r.applicant?.sign || null}
-                              onChange={(d) =>
-                                updateRevalidationRow(r.id, "applicant", {
-                                  ...r.applicant,
-                                  sign: d,
-                                })
-                              }
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <input
-                              type="text"
-                              value={r.applicant?.name || ""}
-                              onChange={(e) =>
-                                updateRevalidationRow(r.id, "applicant", {
-                                  ...r.applicant,
-                                  name: e.target.value,
-                                })
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <SignaturePad
-                              value={r.holder?.sign || null}
-                              onChange={(d) =>
-                                updateRevalidationRow(r.id, "holder", {
-                                  ...r.holder,
-                                  sign: d,
-                                })
-                              }
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <input
-                              type="text"
-                              value={r.holder?.name || ""}
-                              onChange={(e) =>
-                                updateRevalidationRow(r.id, "holder", {
-                                  ...r.holder,
-                                  name: e.target.value,
-                                })
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
-                            />
-                          </div>
-                          <div className="p-2 md:p-2">
-                            <SignaturePad
-                              value={r.authoriser?.sign || null}
-                              onChange={(d) =>
-                                updateRevalidationRow(r.id, "authoriser", {
-                                  ...r.authoriser,
-                                  sign: d,
-                                })
-                              }
-                            />
-                          </div>
-                          <div className="p-2 md:p-2 flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={r.authoriser?.name || ""}
-                              onChange={(e) =>
-                                updateRevalidationRow(r.id, "authoriser", {
-                                  ...r.authoriser,
-                                  name: e.target.value,
-                                })
-                              }
-                              className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 focus:bg-white text-sm"
-                            />
-                          </div>
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </div>
-
-                <div className="mt-4 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={addRevalidationRow}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md"
-                  >
-                    + Add Row
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {effectiveStep === 6 && (
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6 mx-auto max-w-3xl">
-                <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md shadow-sm">
-                  SAFE LIMIT OF GASES / VAPOURS
-                </div>
-
-                <div className="mt-4 overflow-x-auto">
-                  <table className="w-full border-collapse text-sm">
-                    <thead>
-                      <tr className="bg-gray-800 text-white">
-                        <th className="text-left px-2 py-2 border border-gray-300">
-                          GAS
-                        </th>
-                        <th className="text-center px-2 py-2 border border-gray-300">
-                          SAFE CONCENTRATION FOR 8 HRS DURATION
-                        </th>
-                        <th className="text-center px-2 py-2 border border-gray-300">
-                          FLAMMABLE LIMITS
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="odd:bg-white even:bg-gray-50 text-sm">
-                        <td className="px-2 py-2 border border-gray-300">
-                          CARBON MONOXIDE
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          50 PPM
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          12.5% / 74.2%
-                        </td>
-                      </tr>
-                      <tr className="odd:bg-white even:bg-gray-50 text-sm">
-                        <td className="px-2 py-2 border border-gray-300">
-                          HYDROGEN
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          -
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          4.0% / 75%
-                        </td>
-                      </tr>
-                      <tr className="odd:bg-white even:bg-gray-50 text-sm">
-                        <td className="px-2 py-2 border border-gray-300">
-                          METHANE / NATURAL GAS
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          1000 PPM
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          5.9% / 14%
-                        </td>
-                      </tr>
-                      <tr className="odd:bg-white even:bg-gray-50 text-sm">
-                        <td className="px-2 py-2 border border-gray-300">
-                          AMMONIA
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          25 PPM
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          16% / 23%
-                        </td>
-                      </tr>
-                      <tr className="odd:bg-white even:bg-gray-50 text-sm">
-                        <td className="px-2 py-2 border border-gray-300">
-                          CHLORINE
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          1 PPM
-                        </td>
-                        <td className="px-2 py-2 border border-gray-300 text-center">
-                          &nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="mt-6">
-                  <div className="text-sm font-semibold">
-                    IMPORTANT INSTRUCTIONS:
-                  </div>
-                  <ol className="list-decimal list-inside mt-2 text-sm space-y-1 text-slate-700">
-                    <li>
-                      A Permit-to-Work or Certificate is normally valid for one
-                      shift only. However, it can be extended for a maximum of
-                      seven days more with appropriate renewals.
-                    </li>
-                    <li>
-                      Permit is not valid in the event, if conditions in the
-                      incident area become Hazardous from conditions not
-                      existing when this permit was issued or in the event of
-                      any Emergency / Fire.
-                    </li>
-                    <li>The authorized person should issue permit only.</li>
-                    <li>
-                      Work Instructions &amp; Protocol procedures are to be
-                      strictly followed.
-                    </li>
-                    <li>
-                      If job is not completed within the validity time period,
-                      the authorized person incorporating necessary changes must
-                      extend the permit.
-                    </li>
-                    <li>
-                      Permit must be returned by the applicant to the issuing
-                      authority after completion of the job.
-                    </li>
-                    <li>
-                      When more than one agency is working at a place the
-                      concerned agencies must co-ordinate among themselves for
-                      safety of the persons working there.
-                    </li>
-                    <li>
-                      No job should be attempted / to be done for which permit
-                      is not issued.
-                    </li>
-                    <li>
-                      Workers must be briefed about imminent dangers involved in
-                      the job.
-                    </li>
-                    <li>
-                      Persons working at height and Confined Space should be
-                      medically checked for acrophobia and claustrophobia
-                      respectively.
-                    </li>
-                    <li>
-                      Separate Certificates are to be taken for the jobs
-                      involving Excavation, Confined Space Entry, Working at
-                      Height, Radiography, Electrical, LOTO, Road Closure &amp;
-                      Heavy Lift jobs.
-                    </li>
-                    <li>
-                      Results for the Confined Space Entry to be periodically
-                      recorded in the Certificate.
-                    </li>
-                  </ol>
-
-                  <p className="mt-2 text-xs italic">
-                    NOTE: If the Applicant does not fill it, Authorizer can fill
-                    it up if necessary or write "NIL"
-                  </p>
-                </div>
-
-                <div className="mt-6 text-center">
-                  <div className="border p-4 rounded font-semibold text-center">
-                    BEFORE AUTHORISING THE PERMIT
-                    <br />
-                    <span className="block mt-2">
-                      ENSURE THAT SITE IS SAFE TO WORK &amp; SAFE WORKING
-                      CONDITIONS ARE MAINTAINED
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <div className="text-sm font-semibold">Legend</div>
-                  <div className="mt-2 grid grid-cols-3 gap-4 text-sm">
-                    <div className="flex items-start gap-2">
-                      <div className="text-green-600 font-bold">✓</div>
-                      <div>Measures Taken</div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <div className="text-red-600 font-bold">X</div>
-                      <div>Measures Not Required</div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <div className="font-semibold">NA</div>
-                      <div>Not Applicable</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-      )}
-
-      {effectiveStep === 7 && (
-            <StepSection title="Details of such permit">
-              <div className="space-y-6">
-                <div className="bg-white rounded-lg shadow-md border border-slate-200 p-4 sm:p-6">
-                  <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
-                    Details of such permit
-                  </div>
-                  <div className="mt-4 space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-xs text-gray-500">Permit Requester</div>
-                        <div className="mt-1 flex items-center gap-2">
-                          <input
-                            placeholder="Search user..."
-                            className="w-full rounded border px-3 py-2 text-sm"
+                              } as any)
+                            }
                           />
                         </div>
-                      </div>
 
-                      <div>
-                        <div className="text-xs text-gray-500">Permit Approver 1</div>
-                        <input
-                          aria-label="Permit Approver 1"
-                          value={form.permitApprover1 || ""}
-                          onChange={(e) => update({ permitApprover1: e.target.value })}
-                          className="w-full mt-1 rounded border px-3 py-2 text-sm"
-                          placeholder="Approver name or role"
-                        />
-                      </div>
-
-                      <div>
-                        <div className="text-xs text-gray-500">Permit Approver 2</div>
-                        <input
-                          aria-label="Permit Approver 2"
-                          value={form.permitApprover2 || ""}
-                          onChange={(e) => update({ permitApprover2: e.target.value })}
-                          className="w-full mt-1 rounded border px-3 py-2 text-sm"
-                          placeholder="Approver name or role"
-                        />
-                      </div>
-
-                      <div>
-                        <div className="text-xs text-gray-500">Safety Manager</div>
-                        <input
-                          aria-label="Safety Manager"
-                          value={form.safetyManager || ""}
-                          onChange={(e) => update({ safetyManager: e.target.value })}
-                          className="w-full mt-1 rounded border px-3 py-2 text-sm"
-                          placeholder="Safety Manager name/department"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-xs text-gray-500">
-                          Permit Issue Date
-                        </label>
-                        <input
-                          type="date"
-                          value={form.permitIssueDate || ""}
-                          onChange={(e) => update({ permitIssueDate: e.target.value })}
-                          className="w-full mt-1 rounded border px-3 py-2 text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-500">
-                          Expected Return Date
-                        </label>
-                        <input
-                          type="date"
-                          value={form.expectedReturnDate || ""}
-                          onChange={(e) =>
-                            update({ expectedReturnDate: e.target.value })
-                          }
-                          className="w-full mt-1 rounded border px-3 py-2 text-sm"
-                        />
-                      </div>
-                    </div>
-
-                  {/* Comments from Approver (read-only) */}
-                  {(() => {
-                    try {
-                      const raw =
-                        typeof window !== "undefined"
-                          ? localStorage.getItem("dps_approver_comments_work")
-                          : null;
-                      const aData = raw ? JSON.parse(raw) : null;
-                      const hasAny = !!(
-                        aData &&
-                        (aData.approverRequireUrgent ||
-                          aData.approverSafetyManagerApproval ||
-                          aData.approverPlannedShutdown ||
-                          (aData.approverCustomComments || []).length > 0)
-                      );
-                      return (
-                        <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                          <div className="text-md font-medium">Comments from Approver:</div>
-                          <div className="mt-2 space-y-1 text-sm">
-                            {hasAny ? (
-                              <>
-                                {aData?.approverRequireUrgent && (
-                                  <div>Require on urgent basis</div>
-                                )}
-                                {aData?.approverSafetyManagerApproval && (
-                                  <div>Safety Manager approval required</div>
-                                )}
-                                {(aData?.approverPlannedShutdown ||
-                                  aData?.approverPlannedShutdownDate) && (
-                                  <div>
-                                    Planned shutdown on: {aData?.approverPlannedShutdownDate || ""}
+                        <div className="mt-3">
+                          <div className="mt-2 space-y-1">
+                            {(
+                              (form as any).requesterSafetyCustomComments || []
+                            ).map((item: any, idx: number) => {
+                              const text =
+                                typeof item === "string" ? item : item.text;
+                              const checked =
+                                typeof item === "string"
+                                  ? false
+                                  : !!item.checked;
+                              return (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between gap-2 w-full"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={(e) => {
+                                        const prev =
+                                          (form as any)
+                                            .requesterSafetyCustomComments ||
+                                          [];
+                                        const next = prev.map(
+                                          (it: any, i: number) => {
+                                            if (i !== idx) return it;
+                                            if (typeof it === "string")
+                                              return {
+                                                text: it,
+                                                checked: e.target.checked,
+                                              };
+                                            return {
+                                              ...it,
+                                              checked: e.target.checked,
+                                            };
+                                          },
+                                        );
+                                        update({
+                                          requesterSafetyCustomComments: next,
+                                        } as any);
+                                      }}
+                                    />
+                                    <span className="text-sm">{text}</span>
                                   </div>
-                                )}
-                                {(aData?.approverCustomComments || []).map(
-                                  (it: any, i: number) => (
-                                    <div key={i}>- {typeof it === "string" ? it : it.text}</div>
-                                  ),
-                                )}
-                              </>
-                            ) : (
-                              <div className="text-gray-500">No comments from approver yet</div>
-                            )}
+                                  <div>
+                                    <button
+                                      type="button"
+                                      aria-label={`Delete comment ${idx + 1}`}
+                                      onClick={() => {
+                                        const prev =
+                                          (form as any)
+                                            .requesterSafetyCustomComments ||
+                                          [];
+                                        const next = prev.filter(
+                                          (_: any, i: number) => i !== idx,
+                                        );
+                                        update({
+                                          requesterSafetyCustomComments: next,
+                                        } as any);
+                                      }}
+                                      className="text-xs text-red-600 hover:underline px-2 py-1"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          <p className="text-xs font-medium mt-2">
+                            Add comment
+                          </p>
+                          <div className="flex gap-2 mt-2">
+                            <input
+                              placeholder="Add comment"
+                              className="flex-1 rounded border px-3 py-2 text-sm"
+                              value={newRequesterSafetyComment}
+                              onChange={(e) =>
+                                setNewRequesterSafetyComment(e.target.value)
+                              }
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const v = newRequesterSafetyComment.trim();
+                                if (!v) return;
+                                const prev =
+                                  (form as any).requesterSafetyCustomComments ||
+                                  [];
+                                update({
+                                  requesterSafetyCustomComments: [
+                                    ...prev,
+                                    { text: v, checked: false },
+                                  ],
+                                } as any);
+                                setNewRequesterSafetyComment("");
+                              }}
+                              className="px-3 py-1 rounded bg-white border text-sm"
+                            >
+                              Add
+                            </button>
                           </div>
                         </div>
-                      );
-                    } catch (e) {
-                      return (
-                        <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                          <div className="text-md font-medium">Comments from Approver:</div>
-                          <div className="mt-2 space-y-1 text-sm text-gray-500">No comments from approver yet</div>
-                        </div>
-                      );
-                    }
-                  })()}
-
-                  {(() => {
-                    try {
-                      const raw =
-                        typeof window !== "undefined"
-                          ? localStorage.getItem(
-                              "dps_safety_to_requester_comments_work",
-                            )
-                          : null;
-                      const sData = raw ? JSON.parse(raw) : null;
-                      return (
-                        <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                          <div className="text-md font-medium">Comments from Safety Officer:</div>
-                          <div className="mt-2 space-y-1 text-sm">
-                            {sData?.safetyToRequesterRequireUrgent && (
-                              <div>Require on urgent basis</div>
-                            )}
-                            {sData?.safetyToRequesterSafetyManagerApproval && (
-                              <div>Safety Manager approval required</div>
-                            )}
-                            {(sData?.safetyToRequesterPlannedShutdown ||
-                              sData?.safetyToRequesterPlannedShutdownDate) && (
-                              <div>
-                                Planned shutdown on: {sData?.safetyToRequesterPlannedShutdownDate || ""}
-                              </div>
-                            )}
-                            {(sData?.safetyToRequesterCustomComments || []).map(
-                              (it: any, i: number) => (
-                                <div key={i}>- {typeof it === "string" ? it : it.text}</div>
-                              ),
-                            )}
-                            {!sData?.safetyToRequesterRequireUrgent &&
-                              !sData?.safetyToRequesterSafetyManagerApproval &&
-                              !(
-                                sData?.safetyToRequesterPlannedShutdown ||
-                                sData?.safetyToRequesterPlannedShutdownDate
-                              ) &&
-                              (sData?.safetyToRequesterCustomComments || []).length === 0 && (
-                              <div className="text-gray-500">No comments from safety officer yet</div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    } catch (e) {
-                      return (
-                        <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                          <div className="text-md font-medium">Comments from Safety Officer:</div>
-                          <div className="mt-2 space-y-1 text-sm text-gray-500">No comments from safety officer yet</div>
-                        </div>
-                      );
-                    }
-                  })()}
-
-                  <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                    <div className="text-md font-medium">
-                      Comments for Approver:
-                    </div>
-                    <label className="flex items-center gap-2 mt-2">
-                      <input
-                        type="checkbox"
-                        checked={!!form.requesterRequireUrgent}
-                        onChange={(e) =>
-                          update({ requesterRequireUrgent: e.target.checked })
-                        }
-                      />
-                      Require on urgent basis
-                    </label>
-                    <label className="flex items-center gap-2 mt-2">
-                      <input
-                        type="checkbox"
-                        checked={!!form.requesterSafetyManagerApproval}
-                        onChange={(e) =>
-                          update({
-                            requesterSafetyManagerApproval: e.target.checked,
-                          })
-                        }
-                      />
-                      Safety Manager approval required
-                    </label>
-                    <div className="mt-2 text-md flex items-center gap-2">
-                      <label className="inline-flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={!!form.requesterPlannedShutdown}
-                          onChange={(e) =>
-                            update({
-                              requesterPlannedShutdown: e.target.checked,
-                            })
-                          }
-                        />
-                        <span>Planned shutdown on:</span>
-                      </label>
-                      <input
-                        type="date"
-                        className="rounded border px-2 py-1 text-sm"
-                        value={form.requesterPlannedShutdownDate || ""}
-                        onChange={(e) =>
-                          update({
-                            requesterPlannedShutdownDate: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className="mt-3">
-                      <div className="mt-2 space-y-1">
-                        {(form.requesterCustomComments || []).map(
-                          (item: any, idx: number) => {
-                            const text =
-                              typeof item === "string" ? item : item.text;
-                            const checked =
-                              typeof item === "string" ? false : !!item.checked;
-                            return (
-                              <div
-                                key={idx}
-                                className="flex items-center justify-between gap-2 w-full"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={checked}
-                                    onChange={(e) => {
-                                      const prev =
-                                        form.requesterCustomComments || [];
-                                      const next = prev.map(
-                                        (it: any, i: number) => {
-                                          if (i !== idx) return it;
-                                          if (typeof it === "string")
-                                            return {
-                                              text: it,
-                                              checked: e.target.checked,
-                                            };
-                                          return {
-                                            ...it,
-                                            checked: e.target.checked,
-                                          };
-                                        },
-                                      );
-                                      update({ requesterCustomComments: next });
-                                    }}
-                                  />
-                                  <span className="text-sm">{text}</span>
-                                </div>
-                                <div>
-                                  <button
-                                    type="button"
-                                    aria-label={`Delete comment ${idx + 1}`}
-                                    onClick={() => {
-                                      const prev =
-                                        form.requesterCustomComments || [];
-                                      const next = prev.filter(
-                                        (_: any, i: number) => i !== idx,
-                                      );
-                                      update({ requesterCustomComments: next });
-                                    }}
-                                    className="text-xs text-red-600 hover:underline px-2 py-1"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          },
-                        )}
-                      </div>
-
-                      <p className="text-xs font-medium mt-2">Add comment</p>
-                      <div className="flex gap-2 mt-2">
-                        <input
-                          placeholder="Add comment"
-                          className="flex-1 rounded border px-3 py-2 text-sm"
-                          value={newRequesterComment}
-                          onChange={(e) =>
-                            setNewRequesterComment(e.target.value)
-                          }
-                        />
-                        <button
-                          onClick={() => {
-                            const v = newRequesterComment.trim();
-                            if (!v) return;
-                            const prev = form.requesterCustomComments || [];
-                            update({
-                              requesterCustomComments: [
-                                ...prev,
-                                { text: v, checked: false },
-                              ],
-                            });
-                            setNewRequesterComment("");
-                          }}
-                          className="px-3 py-1 rounded bg-white border text-sm"
-                        >
-                          Add
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Comments for Safety Officer (interactive) */}
-                  <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                    <div className="text-md font-medium">Comments for Safety Officer:</div>
-                    <label className="flex items-center gap-2 mt-2">
-                      <input
-                        type="checkbox"
-                        checked={!!(form as any).requesterSafetyRequireUrgent}
-                        onChange={(e) =>
-                          update({ requesterSafetyRequireUrgent: e.target.checked } as any)
-                        }
-                      />
-                      Require on urgent basis
-                    </label>
-                    <label className="flex items-center gap-2 mt-2">
-                      <input
-                        type="checkbox"
-                        checked={!!(form as any).requesterSafetySafetyManagerApproval}
-                        onChange={(e) =>
-                          update({ requesterSafetySafetyManagerApproval: e.target.checked } as any)
-                        }
-                      />
-                     Approver approval required
-                    </label>
-                    <div className="mt-2 text-md flex items-center gap-2">
-                      <label className="inline-flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={!!(form as any).requesterSafetyPlannedShutdown}
-                          onChange={(e) =>
-                            update({ requesterSafetyPlannedShutdown: e.target.checked } as any)
-                          }
-                        />
-                        <span>
-                        Planned shutdown on:
-                        </span>
-                      </label>
-                      <input
-                        type="date"
-                        className="rounded border px-2 py-1 text-sm"
-                        value={(form as any).requesterSafetyPlannedShutdownDate || ""}
-                        onChange={(e) =>
-                          update({ requesterSafetyPlannedShutdownDate: e.target.value } as any)
-                        }
-                      />
-                    </div>
-
-                    <div className="mt-3">
-                      <div className="mt-2 space-y-1">
-                        {((form as any).requesterSafetyCustomComments || []).map(
-                          (item: any, idx: number) => {
-                            const text =
-                              typeof item === "string" ? item : item.text;
-                            const checked =
-                              typeof item === "string" ? false : !!item.checked;
-                            return (
-                              <div
-                                key={idx}
-                                className="flex items-center justify-between gap-2 w-full"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={checked}
-                                    onChange={(e) => {
-                                      const prev =
-                                        (form as any).requesterSafetyCustomComments || [];
-                                      const next = prev.map(
-                                        (it: any, i: number) => {
-                                          if (i !== idx) return it;
-                                          if (typeof it === "string")
-                                            return {
-                                              text: it,
-                                              checked: e.target.checked,
-                                            };
-                                          return {
-                                            ...it,
-                                            checked: e.target.checked,
-                                          };
-                                        },
-                                      );
-                                      update({ requesterSafetyCustomComments: next } as any);
-                                    }}
-                                  />
-                                  <span className="text-sm">{text}</span>
-                                </div>
-                                <div>
-                                  <button
-                                    type="button"
-                                    aria-label={`Delete comment ${idx + 1}`}
-                                    onClick={() => {
-                                      const prev =
-                                        (form as any).requesterSafetyCustomComments || [];
-                                      const next = prev.filter(
-                                        (_: any, i: number) => i !== idx,
-                                      );
-                                      update({ requesterSafetyCustomComments: next } as any);
-                                    }}
-                                    className="text-xs text-red-600 hover:underline px-2 py-1"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          },
-                        )}
-                      </div>
-
-                      <p className="text-xs font-medium mt-2">Add comment</p>
-                      <div className="flex gap-2 mt-2">
-                        <input
-                          placeholder="Add comment"
-                          className="flex-1 rounded border px-3 py-2 text-sm"
-                          value={newRequesterSafetyComment}
-                          onChange={(e) =>
-                            setNewRequesterSafetyComment(e.target.value)
-                          }
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const v = newRequesterSafetyComment.trim();
-                            if (!v) return;
-                            const prev = (form as any).requesterSafetyCustomComments || [];
-                            update({
-                              requesterSafetyCustomComments: [
-                                ...prev,
-                                { text: v, checked: false },
-                              ],
-                            } as any);
-                            setNewRequesterSafetyComment("");
-                          }}
-                          className="px-3 py-1 rounded bg-white border text-sm"
-                        >
-                          Add
-                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              </div>
-            </StepSection>  
-          )}
-        </div>
+              </StepSection>
+            )}
+          </div>
 
-        <StepActions
-          onBack={prev}
-          onSave={saveDraft}
-          onNext={() => {
-            if (currentStep === steps.length - 1) {
-              submit();
-              return;
+          <StepActions
+            onBack={prev}
+            onSave={saveDraft}
+            onNext={() => {
+              if (currentStep === steps.length - 1) {
+                submit();
+                return;
+              }
+              next();
+            }}
+            onPreview={preview}
+            nextLabel={
+              currentStep === steps.length - 1 ? "Submit Permit" : "Next Step"
             }
-            next();
-          }}
-          onPreview={preview}
-          nextLabel={
-            currentStep === steps.length - 1 ? "Submit Permit" : "Next Step"
-          }
-          disableNext={false}
-          isFirst={currentStep === 0}
-          isLast={currentStep === steps.length - 1}
-        />
+            disableNext={false}
+            isFirst={currentStep === 0}
+            isLast={currentStep === steps.length - 1}
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 }

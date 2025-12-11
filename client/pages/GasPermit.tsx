@@ -396,6 +396,16 @@ export default function GasPermit() {
     form.permitDetails?.requesterSafetyCustomComments,
   ]);
 
+  // Auto-open preview modal if URL contains ?preview
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has("preview")) {
+        setShowPreview(true);
+      }
+    } catch {}
+  }, []);
+
   const update = (path: string, value: any) => {
     setForm((f: any) => {
       const copy = JSON.parse(JSON.stringify(f));

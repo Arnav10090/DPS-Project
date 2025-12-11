@@ -912,7 +912,7 @@ export default function ApproverPermitDetails() {
 
       {/* Action Buttons at Bottom */}
       <div className="mx-auto max-w-7xl px-4 pb-6">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
           <button
             onClick={() => alert("Approve (placeholder)")}
             className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700"

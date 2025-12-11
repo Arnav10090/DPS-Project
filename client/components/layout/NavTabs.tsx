@@ -28,9 +28,6 @@ export default function NavTabs() {
         : "/permit-details";
   const baseTabs: TabItem[] = [
     { to: "/", label: "Main Dashboard" },
-    // Permit Details should be available to Requester, Approver, and Safety Officer
-    // Route approvers to the dedicated ApproverPermitDetails page
-    { to: permitDetailsPath, label: "Permit Details", hideForAdmin: true },
   ];
 
   const otherTabs: TabItem[] = [
@@ -73,10 +70,16 @@ export default function NavTabs() {
     tabs.push({ to: "/work-closure-request", label: "Work Closure Request" });
   }
   if (role === "approver") {
-    // Approver-specific navigation items inserted after Permit Details
+    // Approver-specific navigation items: Approval Queue first, then Permit Details
     tabs.push({ to: "/approval-queue", label: "Approval Queue" });
+    tabs.push({ to: permitDetailsPath, label: "Permit Details" });
     tabs.push({ to: "/review-permits", label: "Review Permits" });
     tabs.push({ to: "/work-closure-approval", label: "Work Closure Approval" });
+  }
+
+  if (role !== "approver") {
+    // Permit Details for non-approver roles (Requester, Safety Officer)
+    tabs.push({ to: permitDetailsPath, label: "Permit Details", hideForAdmin: true });
   }
 
   // Filter out tabs that should be hidden for specific roles

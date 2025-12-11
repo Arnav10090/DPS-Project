@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectTrigger,
@@ -250,17 +251,20 @@ export default function ApproverPermitDetails() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+        {/* Back Button - Outside Details Container */}
+        <div className="mb-6">
+          <Button
+            variant="outline"
+            onClick={() => navigate("/approval-queue")}
+            className="text-sm font-medium px-4 py-2 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            ← Back to List
+          </Button>
+        </div>
+
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">
-            {/* Back Button */}
-            <button
-              onClick={() => navigate("/approval-queue")}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors text-sm font-medium"
-            >
-              ← Back to Approval Queue
-            </button>
-
             <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
               <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
                 Details of such permit

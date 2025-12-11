@@ -154,9 +154,8 @@ export default function ApproverQueue() {
 
   // comprehensive filter state
   const [filters, setFilters] = useState({
-    priority: [] as string[],
+    permitType: [] as string[],
     status: [] as string[],
-    type: [] as string[],
     requester: [] as string[],
     location: [] as string[],
     risk: [] as string[],

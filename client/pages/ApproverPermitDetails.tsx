@@ -108,11 +108,28 @@ export default function ApproverPermitDetails() {
     }
   }, []);
 
-  // Load requester comments persisted from requester page
+  // Load requester comments persisted from requester page or approval queue
   useEffect(() => {
     try {
       if (typeof window === "undefined") return;
-      const raw = localStorage.getItem("dps_requester_comments_work");
+
+      // Try to load from work form first
+      let raw = localStorage.getItem("dps_requester_comments_work");
+
+      // If not found, check the permit type and load accordingly
+      if (!raw) {
+        const header = localStorage.getItem("dps_permit_header");
+        if (header) {
+          const h = JSON.parse(header);
+          const permitNumber = h.permitNumber || "";
+          // Determine permit type based on header or other clues
+          // For now, we'll try all keys
+          const htRaw = localStorage.getItem("dps_requester_comments_ht");
+          const gasRaw = localStorage.getItem("dps_requester_comments_gas");
+          raw = htRaw || gasRaw || raw;
+        }
+      }
+
       if (!raw) return;
       const data = JSON.parse(raw);
       update({

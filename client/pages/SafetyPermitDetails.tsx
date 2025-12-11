@@ -952,7 +952,9 @@ export default function SafetyOfficerPermitDetails() {
                                         };
                                       },
                                     );
-                                    update({ SafetyOfficerCustomComments: next });
+                                    update({
+                                      SafetyOfficerCustomComments: next,
+                                    });
                                   }}
                                 />
                                 <span className="text-sm">{text}</span>
@@ -967,7 +969,9 @@ export default function SafetyOfficerPermitDetails() {
                                     const next = prev.filter(
                                       (_: any, i: number) => i !== idx,
                                     );
-                                    update({ SafetyOfficerCustomComments: next });
+                                    update({
+                                      SafetyOfficerCustomComments: next,
+                                    });
                                   }}
                                   className="text-xs text-red-600 hover:underline px-2 py-1"
                                 >
@@ -1670,7 +1674,9 @@ export function SafetyGLPermitDetailsSection() {
           approverCustomComments: a.approverCustomComments || [],
         });
       }
-      const rawATS = localStorage.getItem("dps_approver_to_safety_comments_gas");
+      const rawATS = localStorage.getItem(
+        "dps_approver_to_safety_comments_gas",
+      );
       if (rawATS) {
         const s = JSON.parse(rawATS);
         update({

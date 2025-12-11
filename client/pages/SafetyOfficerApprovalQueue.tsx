@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import SafetyOfficerPermitDetails from "./SafetyPermitDetails";
 import {
   Card,
   CardContent,

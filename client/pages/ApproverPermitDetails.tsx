@@ -243,10 +243,7 @@ export default function ApproverPermitDetails() {
               {/* Permit Header */}
               <div className="mt-6 mb-6">
                 <div>
-                  <div className="text-sm text-slate-600">Permit</div>
-                  <div className="text-xl font-semibold">
-                    {form.permitNumber || "Select a permit"}
-                  </div>
+                  <div className="text-sm text-slate-600 font-bold">Permit Type:</div>
                   <div className="text-sm text-slate-600">
                     {form.permitDocType === "highTension"
                       ? "High Tension Line Work Permit"

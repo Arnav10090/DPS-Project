@@ -253,6 +253,14 @@ export default function ApproverPermitDetails() {
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">
+            {/* Back Button */}
+            <button
+              onClick={() => navigate("/approval-queue")}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors text-sm font-medium"
+            >
+              ← Back to Approval Queue
+            </button>
+
             <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
               <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
                 Details of such permit

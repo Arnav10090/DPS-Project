@@ -260,7 +260,7 @@ export default function ApproverPermitDetails() {
               {/* Permit Details in 2-Column Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-xs text-slate-600 mb-1 font-semibold">
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
                     Work Description
                   </div>
                   <div className="text-sm text-slate-700">

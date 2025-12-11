@@ -1,4 +1,5 @@
 import React from "react";
+import { Wifi } from "lucide-react";
 import {
   PermitItem,
   PermitStatusTable,
@@ -1060,45 +1061,116 @@ export function SystemArchitecture() {
                     const tx = n.x - 50;
                     const ty = n.y - 18;
                     return (
-                      <g
-                        key={n.id}
-                        transform={`translate(${tx}, ${ty})`}
-                        onClick={() => n.label && setSelectedNode(n)}
-                        style={{ cursor: n.label ? "pointer" : "default" }}
-                      >
-                        <rect
-                          width={100}
-                          height={36}
-                          rx={6}
-                          fill="#fff"
-                          stroke="#0f172a"
-                          strokeWidth={1}
-                        />
-                        {n.label ? (
-                          <foreignObject width={100} height={36}>
-                            <div
-                              className={`w-full h-full flex items-center gap-2 px-2`}
-                            >
+                        <g
+                          key={n.id}
+                          transform={`translate(${tx}, ${ty})`}
+                          onClick={() => n.label && setSelectedNode(n)}
+                          style={{ cursor: n.label ? "pointer" : "default" }}
+                        >
+                          {n.type === "tablet" && (
+                            <g transform={`translate(${-18}, 9)`}> 
+                              <Wifi size={14} stroke="#16a34a" />
+                            </g>
+                          )}
+                          <rect
+                            width={100}
+                            height={36}
+                            rx={6}
+                            fill="#fff"
+                            stroke="#0f172a"
+                            strokeWidth={1}
+                          />
+                          {n.label ? (
+                            <foreignObject width={100} height={36}>
                               <div
-                                className="w-2 h-2 rounded-full"
-                                style={{
-                                  background:
-                                    n.status === "online"
-                                      ? "#16a34a"
-                                      : n.status === "offline"
-                                        ? "#ef4444"
-                                        : "#f59e0b",
-                                }}
-                              />
-                              <div className="text-xs">
-                                <div className="font-semibold text-[10px] leading-tight">
-                                  {n.label}
+                                className={`w-full h-full flex items-center gap-2 px-2`}
+                              >
+                                <div className="w-6 h-6 flex items-center justify-center">
+                                  {(() => {
+                                    // special-case by id for email/admin
+                                    if (n.id === "email") {
+                                      return (
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <rect x="2" y="5" width="20" height="14" rx="2" stroke="#0f172a" strokeWidth="1.2" />
+                                          <path d="M3 7l9 6 9-6" stroke="#0f172a" strokeWidth="1.2" fill="none" />
+                                        </svg>
+                                      );
+                                    }
+                                    if (n.id === "admin") {
+                                      return (
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="12" cy="8" r="3" stroke="#0f172a" strokeWidth="1.2" />
+                                          <path d="M4 20c1.5-4 6-6 8-6s6.5 2 8 6" stroke="#0f172a" strokeWidth="1.2" fill="none" />
+                                        </svg>
+                                      );
+                                    }
+                                    // render icon per node type
+                                    switch (n.type) {
+                                      case "server":
+                                        return (
+                                          <svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                          >
+                                            <rect x="3" y="4" width="18" height="6" rx="1" stroke="#0f172a" strokeWidth="1.5" />
+                                            <rect x="3" y="14" width="18" height="6" rx="1" stroke="#0f172a" strokeWidth="1.5" />
+                                          </svg>
+                                        );
+                                      case "db":
+                                        return (
+                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <ellipse cx="12" cy="6" rx="8" ry="3" stroke="#0f172a" strokeWidth="1.5" />
+                                            <path d="M4 6v6c0 1.657 3.582 3 8 3s8-1.343 8-3V6" stroke="#0f172a" strokeWidth="1.5" />
+                                          </svg>
+                                        );
+                                      case "network":
+                                        return (
+                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="4" width="18" height="5" rx="1" stroke="#0f172a" strokeWidth="1.5" />
+                                            <rect x="7" y="12" width="10" height="6" rx="1" stroke="#0f172a" strokeWidth="1.5" />
+                                          </svg>
+                                        );
+                                      case "security":
+                                        return (
+                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 3l7 3v5c0 5-3.582 8-7 9-3.418-1-7-4-7-9V6l7-3z" stroke="#0f172a" strokeWidth="1.2" fill="#fff" />
+                                          </svg>
+                                        );
+                                      case "client":
+                                        return (
+                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="4" width="18" height="12" rx="1" stroke="#0f172a" strokeWidth="1.2" />
+                                            <rect x="9" y="18" width="6" height="2" fill="#0f172a" />
+                                          </svg>
+                                        );
+                                      case "tablet":
+                                        return (
+                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="5" y="3" width="14" height="18" rx="2" stroke="#0f172a" strokeWidth="1.2" />
+                                            <circle cx="12" cy="18" r="0.8" fill="#0f172a" />
+                                          </svg>
+                                        );
+                                      default:
+                                        return (
+                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="8" stroke="#0f172a" strokeWidth="1.2" />
+                                          </svg>
+                                        );
+                                    }
+                                  })()}
+                                </div>
+                                <div className="text-xs">
+                                  <div className="font-semibold text-[10px] leading-tight">
+                                    {n.label}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </foreignObject>
-                        ) : null}
-                      </g>
+                            </foreignObject>
+                          ) : null}
+                        </g>
                     );
                   })}
                 </g>
@@ -1111,31 +1183,47 @@ export function SystemArchitecture() {
           <div className="bg-white border p-4 rounded-lg shadow-sm space-y-4">
             <div>
               <h3 className="text-sm font-semibold mb-2">Legend & Controls</h3>
-              <div className="flex flex-col gap-2">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={showEthernet}
-                    onChange={(e) => setShowEthernet(e.target.checked)}
-                  />{" "}
-                  Ethernet
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={showWifi}
-                    onChange={(e) => setShowWifi(e.target.checked)}
-                  />{" "}
-                  WiFi
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={showSecure}
-                    onChange={(e) => setShowSecure(e.target.checked)}
-                  />{" "}
-                  Secure
-                </label>
+              {/* checkboxes removed as requested */}
+              <div />
+            </div>
+
+            {/* Visual legend matching the supplied image */}
+            <div className="mt-2">
+              <div className="relative inline-block">
+                <div className="absolute -top-3 right-2 bg-yellow-300 text-xs font-semibold px-2 rounded">
+                  LEGENDS
+                </div>
+                <div className="border-2 border-dashed border-red-600 rounded p-3 pr-6">
+                  <div className="grid" style={{ gridTemplateColumns: '80px 1fr', columnGap: 12, rowGap: 8 }}>
+                    {/* Ethernet row */}
+                    <div className="flex items-center justify-center">
+                      <svg width="80" height="12" viewBox="0 0 80 12" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="6" x2="68" y2="6" stroke="#16a34a" strokeWidth="4" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-xs">Ethernet</span>
+                    </div>
+
+                    {/* HIL Supply row */}
+                    <div className="flex items-center justify-center">
+                      <svg width="80" height="12" viewBox="0 0 80 12" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="6" x2="68" y2="6" stroke="#b91c1c" strokeWidth="3" strokeDasharray="6 4" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-xs">HIL Supply</span>
+                    </div>
+
+                    {/* Wireless row: wifi icon centered above a dashed connector line in the symbol column */}
+                    <div className="flex items-center justify-center">
+                      <Wifi size={16} stroke="#16a34a" />
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-xs">Wireless LAN (WIFI) connection</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

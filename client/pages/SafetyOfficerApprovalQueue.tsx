@@ -412,9 +412,14 @@ export default function SafetyOfficerApprovalQueue() {
     const renderPermitForm = () => {
       switch (selectedPermitType) {
         case "highTension":
-          return <SafetyHTPermitDetailsSection />;
+          // Use the full SafetyOfficerPermitDetails for HT so header/company
+          // section and split layout appear the same as Approver view
+          return <SafetyOfficerPermitDetails />;
         case "gasLine":
-          return <SafetyGLPermitDetailsSection />;
+          // Use the full SafetyOfficerPermitDetails for Gas Line as well
+          // so the company header and split permit layout match the
+          // Approver view for consistency.
+          return <SafetyOfficerPermitDetails />;
         case "work":
         default:
           return <SafetyOfficerPermitDetails />;

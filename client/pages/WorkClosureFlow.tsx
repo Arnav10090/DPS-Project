@@ -75,7 +75,7 @@ export default function AdminWorkflows() {
   const [priorityFilter, setPriorityFilter] = useState<string>("All");
   const [dateRange, setDateRange] = useState<string>("All");
   const [page, setPage] = useState(1);
-  const pageSize = 25;
+  const [pageSize, setPageSize] = useState<number>(25);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
@@ -366,7 +366,7 @@ export default function AdminWorkflows() {
                         <div className="text-xs text-muted-foreground">
                           {row.workType} • {row.location}
                         </div>
-                        <div className="text-xs mt-1 inline-block bg-gray-100 px-2 py-0.5 rounded text-xs">
+                        <div className="text-xs mt-1 inline-block bg-gray-100 px-2 py-0.5 rounded">
                           {row.duration}
                         </div>
                       </td>
@@ -481,12 +481,17 @@ export default function AdminWorkflows() {
             <div className="flex items-center gap-2">
               <select
                 value={pageSize}
-                onChange={(e) => setPage(1)}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setPage(1);
+                }}
                 className="rounded border px-2 py-1"
               >
-                <option>25</option>
-                <option>50</option>
-                <option>100</option>
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
               <Button
                 variant="outline"

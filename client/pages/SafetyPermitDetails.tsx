@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import PermitPreview from "@/components/permit/PermitPreview";
+import HTPermitPreview from "@/components/permit/ht/HTPermitPreview";
+import GasPermitPreview from "@/components/permit/gas/GasPermitPreview";
 import {
   Select,
   SelectTrigger,
@@ -104,11 +107,28 @@ const DEFAULT_FORM: SafetyOfficerPermitForm = {
 
 export default function SafetyOfficerPermitDetails() {
   const [form, setForm] = useState<SafetyOfficerPermitForm>(() => DEFAULT_FORM);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [newSafetyOfficerComment, setNewSafetyOfficerComment] = useState("");
   const [newSafetyToApproverComment, setNewSafetyToApproverComment] =
     useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (showPreviewModal) {
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setShowPreviewModal(false);
+      };
+      document.addEventListener("keydown", onKey);
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.removeEventListener("keydown", onKey);
+        document.body.style.overflow = prev;
+      };
+    }
+    return;
+  }, [showPreviewModal]);
+  
   useEffect(() => {
     // Force safety role for this page
     try {
@@ -193,6 +213,8 @@ export default function SafetyOfficerPermitDetails() {
       if (header) {
         const h = JSON.parse(header);
         update({
+          // ensure permitDocType is honored so HT/Gas views render correctly
+          permitDocType: h.permitDocType || "work",
           permitRequester: h.permitRequester || "",
           permitApprover1: h.permitApprover1 || "",
           permitApprover2: h.permitApprover2 || "",
@@ -307,16 +329,6 @@ export default function SafetyOfficerPermitDetails() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
-        {/* Back Button */}
-        <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={() => navigate("/safety-officer-approval-queue")}
-            className="text-sm font-medium px-4 py-2 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
-          >
-            ← Back to List
-          </Button>
-        </div>
 
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
@@ -459,21 +471,77 @@ export default function SafetyOfficerPermitDetails() {
         <div className="flex justify-end">
           <button
             type="button"
-            onClick={() => {
-              const docType = form.permitDocType || "work";
-              let previewUrl = "/permit-details?preview=1&from=safety";
-              if (docType === "highTension") {
-                previewUrl = "/ht-permit?preview=1&from=safety";
-              } else if (docType === "gasLine") {
-                previewUrl = "/gas-permit?preview=1&from=safety";
-              }
-              navigate(previewUrl);
-            }}
+            onClick={() => setShowPreviewModal(true)}
             className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
           >
             Preview Requester Form
           </button>
         </div>
+
+        {showPreviewModal && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/100 backdrop-blur-md"
+              onClick={() => setShowPreviewModal(false)}
+              style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
+            />
+
+            <div className="relative bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto p-6 z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div />
+                <div>
+                  <Button variant="ghost" size="sm" onClick={() => setShowPreviewModal(false)}>
+                    Close
+                  </Button>
+                </div>
+              </div>
+
+              {/* Render the appropriate preview component */}
+              {form.permitDocType === "highTension" ? (
+                <HTPermitPreview />
+              ) : form.permitDocType === "gasLine" ? (
+                (() => {
+                  const gasData = {
+                    header: {
+                      certificateNo: form.certificateNumber || "",
+                      permitNo: form.permitNumber || "",
+                    },
+                    partA: {
+                      issuerName: form.permitRequester || "",
+                      crossRef: "",
+                      department: form.safetyManager || "",
+                      location: "Plant A - Bay 3",
+                      description: "Gas line work",
+                      fromDate: form.permitIssueDate || "",
+                      fromTime: "08:00",
+                      toDate: form.expectedReturnDate || "",
+                      toTime: "17:00",
+                    },
+                    partB: [],
+                    partD: { confirmation: false },
+                    partE: {
+                      acceptor: {},
+                      issuer: {},
+                      acceptorConfirmed: false,
+                      closed: false,
+                    },
+                  } as any;
+                  return <GasPermitPreview data={gasData} />;
+                })()
+              ) : (
+                <PermitPreview
+                  form={{
+                    permitNumber: form.permitNumber || "",
+                    certificateNumber: form.certificateNumber || "",
+                    permitType: form.permitType === "hot" ? "hot" : "cold",
+                    title: "Permit Preview",
+                    attachments: [],
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Section 2: Permit Details & Comments */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">

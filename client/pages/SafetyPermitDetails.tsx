@@ -307,6 +307,16 @@ export default function SafetyOfficerPermitDetails() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Button
+            variant="outline"
+            onClick={() => navigate("/safety-officer-approval-queue")}
+            className="text-sm font-medium px-4 py-2 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            ← Back to List
+          </Button>
+        </div>
 
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">

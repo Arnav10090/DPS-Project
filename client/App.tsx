@@ -21,6 +21,7 @@ import GasPermit from "./pages/GasPermit";
 import WorkClosureRequest from "./pages/WorkClosureRequest";
 import WorkClosureApproval from "./pages/WorkClosureApproval";
 import ApprovalQueue from "./pages/ApprovalQueue";
+import SafetyOfficerApprovalQueue from "./pages/SafetyOfficerApprovalQueue";
 import ReviewPermits from "./pages/ReviewPermits";
 import Users from "./pages/Users";
 import RolesPermissions from "./pages/RolesPermissions";
@@ -68,6 +69,10 @@ const App = () => (
               element={<WorkClosureApproval />}
             />
             <Route path="approval-queue" element={<ApprovalQueue />} />
+            <Route
+              path="safety-officer-approval-queue"
+              element={<SafetyOfficerApprovalQueue />}
+            />
             <Route path="review-permits" element={<ReviewPermits />} />
             <Route path="permits-closed" element={<PermitsClosed />} />
             <Route path="overall-status" element={<OverallStatus />} />

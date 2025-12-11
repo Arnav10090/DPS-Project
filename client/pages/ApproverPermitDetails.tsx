@@ -386,6 +386,17 @@ export default function ApproverPermitDetails() {
           </div>
         </div>
 
+        {/* Preview Requester Form Button */}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => navigate("/permit-details?preview=1")}
+            className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
+          >
+            Preview Requester Form
+          </button>
+        </div>
+
         {/* Section 2: Permit Details & Comments */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">

@@ -231,57 +231,6 @@ export default function ApproverPermitDetails() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
-        <div>
-          <h1 className="text-[20px] font-semibold">Work Permit Form</h1>
-          <div className="text-sm text-gray-500">
-            <p>
-              <span className="text-sm">{`WCS-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`}</span>
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-6">
-          {/* Work Permit Form Type dropdown */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-700 font-medium">
-              Work Permit Form Type:
-            </span>
-            <div className="w-[220px]">
-              <Select
-                value={form.permitDocType}
-                onValueChange={(v) => {
-                  if (v === "highTension") {
-                    navigate("/ht-permit");
-                  } else if (v === "gasLine") {
-                    navigate("/gas-permit");
-                  } else {
-                    update({ permitDocType: v as any });
-                  }
-                }}
-              >
-                <SelectTrigger aria-label="Select permit form">
-                  <SelectValue placeholder="Permit form" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="work">Work Permit</SelectItem>
-                  <SelectItem value="highTension">
-                    High Tension Line Work Permit
-                  </SelectItem>
-                  <SelectItem value="gasLine">Gas Line Work Permit</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          {/* Preview requester form button */}
-          <button
-            type="button"
-            onClick={() => navigate("/permit-details?preview=1")}
-            className="px-3 py-1.5 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
-          >
-            Preview Requester Form
-          </button>
-        </div>
-      </header>
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">

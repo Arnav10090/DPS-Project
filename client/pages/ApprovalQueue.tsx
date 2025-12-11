@@ -430,16 +430,6 @@ export default function ApproverQueue() {
               </button>
             </div>
           </div>
-
-          {/* Search bar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            <Input
-              placeholder="Search permits..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 text-sm"
-            />
-          </div>
         </div>
 
         {/* Active Filters Display */}
@@ -780,6 +770,16 @@ export default function ApproverQueue() {
             </div>
           </div>
 
+        </div>
+
+        {/* Search bar */}
+        <div className="mb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <Input
+            placeholder="Search permits..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="flex-1 text-sm"
+          />
         </div>
 
         {/* Results header */}

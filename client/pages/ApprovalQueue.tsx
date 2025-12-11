@@ -405,59 +405,33 @@ export default function ApproverQueue() {
       <div className="rounded-lg border bg-card p-3 sm:p-4 shadow-sm relative">
         {/* Top action bar - now fully responsive */}
         <div className="mb-4 space-y-3">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                onClick={bulkApprove}
-                className="bg-green-600 text-white text-xs sm:text-sm px-3 py-1.5"
-                size="sm"
+          <div className="flex items-center gap-2 w-full">
+            {/* View toggle for tablet/mobile */}
+            <div className="md:hidden flex bg-gray-100 rounded-lg p-1 ml-auto">
+              <button
+                onClick={() => setViewMode("table")}
+                className={`px-3 py-1 text-xs rounded transition-colors ${
+                  viewMode === "table"
+                    ? "bg-white shadow-sm text-gray-900"
+                    : "text-gray-600"
+                }`}
               >
-                Bulk Approve
-              </Button>
-              <Button
-                variant="outline"
-                className="text-xs sm:text-sm px-3 py-1.5"
-                size="sm"
+                Table
+              </button>
+              <button
+                onClick={() => setViewMode("cards")}
+                className={`px-3 py-1 text-xs rounded transition-colors ${
+                  viewMode === "cards"
+                    ? "bg-white shadow-sm text-gray-900"
+                    : "text-gray-600"
+                }`}
               >
-                Priority Filter
-              </Button>
-              <Button
-                variant="outline"
-                className="text-xs sm:text-sm px-3 py-1.5"
-                size="sm"
-              >
-                Export
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              {/* View toggle for tablet/mobile */}
-              <div className="md:hidden flex bg-gray-100 rounded-lg p-1">
-                <button
-                  onClick={() => setViewMode("table")}
-                  className={`px-3 py-1 text-xs rounded transition-colors ${
-                    viewMode === "table"
-                      ? "bg-white shadow-sm text-gray-900"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Table
-                </button>
-                <button
-                  onClick={() => setViewMode("cards")}
-                  className={`px-3 py-1 text-xs rounded transition-colors ${
-                    viewMode === "cards"
-                      ? "bg-white shadow-sm text-gray-900"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Cards
-                </button>
-              </div>
+                Cards
+              </button>
             </div>
           </div>
 
-          {/* Search and filter row */}
+          {/* Search bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <Input
               placeholder="Search permits..."
@@ -465,35 +439,6 @@ export default function ApproverQueue() {
               onChange={(e) => setQuery(e.target.value)}
               className="flex-1 text-sm"
             />
-
-            <button
-              onClick={() => setFiltersOpen((v) => !v)}
-              className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-white/60 backdrop-blur border border-gray-200 hover:scale-102 transition-transform text-sm whitespace-nowrap"
-              aria-expanded={filtersOpen}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 14.414V19a1 1 0 01-1.447.894L9 18.618V14.414L3.293 6.707A1 1 0 013 6V4z"
-                />
-              </svg>
-              <span>Filters</span>
-              {getActiveFilters().length > 0 ? (
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white text-xs">
-                  {getActiveFilters().length}
-                </span>
-              ) : (
-                <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
-              )}
-            </button>
           </div>
         </div>
 

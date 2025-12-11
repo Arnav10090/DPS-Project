@@ -23,6 +23,14 @@ import {
 const PermitsClosed = () => {
   // Mock data for closed permits
   const navigate = useNavigate();
+
+  // Redirect requesters away from this page
+  useEffect(() => {
+    const role = typeof window !== "undefined" ? localStorage.getItem("dps_role") : null;
+    if (role === "requester") {
+      navigate("/overall-status", { replace: true });
+    }
+  }, [navigate]);
   const [permitDocType, setPermitDocType] = useState<
     "work" | "highTension" | "gasLine"
   >("work");

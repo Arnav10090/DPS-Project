@@ -110,6 +110,7 @@ export default function ApproverQueue() {
         expectedReturnDate: "",
         certificateNumber: "",
         permitNumber: permit.permitId,
+        permitDocType,
       };
       localStorage.setItem("dps_permit_header", JSON.stringify(headerData));
 

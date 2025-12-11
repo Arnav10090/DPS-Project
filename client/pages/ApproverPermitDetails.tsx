@@ -90,6 +90,7 @@ export default function ApproverPermitDetails() {
   const [form, setForm] = useState<ApproverPermitForm>(() => DEFAULT_FORM);
   const [newApproverComment, setNewApproverComment] = useState("");
   const [newApproverToSafetyComment, setNewApproverToSafetyComment] = useState("");
+  const [activeTab, setActiveTab] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {

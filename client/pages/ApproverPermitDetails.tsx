@@ -95,7 +95,6 @@ export default function ApproverPermitDetails() {
   const [newApproverComment, setNewApproverComment] = useState("");
   const [newApproverToSafetyComment, setNewApproverToSafetyComment] =
     useState("");
-  const [activeTab, setActiveTab] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -232,57 +231,6 @@ export default function ApproverPermitDetails() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
-        <div>
-          <h1 className="text-[20px] font-semibold">Work Permit Form</h1>
-          <div className="text-sm text-gray-500">
-            <p>
-              <span className="text-sm">{`WCS-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`}</span>
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-6">
-          {/* Work Permit Form Type dropdown */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-700 font-medium">
-              Work Permit Form Type:
-            </span>
-            <div className="w-[220px]">
-              <Select
-                value={form.permitDocType}
-                onValueChange={(v) => {
-                  if (v === "highTension") {
-                    navigate("/ht-permit");
-                  } else if (v === "gasLine") {
-                    navigate("/gas-permit");
-                  } else {
-                    update({ permitDocType: v as any });
-                  }
-                }}
-              >
-                <SelectTrigger aria-label="Select permit form">
-                  <SelectValue placeholder="Permit form" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="work">Work Permit</SelectItem>
-                  <SelectItem value="highTension">
-                    High Tension Line Work Permit
-                  </SelectItem>
-                  <SelectItem value="gasLine">Gas Line Work Permit</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          {/* Preview requester form button */}
-          <button
-            type="button"
-            onClick={() => navigate("/permit-details?preview=1")}
-            className="px-3 py-1.5 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
-          >
-            Preview Requester Form
-          </button>
-        </div>
-      </header>
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
@@ -364,79 +312,95 @@ export default function ApproverPermitDetails() {
           </div>
         </div>
 
+        {/* Company header under progress for Approver */}
+        <div className="bg-white border-b">
+          <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg"
+                alt="AM/NS INDIA logo"
+                className="h-[60px] w-auto"
+              />
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-gray-900">
+                ArcelorMittal Nippon Steel India Limited
+              </div>
+              <div className="text-gray-600">HAZIRA</div>
+              <div className="mt-1 text-[20px] font-bold text-gray-900">
+                {form.permitDocType === "highTension"
+                  ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
+                  : form.permitDocType === "gasLine"
+                    ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
+                    : "PERMIT TO WORK"}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 w-[240px]">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Certificate No.
+                </label>
+                <input
+                  value={form.certificateNumber || ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    update({ certificateNumber: v });
+                    try {
+                      const header = JSON.parse(
+                        localStorage.getItem("dps_permit_header") || "{}",
+                      );
+                      header.certificateNumber = v;
+                      localStorage.setItem(
+                        "dps_permit_header",
+                        JSON.stringify(header),
+                      );
+                    } catch {}
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Permit No.
+                </label>
+                <input
+                  value={form.permitNumber || ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    update({ permitNumber: v });
+                    try {
+                      const header = JSON.parse(
+                        localStorage.getItem("dps_permit_header") || "{}",
+                      );
+                      header.permitNumber = v;
+                      localStorage.setItem(
+                        "dps_permit_header",
+                        JSON.stringify(header),
+                      );
+                    } catch {}
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Preview Requester Form Button */}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => navigate("/permit-details?preview=1&from=approver")}
+            className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
+          >
+            Preview Requester Form
+          </button>
+        </div>
+
         {/* Section 2: Permit Details & Comments */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-              {/* Tabs */}
-              <div className="flex items-center gap-2 border rounded-lg p-1 bg-gray-50 w-fit mb-6">
-                <button
-                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 0 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
-                  onClick={() => setActiveTab(0)}
-                >
-                  Risk Assessment
-                </button>
-                <button
-                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 1 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
-                  onClick={() => setActiveTab(1)}
-                >
-                  Compliance
-                </button>
-                <button
-                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 2 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
-                  onClick={() => setActiveTab(2)}
-                >
-                  Documents
-                </button>
-                <button
-                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 3 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
-                  onClick={() => setActiveTab(3)}
-                >
-                  Review History
-                </button>
-              </div>
-
-              {/* Tab Content */}
-              <div className="space-y-4 mb-6 pb-6 border-b">
-                {activeTab === 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium">Risk Matrix</h3>
-                    <div className="text-sm text-slate-600">
-                      Probability vs Impact chart (placeholder)
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 1 && (
-                  <div>
-                    <h3 className="text-sm font-medium">
-                      Compliance Checklist
-                    </h3>
-                    <div className="text-sm text-slate-600">
-                      Compliance verification (placeholder)
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 2 && (
-                  <div>
-                    <h3 className="text-sm font-medium">Documents</h3>
-                    <div className="text-sm text-slate-600">
-                      Supporting documents (placeholder)
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 3 && (
-                  <div>
-                    <h3 className="text-sm font-medium">Review History</h3>
-                    <div className="text-sm text-slate-600">
-                      Historical reviews (placeholder)
-                    </div>
-                  </div>
-                )}
-              </div>
-
               <div className="mt-6 space-y-4">
                 {/* Top requester/approver fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -960,80 +924,6 @@ export default function ApproverPermitDetails() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Company header under progress for Approver */}
-        <div className="bg-white border-b">
-          <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <img
-                src="/placeholder.svg"
-                alt="AM/NS INDIA logo"
-                className="h-[60px] w-auto"
-              />
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-gray-900">
-                ArcelorMittal Nippon Steel India Limited
-              </div>
-              <div className="text-gray-600">HAZIRA</div>
-              <div className="mt-1 text-[20px] font-bold text-gray-900">
-                {form.permitDocType === "highTension"
-                  ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
-                  : form.permitDocType === "gasLine"
-                    ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
-                    : "PERMIT TO WORK"}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 w-[240px]">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Certificate No.
-                </label>
-                <input
-                  value={form.certificateNumber || ""}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    update({ certificateNumber: v });
-                    try {
-                      const header = JSON.parse(
-                        localStorage.getItem("dps_permit_header") || "{}",
-                      );
-                      header.certificateNumber = v;
-                      localStorage.setItem(
-                        "dps_permit_header",
-                        JSON.stringify(header),
-                      );
-                    } catch {}
-                  }}
-                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Permit No.
-                </label>
-                <input
-                  value={form.permitNumber || ""}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    update({ permitNumber: v });
-                    try {
-                      const header = JSON.parse(
-                        localStorage.getItem("dps_permit_header") || "{}",
-                      );
-                      header.permitNumber = v;
-                      localStorage.setItem(
-                        "dps_permit_header",
-                        JSON.stringify(header),
-                      );
-                    } catch {}
-                  }}
-                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-                />
               </div>
             </div>
           </div>

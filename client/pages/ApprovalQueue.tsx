@@ -180,11 +180,8 @@ export default function ApproverQueue() {
           .toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      // priority
-      if (
-        filters.priority.length &&
-        !filters.priority.map((s) => s.toLowerCase()).includes(p.priority)
-      )
+      // permit type
+      if (filters.permitType.length && !filters.permitType.includes(p.type))
         return false;
       // status
       if (
@@ -194,8 +191,6 @@ export default function ApproverQueue() {
           .includes(p.safetyStatus.toLowerCase())
       )
         return false;
-      // type
-      if (filters.type.length && !filters.type.includes(p.type)) return false;
       // requester
       if (filters.requester.length && !filters.requester.includes(p.requester))
         return false;

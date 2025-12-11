@@ -224,24 +224,10 @@ export default function ApproverQueue() {
     setSelected((s) => ({ ...s, ...next }));
   }
 
-  function bulkApprove() {
-    const ids = Object.keys(selected).filter((k) => selected[k]);
-    if (!ids.length) return;
-    // For now just mark safetyStatus locally
-    setPermits((s) =>
-      s.map((p) =>
-        ids.includes(p.id) ? { ...p, safetyStatus: "Approved" } : p,
-      ),
-    );
-    // clear selection
-    setSelected({});
-  }
-
   function clearAllFilters() {
     setFilters({
-      priority: [],
+      permitType: [],
       status: [],
-      type: [],
       requester: [],
       location: [],
       risk: [],

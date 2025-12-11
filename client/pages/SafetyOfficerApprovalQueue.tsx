@@ -402,18 +402,35 @@ export default function SafetyOfficerApprovalQueue() {
 
   // Show permit details inline when a permit is selected
   if (selectedPermit) {
+    const handleBackToList = () => {
+      setSelectedPermit(null);
+      setSelectedPermitType(null);
+    };
+
+    const renderPermitForm = () => {
+      switch (selectedPermitType) {
+        case "highTension":
+          return <SafetyHTPermitDetailsSection />;
+        case "gasLine":
+          return <SafetyGLPermitDetailsSection />;
+        case "work":
+        default:
+          return <SafetyOfficerPermitDetails />;
+      }
+    };
+
     return (
       <div>
         <div className="mb-6 px-2 sm:px-4 mt-4">
           <Button
             variant="outline"
-            onClick={() => setSelectedPermit(null)}
+            onClick={handleBackToList}
             className="text-sm font-medium px-4 py-2 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
           >
             ← Back to List
           </Button>
         </div>
-        <SafetyOfficerPermitDetails />
+        {renderPermitForm()}
       </div>
     );
   }

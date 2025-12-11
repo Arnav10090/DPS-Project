@@ -1038,7 +1038,6 @@ export default function ApproverPermitDetails() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

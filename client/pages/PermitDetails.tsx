@@ -1225,6 +1225,19 @@ export default function CreatePermit() {
     }
   }, []);
 
+  const handleClosePreview = () => {
+    setShowPreviewModal(false);
+    // If preview was opened from ApproverPermitDetails, navigate back
+    try {
+      const referrer = document.referrer;
+      if (referrer && referrer.includes("/approver-permit-details")) {
+        navigate("/approver-permit-details");
+      }
+    } catch (e) {
+      // ignore
+    }
+  };
+
   const submit = () => {
     try {
       const payload = { ...form, submittedAt: new Date().toISOString() };

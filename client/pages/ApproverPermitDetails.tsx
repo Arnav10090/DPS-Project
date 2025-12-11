@@ -272,7 +272,7 @@ export default function ApproverPermitDetails() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">Location</div>
+                  <div className="text-xs text-slate-600 mb-1 font-bold">Location</div>
                   <div className="text-sm text-slate-700">Plant A - Bay 3</div>
                 </div>
                 <div>

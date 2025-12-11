@@ -284,6 +284,159 @@ export default function ApproverPermitDetails() {
         </div>
       </header>
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+        {/* Only Section 1: Permit Details - Moved to top */}
+        <div className="rounded-xl border bg-white p-4 shadow-sm">
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
+                Details of such permit
+              </div>
+
+              {/* Permit Header with Actions */}
+              <div className="mt-6 flex items-center justify-between mb-6">
+                <div>
+                  <div className="text-sm text-slate-600">Permit</div>
+                  <div className="text-xl font-semibold">
+                    {form.permitNumber || "Select a permit"}
+                  </div>
+                  <div className="text-sm text-slate-600">
+                    {form.permitDocType === "highTension"
+                      ? "High Tension Line Work Permit"
+                      : form.permitDocType === "gasLine"
+                        ? "Gas Line Work Permit"
+                        : "Work Permit"}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => alert("Approve (placeholder)")}
+                    className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700"
+                  >
+                    Approve
+                  </button>
+                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
+                    Conditional
+                  </button>
+                  <button
+                    onClick={() => alert("Reject (placeholder)")}
+                    className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700"
+                  >
+                    Reject
+                  </button>
+                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
+                    Escalate
+                  </button>
+                </div>
+              </div>
+
+              {/* Permit Details in 2-Column Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b">
+                <div>
+                  <div className="text-xs text-slate-600 mb-1">
+                    Work Description
+                  </div>
+                  <div className="text-sm text-slate-700">
+                    {form.permitDocType === "work"
+                      ? "Welding work near fuel line"
+                      : form.permitDocType === "highTension"
+                        ? "High-voltage panel maintenance"
+                        : "Gas line inspection and testing"}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-600 mb-1">Location</div>
+                  <div className="text-sm text-slate-700">Plant A - Bay 3</div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-600 mb-1">
+                    Estimated Duration
+                  </div>
+                  <div className="text-sm text-slate-700">3 hrs</div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-600 mb-1">Personnel</div>
+                  <div className="text-sm text-slate-700">
+                    {form.permitRequester || "Jane Doe"} • Maintenance
+                  </div>
+                </div>
+              </div>
+
+              {/* Tabs */}
+              <div className="flex items-center gap-2 border rounded-lg p-1 bg-gray-50 w-fit mb-6">
+                <button
+                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 0 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                  onClick={() => setActiveTab(0)}
+                >
+                  Risk Assessment
+                </button>
+                <button
+                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 1 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                  onClick={() => setActiveTab(1)}
+                >
+                  Compliance
+                </button>
+                <button
+                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 2 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                  onClick={() => setActiveTab(2)}
+                >
+                  Documents
+                </button>
+                <button
+                  className={`px-3 py-1.5 rounded text-sm ${activeTab === 3 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                  onClick={() => setActiveTab(3)}
+                >
+                  Review History
+                </button>
+              </div>
+
+              {/* Tab Content */}
+              <div className="space-y-4">
+                {activeTab === 0 && (
+                  <div>
+                    <h3 className="text-sm font-medium">Risk Matrix</h3>
+                    <div className="text-sm text-slate-600">
+                      Probability vs Impact chart (placeholder)
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 1 && (
+                  <div>
+                    <h3 className="text-sm font-medium">
+                      Compliance Checklist
+                    </h3>
+                    <div className="text-sm text-slate-600">
+                      Compliance verification (placeholder)
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 2 && (
+                  <div>
+                    <h3 className="text-sm font-medium">Documents</h3>
+                    <div className="text-sm text-slate-600">
+                      Supporting documents (placeholder)
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 3 && (
+                  <div>
+                    <h3 className="text-sm font-medium">Review History</h3>
+                    <div className="text-sm text-slate-600">
+                      Historical reviews (placeholder)
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 space-y-4">
+                {/* Requester/Approver/Manager/Date fields remain here */}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Company header under progress for Approver */}
         <div className="bg-white border-b">
           <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">

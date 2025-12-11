@@ -1,0 +1,408 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 0 0% 98%; /* #fafafa */
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 207 75% 47%; /* #1976d2 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 204 77% 93%; /* #e3f2fd info */
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 4 90% 58%; /* #f44336 */
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 207 75% 47%;
+
+    --radius: 0.5rem; /* 8px cards, 4px inputs handled via tailwind */
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 207 75% 47%;
+
+    --sidebar-primary-foreground: 0 0% 100%;
+
+    --sidebar-accent: 210 40% 96.1%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-brand-bg text-foreground font-sans antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  @media (prefers-contrast: more) {
+    :focus-visible {
+      @apply ring-4;
+    }
+  }
+}
+
+/* Print adjustments */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .permit-print-area {
+    width: 210mm !important;
+    transform: scale(1.05);
+    transform-origin: top left;
+  }
+
+  /* Enlarge sections and table cells for print to better fill page */
+  .permit-print-area {
+    font-size: 13px !important;
+    line-height: 1.28 !important;
+  }
+  .permit-print-area .text-xs {
+    font-size: 12px !important;
+  }
+  .permit-print-area td,
+  .permit-print-area th,
+  .permit-print-area .p-2 {
+    padding: 0.85rem !important;
+  }
+  .permit-print-area .p-3 {
+    padding: 1rem !important;
+  }
+  .permit-print-area .mt-3 {
+    margin-top: 1rem !important;
+  }
+  .permit-print-area .mt-4 {
+    margin-top: 1.25rem !important;
+  }
+  .permit-print-area .border {
+    border-width: 1px !important;
+  }
+  .permit-print-area tr {
+    height: 20px;
+  }
+  .permit-print-area td,
+  .permit-print-area th {
+    vertical-align: middle;
+  }
+  .permit-print-area table,
+  .permit-print-area thead,
+  .permit-print-area tbody,
+  .permit-print-area tr,
+  .permit-print-area td,
+  .permit-print-area th,
+  .permit-print-keep-together,
+  .permit-print-area .grid,
+  .permit-print-area .border {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Ensure permit status block prefers to stay with previous content */
+  .permit-status-compact {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Explicit keep-together helper */
+  .permit-print-keep-together {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Print page grouping helpers */
+  .print-group {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 210mm !important;
+    margin: 0 auto !important;
+    border: none !important;
+  }
+
+  /* Add borders to each page wrapper individually so they match content height */
+  .print-page-1,
+  .print-page-2,
+  .print-page-3 {
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+    box-sizing: border-box !important;
+    width: 210mm !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  /* Simplified: remove extra side borders and pseudo-element bottom borders to avoid duplicate lines on print */
+  /* Side borders and bottom border are handled by the main .print-page-* wrapper; no extra ::after pseudo-elements or left/right borders here */
+
+  /* Enhanced first page styling for full page coverage */
+  .print-page-1 {
+    page-break-after: always !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 0 !important;
+    border-right: 2px solid #000 !important; /* Darker right-side border to match left */
+    border-bottom: none !important; /* Remove bottom-most page wrapper border */
+  }
+
+  /* Prevent internal direct child wrappers from drawing an extra right border next to the page border */
+  .print-page-1 > .border {
+    border-right: none !important;
+  }
+
+  /* Expand sections on page 1 to fill available space */
+  .print-page-1 .permit-print-area {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-evenly !important;
+    padding: 12px !important;
+  }
+
+  /* Make form sections expand proportionally on page 1 */
+  .print-page-1 table {
+    flex: 1 !important;
+    height: auto !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Increase cell heights and padding on page 1 for better space utilization */
+  .print-page-1 td,
+  .print-page-1 th {
+    padding: 1.8rem 1rem !important;
+    vertical-align: middle !important;
+    height: auto !important;
+    min-height: 55px !important;
+  }
+
+  /* Expand text areas and input fields on page 1 */
+  .print-page-1 textarea,
+  .print-page-1 input[type="text"] {
+    min-height: 50px !important;
+    padding: 12px !important;
+  }
+
+  /* Increase spacing between major sections on page 1 */
+  .print-page-1 .mt-3 {
+    margin-top: 2rem !important;
+  }
+  .print-page-1 .mt-4 {
+    margin-top: 2.5rem !important;
+  }
+
+  /* Expand the main table rows on page 1 to fill more space */
+  .print-page-1 tr {
+    height: auto !important;
+    min-height: 50px !important;
+  }
+
+  /* Make the work description section expandable on page 1 */
+  .print-page-1 .work-description-section {
+    flex: 2 !important;
+    min-height: 160px !important;
+  }
+
+  /* Equipment section expansion on page 1 */
+  .print-page-1 .equipment-section {
+    flex: 1.8 !important;
+    min-height: 140px !important;
+  }
+
+  /* Safety measures table expansion on page 1 */
+  .print-page-1 .safety-measures-table {
+    flex: 2.5 !important;
+    min-height: 280px !important;
+  }
+
+  /* Expand all table sections on page 1 */
+  .print-page-1 table {
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Make individual table rows taller */
+  .print-page-1 .safety-measures-table tr {
+    min-height: 35px !important;
+  }
+
+  /* Increase font size slightly for better proportion */
+  .print-page-1 {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+  }
+
+  .print-page-2 {
+    page-break-before: always !important;
+    page-break-after: always !important;
+    break-before: page !important;
+    break-after: page !important;
+  }
+  .print-page-3 {
+    page-break-before: always !important;
+    break-before: page !important;
+    padding: 4px 12px 12px 12px !important;
+  }
+
+  /* Reduce top margin/padding for page 3 content */
+  .print-page-3 > *:first-child,
+  .print-page-3 .permit-print-area > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 4px !important;
+  }
+
+  /* Compact spacing for page 3 headers and sections */
+  .print-page-3 h1,
+  .print-page-3 h2,
+  .print-page-3 h3 {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    padding-top: 0 !important;
+  }
+
+  /* Reduce spacing between sections on page 3 */
+  .print-page-3 .mt-3 {
+    margin-top: 8px !important;
+  }
+  .print-page-3 .mt-4 {
+    margin-top: 10px !important;
+  }
+
+  /* Compact layout for page 2 so PPE + Applicant + Permit Return fit on one page */
+  .print-page-2 {
+    /* increase size to fill page height better */
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    margin-top: -1px !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .print-page-2 > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .print-page-2 table:first-child,
+  .print-page-2 .permit-print-area > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .print-page-2 .text-xs {
+    font-size: 11px !important;
+  }
+  .print-page-2 td,
+  .print-page-2 th,
+  .print-page-2 .p-2 {
+    padding: 8px !important;
+  }
+  .print-page-2 .p-3 {
+    padding: 10px !important;
+  }
+  .print-page-2 .mt-3 {
+    margin-top: 10px !important;
+  }
+  .print-page-2 .mt-4 {
+    margin-top: 12px !important;
+  }
+  .print-page-2 .border {
+    border-width: 1px !important;
+  }
+  .print-page-2 tr {
+    height: 24px;
+  }
+  .print-page-2 td,
+  .print-page-2 th {
+    vertical-align: middle;
+  }
+
+  /* Ensure tables and status block don't split across pages */
+  .permit-status-compact,
+  .permit-print-keep-together,
+  .print-group {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}

@@ -385,7 +385,12 @@ export default function ApproverPermitDetails() {
         <div className="flex justify-end">
           <button
             type="button"
-            onClick={() => navigate("/permit-details?preview=1&from=approver")}
+            onClick={() => {
+              const docType = form.permitDocType || "work";
+              navigate(
+                `/permit-details?preview=1&from=approver&docType=${docType}`
+              );
+            }}
             className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
           >
             Preview Requester Form

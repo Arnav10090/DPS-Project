@@ -421,6 +421,17 @@ export default function HTPermitForm() {
     } catch {}
   }, []);
 
+  const handleClosePreview = () => {
+    setShowPreview(false);
+    // If preview was opened from ApproverPermitDetails, navigate back
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("from") === "approver") {
+        navigate("/approver-permit-details");
+      }
+    } catch {}
+  };
+
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
@@ -501,7 +512,7 @@ export default function HTPermitForm() {
           <div className="fixed inset-0 z-[9999] flex items-center justify-center">
             <div
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setShowPreview(false)}
+              onClick={() => handleClosePreview()}
               style={{
                 position: "fixed",
                 top: 0,

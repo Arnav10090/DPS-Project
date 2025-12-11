@@ -1218,6 +1218,43 @@ export default function CreatePermit() {
     return;
   }, [showPreviewModal]);
 
+  // Load preview data from localStorage if in preview mode from SafetyOfficerApprovalQueue
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has("preview")) {
+        const headerStr = localStorage.getItem("dps_permit_header");
+        if (headerStr) {
+          const header = JSON.parse(headerStr);
+          update({
+            permitNumber: header.permitNumber || form.permitNumber,
+            certificateNumber: header.certificateNumber || "",
+            permitApprover1: header.permitApprover1 || "",
+            permitApprover2: header.permitApprover2 || "",
+            safetyManager: header.safetyManager || "",
+            permitIssueDate: header.permitIssueDate || "",
+            expectedReturnDate: header.expectedReturnDate || "",
+            applicantName: header.permitRequester || "",
+          });
+        }
+        // Load requester comments for work permit
+        const requesterStr = localStorage.getItem("dps_requester_safety_comments_work");
+        if (requesterStr) {
+          const requesterData = JSON.parse(requesterStr);
+          update({
+            requesterSafetyRequireUrgent: !!requesterData.requesterSafetyRequireUrgent,
+            requesterSafetySafetyManagerApproval: !!requesterData.requesterSafetySafetyManagerApproval,
+            requesterSafetyPlannedShutdown: !!requesterData.requesterSafetyPlannedShutdown,
+            requesterSafetyPlannedShutdownDate: requesterData.requesterSafetyPlannedShutdownDate || "",
+            requesterSafetyCustomComments: requesterData.requesterSafetyCustomComments || [],
+          });
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
   // Auto-open preview modal if URL contains ?preview
   useEffect(() => {
     try {

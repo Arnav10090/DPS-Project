@@ -276,7 +276,7 @@ export default function ApproverPermitDetails() {
                   <div className="text-sm text-slate-700">Plant A - Bay 3</div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
                     Estimated Duration
                   </div>
                   <div className="text-sm text-slate-700">3 hrs</div>

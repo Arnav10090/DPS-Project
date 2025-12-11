@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import SafetyOfficerPermitDetails from "./SafetyPermitDetails";
+import SafetyOfficerPermitDetails, {
+  SafetyHTPermitDetailsSection,
+  SafetyGLPermitDetailsSection,
+} from "./SafetyPermitDetails";
 import {
   Card,
   CardContent,

@@ -38,7 +38,7 @@ const SAMPLE: Permit[] = [
   {
     id: "1",
     permitId: "WP-2024-0892",
-    type: "Hot Work",
+    type: "Work Permit",
     priority: "high",
     requester: "Jane Doe",
     requesterDept: "Maintenance",
@@ -52,7 +52,7 @@ const SAMPLE: Permit[] = [
   {
     id: "2",
     permitId: "WP-2024-0893",
-    type: "Electrical",
+    type: "High Tension Line Work Permit",
     priority: "critical",
     requester: "Carlos M",
     requesterDept: "Engineering",
@@ -66,7 +66,7 @@ const SAMPLE: Permit[] = [
   {
     id: "3",
     permitId: "WP-2024-0894",
-    type: "Confined Space",
+    type: "Gas Line Work Permit",
     priority: "medium",
     requester: "Lee H",
     requesterDept: "Operations",
@@ -271,7 +271,7 @@ export default function ApproverQueue() {
   function PermitCard({ permit }: { permit: Permit }) {
     return (
       <div className="border rounded-lg p-4 bg-white shadow-sm">
-        <div className="flex items-start justify-between mb-3">
+        <div className="flex items-start gap-2 mb-3">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -291,19 +291,6 @@ export default function ApproverQueue() {
               <div className="text-sm text-gray-600">{permit.type}</div>
             </div>
           </div>
-          <span
-            className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
-              permit.priority === "critical"
-                ? "bg-red-100 text-red-700"
-                : permit.priority === "high"
-                  ? "bg-orange-100 text-orange-700"
-                  : permit.priority === "medium"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-green-100 text-green-700"
-            }`}
-          >
-            {permit.priority.toUpperCase()}
-          </span>
         </div>
 
         <div className="space-y-2 mb-3">
@@ -314,10 +301,6 @@ export default function ApproverQueue() {
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Location:</span>
             <span className="font-medium">{permit.location}</span>
-          </div>
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-600">Risk:</span>
-            <span className="font-medium">{permit.risk}</span>
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Status:</span>
@@ -344,7 +327,7 @@ export default function ApproverQueue() {
             {/* Modern View Button for Cards */}
             <button
               onClick={() => {
-                window.location.href = '/review-permits';
+                window.location.href = "/approver-permit-details";
               }}
               className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
             >
@@ -913,13 +896,10 @@ export default function ApproverQueue() {
                           onChange={(e) => toggleSelectAll(e.target.checked)}
                         />
                       </TableHead>
-                      <TableHead className="min-w-20 px-2 text-xs">
-                        Priority
-                      </TableHead>
                       <TableHead className="min-w-24 px-2 text-xs">
                         Permit ID
                       </TableHead>
-                      <TableHead className="min-w-20 px-2 text-xs">
+                      <TableHead className="min-w-28 px-2 text-xs">
                         Type
                       </TableHead>
                       <TableHead className="min-w-32 px-2 text-xs hidden sm:table-cell">
@@ -931,18 +911,15 @@ export default function ApproverQueue() {
                       <TableHead className="min-w-20 px-2 text-xs hidden md:table-cell">
                         Submitted
                       </TableHead>
-                      <TableHead className="min-w-16 px-2 text-xs">
-                        Risk
-                      </TableHead>
                       <TableHead className="min-w-20 px-2 text-xs">
                         Status
                       </TableHead>
                       <TableHead className="min-w-24 px-2 text-xs hidden lg:table-cell">
                         Location
                       </TableHead>
-                        <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">
-                          Actions
-                        </TableHead>
+                      <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">
+                        Actions
+                      </TableHead>
                     </tr>
                   </TableHeader>
                   <TableBody>
@@ -960,21 +937,6 @@ export default function ApproverQueue() {
                               }));
                             }}
                           />
-                        </TableCell>
-                        <TableCell className="px-2">
-                          <span
-                            className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-semibold ${
-                              p.priority === "critical"
-                                ? "bg-red-100 text-red-700"
-                                : p.priority === "high"
-                                  ? "bg-orange-100 text-orange-700"
-                                  : p.priority === "medium"
-                                    ? "bg-yellow-100 text-yellow-700"
-                                    : "bg-green-100 text-green-700"
-                            }`}
-                          >
-                            {p.priority.charAt(0).toUpperCase()}
-                          </span>
                         </TableCell>
                         <TableCell className="px-2">
                           <span className="text-blue-600 font-semibold text-xs">
@@ -1003,7 +965,6 @@ export default function ApproverQueue() {
                             addSuffix: true,
                           }).replace(" ago", "")}
                         </TableCell>
-                        <TableCell className="text-xs px-2">{p.risk}</TableCell>
                         <TableCell className="text-xs px-2">
                           {p.safetyStatus}
                         </TableCell>
@@ -1016,7 +977,8 @@ export default function ApproverQueue() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.location.href = '/review-permits';
+                                window.location.href =
+                                  "/approver-permit-details";
                               }}
                               className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
                             >

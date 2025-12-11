@@ -32,7 +32,7 @@ function makeMockData(count = 24): PermitItem[] {
     "in_progress",
   ];
 
-  return Array.from({ length: count }).map((_, i) => {
+  const openPermits = Array.from({ length: count }).map((_, i) => {
     const issued = subDays(new Date(), Math.floor(Math.random() * 20));
     const isApproved = Math.random() < 0.45;
     const returnDate = isApproved
@@ -63,6 +63,93 @@ function makeMockData(count = 24): PermitItem[] {
       status: isApproved ? "approved" : statuses[i % statuses.length],
     };
   });
+
+  // Closed permits from the Permits-closed page (added after open permits with sequential S.N.)
+  const closedPermits: PermitItem[] = [
+    {
+      id: "closed-1",
+      sn: count + 1,
+      plant: "HSM-1",
+      dept: "Maintenance",
+      date: formatISO(subDays(new Date(), 10)),
+      permitNo: "PTW-2024-1001",
+      requester: "A. Sharma",
+      approver1: "V. Rao",
+      safetyApprover: "N. Das",
+      returnDate: formatISO(subDays(new Date(), 5)),
+      commentsRequester:
+        "Routine maintenance of centrifugal pump P-101 including bearing replacement and alignment",
+      commentsApprover:
+        "Work completed as per specifications. Area restored to original condition.",
+      status: "closed",
+    },
+    {
+      id: "closed-2",
+      sn: count + 2,
+      plant: "BOF",
+      dept: "Electrical",
+      date: formatISO(subDays(new Date(), 15)),
+      permitNo: "PTW-2024-1005",
+      requester: "R. Patel",
+      approver1: "D. Mehta",
+      safetyApprover: "L. Roy",
+      returnDate: formatISO(subDays(new Date(), 10)),
+      commentsRequester:
+        "Upgrade control panel wiring and install new safety relays",
+      commentsApprover: "All electrical tests passed. System operational.",
+      status: "closed",
+    },
+    {
+      id: "closed-3",
+      sn: count + 3,
+      plant: "CRM",
+      dept: "Operations",
+      date: formatISO(subDays(new Date(), 18)),
+      permitNo: "PTW-2024-1012",
+      requester: "S. Khan",
+      approver1: "K. Iyer",
+      safetyApprover: "N. Das",
+      returnDate: formatISO(subDays(new Date(), 13)),
+      commentsRequester:
+        "Replace faulty control valve V-205 in cooling water line",
+      commentsApprover: "New valve installed correctly. No leaks detected.",
+      status: "closed",
+    },
+    {
+      id: "closed-4",
+      sn: count + 4,
+      plant: "Utilities",
+      dept: "Safety",
+      date: formatISO(subDays(new Date(), 20)),
+      permitNo: "PTW-2024-1018",
+      requester: "M. Gupta",
+      approver1: "N. Das",
+      safetyApprover: "L. Roy",
+      returnDate: formatISO(subDays(new Date(), 15)),
+      commentsRequester:
+        "Install emergency shower and eyewash station in chemical storage area",
+      commentsApprover: "Safety equipment meets all regulatory requirements.",
+      status: "closed",
+    },
+    {
+      id: "closed-5",
+      sn: count + 5,
+      plant: "Sinter",
+      dept: "Maintenance",
+      date: formatISO(subDays(new Date(), 25)),
+      permitNo: "PTW-2024-1025",
+      requester: "J. Singh",
+      approver1: "V. Rao",
+      safetyApprover: "N. Das",
+      returnDate: formatISO(subDays(new Date(), 20)),
+      commentsRequester:
+        "Replace worn conveyor belt section in material handling area",
+      commentsApprover: "Belt properly tensioned and aligned. Good work.",
+      status: "closed",
+    },
+  ];
+
+  return [...openPermits, ...closedPermits];
 }
 
 export function OverallStatus() {
@@ -73,13 +160,34 @@ export function OverallStatus() {
     dir: "desc",
   });
 
+  const [role, setRole] = React.useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = React.useState<string | null>(
+    null,
+  );
+
+  React.useEffect(() => {
+    const storedRole = localStorage.getItem("dps_role");
+    const storedUserName = localStorage.getItem("dps_user_name");
+    setRole(storedRole);
+    setCurrentUserName(storedUserName);
+  }, []);
+
   React.useEffect(() => {
     const t = setTimeout(() => {
-      setData(makeMockData(32));
+      let mockData = makeMockData(32);
+
+      // For requester role, filter to show only current user's permits
+      if (role === "requester" && currentUserName) {
+        mockData = mockData.filter(
+          (item) => item.requester === currentUserName,
+        );
+      }
+
+      setData(mockData);
       setLoading(false);
     }, 600);
     return () => clearTimeout(t);
-  }, []);
+  }, [role, currentUserName]);
 
   return (
     <section className="space-y-4">
@@ -561,21 +669,21 @@ export function ContractorPerformance() {
 // Simple hook to get current user role
 function useCurrentRole(): Role | null {
   const [role, setRole] = React.useState<Role | null>(null);
-  
+
   React.useEffect(() => {
-    const storedRole = localStorage.getItem('dps_role') as Role;
+    const storedRole = localStorage.getItem("dps_role") as Role;
     setRole(storedRole);
-    
+
     // Optional: Listen for storage changes to update role in real-time
     const handleStorageChange = () => {
-      const updatedRole = localStorage.getItem('dps_role') as Role;
+      const updatedRole = localStorage.getItem("dps_role") as Role;
       setRole(updatedRole);
     };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
-  
+
   return role;
 }
 
@@ -583,13 +691,13 @@ export function Alarms() {
   const currentRole = useCurrentRole();
 
   // Role-based component rendering
-  if (currentRole === 'requester') {
+  if (currentRole === "requester") {
     return <RequesterAlarms />;
-  } else if (currentRole === 'safety') {
+  } else if (currentRole === "safety") {
     return <SafetyAlarms />;
-  } else if (currentRole === 'approver') {
+  } else if (currentRole === "approver") {
     return <ApproverAlarms />;
-  } else if (currentRole === 'admin') {
+  } else if (currentRole === "admin") {
     return <AdminAlarms />;
   }
 

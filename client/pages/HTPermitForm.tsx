@@ -383,6 +383,25 @@ export default function HTPermitForm() {
 
   // restore latest draft if any
   const initial = useMemo(() => {
+    // Check if we're in preview mode from SafetyOfficerApprovalQueue or ApproverPermitDetails
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has("preview")) {
+        // Try to load from dps_permit_header which is set by SafetyOfficerApprovalQueue
+        const headerStr = localStorage.getItem("dps_permit_header");
+        if (headerStr) {
+          const header = JSON.parse(headerStr);
+          // Create a basic permit form with the header data
+          const data = createInitialData();
+          if (header.permitNumber) data.permitNo = header.permitNumber;
+          if (header.certificateNumber)
+            data.certificateNo = header.certificateNumber;
+          return data;
+        }
+      }
+    } catch {}
+
+    // Otherwise, restore latest draft if any
     const latest = localStorage.getItem(draftKeyBase + "-latest");
     if (latest) {
       try {
@@ -423,11 +442,14 @@ export default function HTPermitForm() {
 
   const handleClosePreview = () => {
     setShowPreview(false);
-    // If preview was opened from ApproverPermitDetails, navigate back
+    // If preview was opened from ApproverPermitDetails or SafetyOfficerApprovalQueue, navigate back
     try {
       const sp = new URLSearchParams(window.location.search);
-      if (sp.get("from") === "approver") {
+      const from = sp.get("from");
+      if (from === "approver") {
         navigate("/approver-permit-details");
+      } else if (from === "safety") {
+        navigate("/safety-officer-approval-queue");
       }
     } catch {}
   };

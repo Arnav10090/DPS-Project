@@ -282,7 +282,7 @@ export default function ApproverPermitDetails() {
                   <div className="text-sm text-slate-700">3 hrs</div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">Personnel</div>
+                  <div className="text-xs text-slate-600 mb-1 font-bold">Personnel</div>
                   <div className="text-sm text-slate-700">
                     {form.permitRequester || "Jane Doe"} • Maintenance
                   </div>

@@ -1609,7 +1609,7 @@ export default function GasPermit() {
       {showPreview && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/100 backdrop-blur-md"
             onClick={() => handleClosePreview()}
             style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
           />

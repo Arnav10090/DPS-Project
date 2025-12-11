@@ -55,8 +55,10 @@ const SAMPLE_CLOSURES: ClosureRequest[] = [
     submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
     status: "CLOSURE REQUESTED",
     overdue: "OVERDUE BY 2 HOURS",
-    scope: "Electrical maintenance in Building A, Floor 2. Safety checks: isolation of supply, permit holder to ensure no combustible materials near work area. Required tools: insulated tools, voltage detector, PPE as per SOP.",
-    completionReport: "Work performed as per scope. Replaced damaged conduits and repaired junction box. No incidents. Post-work insulation resistance tested and within limits.",
+    scope:
+      "Electrical maintenance in Building A, Floor 2. Safety checks: isolation of supply, permit holder to ensure no combustible materials near work area. Required tools: insulated tools, voltage detector, PPE as per SOP.",
+    completionReport:
+      "Work performed as per scope. Replaced damaged conduits and repaired junction box. No incidents. Post-work insulation resistance tested and within limits.",
   },
   {
     id: "WCS-2024-002",
@@ -73,8 +75,10 @@ const SAMPLE_CLOSURES: ClosureRequest[] = [
     submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
     status: "CLOSURE REQUESTED",
     overdue: "ON TIME",
-    scope: "Pipeline inspection and pressure testing. Safety: pressure vessel precautions, breathing apparatus required in confined spaces. Documentation: all test results to be recorded.",
-    completionReport: "All inspection points completed successfully. Pressure tests passed. Minor corrosion noted in section 4B, documented for future action. No safety incidents.",
+    scope:
+      "Pipeline inspection and pressure testing. Safety: pressure vessel precautions, breathing apparatus required in confined spaces. Documentation: all test results to be recorded.",
+    completionReport:
+      "All inspection points completed successfully. Pressure tests passed. Minor corrosion noted in section 4B, documented for future action. No safety incidents.",
   },
   {
     id: "WCS-2024-003",
@@ -91,27 +95,63 @@ const SAMPLE_CLOSURES: ClosureRequest[] = [
     submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 1).toISOString(),
     status: "CLOSURE REQUESTED",
     overdue: "ON TIME",
-    scope: "Hot work welding operations. Fire watch required for 30 minutes post-work. Ensure all combustible materials removed. Use certified welding equipment only.",
-    completionReport: "Welding completed per specifications. Fire watch completed. All equipment tested and functioning correctly. No damage to surrounding areas.",
+    scope:
+      "Hot work welding operations. Fire watch required for 30 minutes post-work. Ensure all combustible materials removed. Use certified welding equipment only.",
+    completionReport:
+      "Welding completed per specifications. Fire watch completed. All equipment tested and functioning correctly. No damage to surrounding areas.",
   },
 ];
 
 const files = [
-  { id: "f1", src: "https://via.placeholder.com/600x400?text=Photo+1", name: "photo1.jpg", size: "1.2 MB" },
-  { id: "f2", src: "https://via.placeholder.com/600x400?text=Photo+2", name: "photo2.jpg", size: "980 KB" },
-  { id: "f3", src: "https://via.placeholder.com/600x400?text=Photo+3", name: "doc1.pdf", size: "240 KB" },
-  { id: "f4", src: "https://via.placeholder.com/600x400?text=Photo+4", name: "photo4.jpg", size: "2.1 MB" },
-  { id: "f5", src: "https://via.placeholder.com/600x400?text=Photo+5", name: "photo5.jpg", size: "840 KB" },
-  { id: "f6", src: "https://via.placeholder.com/600x400?text=Photo+6", name: "report.pdf", size: "450 KB" },
+  {
+    id: "f1",
+    src: "https://via.placeholder.com/600x400?text=Photo+1",
+    name: "photo1.jpg",
+    size: "1.2 MB",
+  },
+  {
+    id: "f2",
+    src: "https://via.placeholder.com/600x400?text=Photo+2",
+    name: "photo2.jpg",
+    size: "980 KB",
+  },
+  {
+    id: "f3",
+    src: "https://via.placeholder.com/600x400?text=Photo+3",
+    name: "doc1.pdf",
+    size: "240 KB",
+  },
+  {
+    id: "f4",
+    src: "https://via.placeholder.com/600x400?text=Photo+4",
+    name: "photo4.jpg",
+    size: "2.1 MB",
+  },
+  {
+    id: "f5",
+    src: "https://via.placeholder.com/600x400?text=Photo+5",
+    name: "photo5.jpg",
+    size: "840 KB",
+  },
+  {
+    id: "f6",
+    src: "https://via.placeholder.com/600x400?text=Photo+6",
+    name: "report.pdf",
+    size: "450 KB",
+  },
 ];
 
 export default function ApproverClosure() {
   const navigate = useNavigate();
   const [closures, setClosures] = useState<ClosureRequest[]>(SAMPLE_CLOSURES);
   const [query, setQuery] = useState("");
-  const [selectedClosure, setSelectedClosure] = useState<ClosureRequest | null>(null);
+  const [selectedClosure, setSelectedClosure] = useState<ClosureRequest | null>(
+    null,
+  );
 
-  const [decision, setDecision] = useState<"approve" | "reject" | "request">("approve");
+  const [decision, setDecision] = useState<"approve" | "reject" | "request">(
+    "approve",
+  );
   const [comments, setComments] = useState("");
   const [commentsTouched, setCommentsTouched] = useState(false);
   const [checklist, setChecklist] = useState<Record<string, boolean>>({
@@ -205,8 +245,13 @@ export default function ApproverClosure() {
           .toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      if (filters.status.length && !filters.status.includes(c.status)) return false;
-      if (filters.department.length && !filters.department.includes(c.department)) return false;
+      if (filters.status.length && !filters.status.includes(c.status))
+        return false;
+      if (
+        filters.department.length &&
+        !filters.department.includes(c.department)
+      )
+        return false;
       if (filters.dateFrom) {
         const from = new Date(filters.dateFrom);
         if (new Date(c.submittedAt) < from) return false;
@@ -232,7 +277,9 @@ export default function ApproverClosure() {
     setFilters((f) => ({
       ...f,
       [filterType]: Array.isArray(f[filterType as keyof typeof f])
-        ? (f[filterType as keyof typeof f] as string[]).filter((v) => v !== value)
+        ? (f[filterType as keyof typeof f] as string[]).filter(
+            (v) => v !== value,
+          )
         : filterType === "dateFrom" || filterType === "dateTo"
           ? ""
           : f[filterType as keyof typeof f],
@@ -317,7 +364,9 @@ export default function ApproverClosure() {
           {getActiveFilters().length > 0 && (
             <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium text-blue-900">Applied Filters</h3>
+                <h3 className="text-sm font-medium text-blue-900">
+                  Applied Filters
+                </h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -404,7 +453,9 @@ export default function ApproverClosure() {
                       />
                     </svg>
                   </div>
-                  <label className="text-sm font-medium text-gray-700">Status</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Status
+                  </label>
                 </div>
                 <div className="space-y-2">
                   {["CLOSURE REQUESTED", "OVERDUE", "APPROVED"].map((s) => (
@@ -472,53 +523,57 @@ export default function ApproverClosure() {
                       />
                     </svg>
                   </div>
-                  <label className="text-sm font-medium text-gray-700">Department</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Department
+                  </label>
                 </div>
                 <div className="space-y-2">
-                  {["Maintenance Team", "Operations", "Safety Team"].map((d) => (
-                    <label
-                      key={d}
-                      className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
-                        filters.department.includes(d)
-                          ? "bg-purple-50 border-purple-200 shadow-md transform scale-[1.02]"
-                          : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
-                      }`}
-                    >
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          checked={filters.department.includes(d)}
-                          onChange={(e) =>
-                            setFilters((f) => ({
-                              ...f,
-                              department: e.target.checked
-                                ? [...f.department, d]
-                                : f.department.filter((x) => x !== d),
-                            }))
-                          }
-                          className="sr-only"
-                        />
-                        <div
-                          className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
-                            filters.department.includes(d)
-                              ? "bg-gradient-to-br from-purple-400 to-indigo-500 text-white shadow-sm"
-                              : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
-                          }`}
-                        >
-                          {filters.department.includes(d) ? "✓" : ""}
-                        </div>
-                      </div>
-                      <span
-                        className={`text-sm font-medium transition-colors duration-200 ${
+                  {["Maintenance Team", "Operations", "Safety Team"].map(
+                    (d) => (
+                      <label
+                        key={d}
+                        className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
                           filters.department.includes(d)
-                            ? "text-purple-700"
-                            : "text-gray-700 group-hover:text-gray-800"
+                            ? "bg-purple-50 border-purple-200 shadow-md transform scale-[1.02]"
+                            : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
                         }`}
                       >
-                        {d}
-                      </span>
-                    </label>
-                  ))}
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={filters.department.includes(d)}
+                            onChange={(e) =>
+                              setFilters((f) => ({
+                                ...f,
+                                department: e.target.checked
+                                  ? [...f.department, d]
+                                  : f.department.filter((x) => x !== d),
+                              }))
+                            }
+                            className="sr-only"
+                          />
+                          <div
+                            className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
+                              filters.department.includes(d)
+                                ? "bg-gradient-to-br from-purple-400 to-indigo-500 text-white shadow-sm"
+                                : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                            }`}
+                          >
+                            {filters.department.includes(d) ? "✓" : ""}
+                          </div>
+                        </div>
+                        <span
+                          className={`text-sm font-medium transition-colors duration-200 ${
+                            filters.department.includes(d)
+                              ? "text-purple-700"
+                              : "text-gray-700 group-hover:text-gray-800"
+                          }`}
+                        >
+                          {d}
+                        </span>
+                      </label>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -540,24 +595,34 @@ export default function ApproverClosure() {
                       />
                     </svg>
                   </div>
-                  <label className="text-sm font-medium text-gray-700">Date Range</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Date Range
+                  </label>
                 </div>
                 <div className="space-y-3">
                   <div className="relative group">
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">From Date</label>
+                    <label className="text-xs font-medium text-gray-600 mb-1 block">
+                      From Date
+                    </label>
                     <input
                       type="date"
                       value={filters.dateFrom}
-                      onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, dateFrom: e.target.value }))
+                      }
                       className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
                     />
                   </div>
                   <div className="relative group">
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">To Date</label>
+                    <label className="text-xs font-medium text-gray-600 mb-1 block">
+                      To Date
+                    </label>
                     <input
                       type="date"
                       value={filters.dateTo}
-                      onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, dateTo: e.target.value }))
+                      }
                       className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
                     />
                   </div>
@@ -594,7 +659,9 @@ export default function ApproverClosure() {
           <div className="mb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div className="flex items-center gap-3">
               <div className="text-sm text-muted-foreground">Showing</div>
-              <div className="font-semibold text-sm">{filtered.length} pending closures</div>
+              <div className="font-semibold text-sm">
+                {filtered.length} pending closures
+              </div>
             </div>
           </div>
 
@@ -604,24 +671,46 @@ export default function ApproverClosure() {
               <Table className="min-w-[800px]">
                 <TableHeader>
                   <tr>
-                    <TableHead className="min-w-24 px-2 text-xs">Permit ID</TableHead>
-                    <TableHead className="min-w-24 px-2 text-xs">Requester</TableHead>
-                    <TableHead className="min-w-24 px-2 text-xs">Department</TableHead>
-                    <TableHead className="min-w-32 px-2 text-xs hidden sm:table-cell">Location</TableHead>
-                    <TableHead className="min-w-20 px-2 text-xs">Status</TableHead>
-                    <TableHead className="min-w-20 px-2 text-xs hidden md:table-cell">Submitted</TableHead>
-                    <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">Actions</TableHead>
+                    <TableHead className="min-w-24 px-2 text-xs">
+                      Permit ID
+                    </TableHead>
+                    <TableHead className="min-w-24 px-2 text-xs">
+                      Requester
+                    </TableHead>
+                    <TableHead className="min-w-24 px-2 text-xs">
+                      Department
+                    </TableHead>
+                    <TableHead className="min-w-32 px-2 text-xs hidden sm:table-cell">
+                      Location
+                    </TableHead>
+                    <TableHead className="min-w-20 px-2 text-xs">
+                      Status
+                    </TableHead>
+                    <TableHead className="min-w-20 px-2 text-xs hidden md:table-cell">
+                      Submitted
+                    </TableHead>
+                    <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">
+                      Actions
+                    </TableHead>
                   </tr>
                 </TableHeader>
                 <TableBody>
                   {filtered.map((closure) => (
                     <TableRow key={closure.id}>
                       <TableCell className="px-2">
-                        <span className="text-blue-600 font-semibold text-xs">{closure.id}</span>
+                        <span className="text-blue-600 font-semibold text-xs">
+                          {closure.id}
+                        </span>
                       </TableCell>
-                      <TableCell className="text-xs px-2">{closure.requester}</TableCell>
-                      <TableCell className="text-xs px-2">{closure.department}</TableCell>
-                      <TableCell className="text-xs px-2 hidden sm:table-cell">{closure.location}</TableCell>
+                      <TableCell className="text-xs px-2">
+                        {closure.requester}
+                      </TableCell>
+                      <TableCell className="text-xs px-2">
+                        {closure.department}
+                      </TableCell>
+                      <TableCell className="text-xs px-2 hidden sm:table-cell">
+                        {closure.location}
+                      </TableCell>
                       <TableCell className="text-xs px-2">
                         <span
                           className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
@@ -636,7 +725,9 @@ export default function ApproverClosure() {
                         </span>
                       </TableCell>
                       <TableCell className="text-xs text-muted-foreground px-2 hidden md:table-cell">
-                        {formatDistanceToNow(new Date(closure.submittedAt), { addSuffix: true }).replace(" ago", "")}
+                        {formatDistanceToNow(new Date(closure.submittedAt), {
+                          addSuffix: true,
+                        }).replace(" ago", "")}
                       </TableCell>
                       <TableCell className="px-2 w-24">
                         <div className="flex justify-center w-full">

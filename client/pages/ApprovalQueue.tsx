@@ -500,9 +500,7 @@ export default function ApproverQueue() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                Filters
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-800">Filters</h3>
             </div>
             <div className="text-sm text-gray-600 bg-white/70 px-3 py-1 rounded-full">
               {getActiveFilters().length} active
@@ -769,7 +767,6 @@ export default function ApproverQueue() {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* Search bar */}

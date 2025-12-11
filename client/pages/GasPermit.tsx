@@ -399,6 +399,35 @@ export default function GasPermit() {
     form.permitDetails?.requesterSafetyCustomComments,
   ]);
 
+  // Load preview data from localStorage if in preview mode from SafetyOfficerApprovalQueue
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has("preview")) {
+        const headerStr = localStorage.getItem("dps_permit_header");
+        if (headerStr) {
+          const header = JSON.parse(headerStr);
+          // Update form with header data for gas permit
+          if (header.permitNumber) {
+            update("permitNo", header.permitNumber);
+          }
+          if (header.certificateNumber) {
+            update("certificateNo", header.certificateNumber);
+          }
+          if (header.permitRequester) {
+            update("requester", header.permitRequester);
+          }
+        }
+        // Load requester comments for gas permit
+        const requesterStr = localStorage.getItem("dps_requester_safety_comments_gas");
+        if (requesterStr) {
+          const requesterData = JSON.parse(requesterStr);
+          // These comments can be displayed in the preview
+        }
+      }
+    } catch {}
+  }, []);
+
   // Auto-open preview modal if URL contains ?preview
   useEffect(() => {
     try {

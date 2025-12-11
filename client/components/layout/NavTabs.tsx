@@ -78,8 +78,8 @@ export default function NavTabs() {
     tabs.push({ to: "/safety-officer-approval-queue", label: "Approval Queue" });
   }
 
-  if (role !== "approver") {
-    // Permit Details for non-approver roles (Requester, Safety Officer)
+  if (role === "requester") {
+    // Permit Details for requester only (inline for safety officer in approval queue)
     tabs.push({
       to: permitDetailsPath,
       label: "Permit Details",

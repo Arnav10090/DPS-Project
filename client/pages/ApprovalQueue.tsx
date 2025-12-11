@@ -85,9 +85,9 @@ export default function ApproverQueue() {
   const [permits, setPermits] = useState<Permit[]>(SAMPLE);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [query, setQuery] = useState("");
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [preview, setPreview] = useState<Permit | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const userRole = localStorage.getItem("dps_role");
 
   // Function to handle View button click and populate ApproverPermitDetails form
   const handleViewPermit = (permit: Permit) => {

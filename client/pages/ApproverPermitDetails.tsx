@@ -364,6 +364,80 @@ export default function ApproverPermitDetails() {
           </div>
         </div>
 
+        {/* Company header under progress for Approver */}
+        <div className="bg-white border-b">
+          <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg"
+                alt="AM/NS INDIA logo"
+                className="h-[60px] w-auto"
+              />
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-gray-900">
+                ArcelorMittal Nippon Steel India Limited
+              </div>
+              <div className="text-gray-600">HAZIRA</div>
+              <div className="mt-1 text-[20px] font-bold text-gray-900">
+                {form.permitDocType === "highTension"
+                  ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
+                  : form.permitDocType === "gasLine"
+                    ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
+                    : "PERMIT TO WORK"}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 w-[240px]">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Certificate No.
+                </label>
+                <input
+                  value={form.certificateNumber || ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    update({ certificateNumber: v });
+                    try {
+                      const header = JSON.parse(
+                        localStorage.getItem("dps_permit_header") || "{}",
+                      );
+                      header.certificateNumber = v;
+                      localStorage.setItem(
+                        "dps_permit_header",
+                        JSON.stringify(header),
+                      );
+                    } catch {}
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Permit No.
+                </label>
+                <input
+                  value={form.permitNumber || ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    update({ permitNumber: v });
+                    try {
+                      const header = JSON.parse(
+                        localStorage.getItem("dps_permit_header") || "{}",
+                      );
+                      header.permitNumber = v;
+                      localStorage.setItem(
+                        "dps_permit_header",
+                        JSON.stringify(header),
+                      );
+                    } catch {}
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Section 2: Permit Details & Comments */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">

@@ -240,8 +240,8 @@ export default function ApproverPermitDetails() {
                 Details of such permit
               </div>
 
-              {/* Permit Header with Actions */}
-              <div className="mt-6 flex items-center justify-between mb-6">
+              {/* Permit Header */}
+              <div className="mt-6 mb-6">
                 <div>
                   <div className="text-sm text-slate-600">Permit</div>
                   <div className="text-xl font-semibold">
@@ -254,26 +254,6 @@ export default function ApproverPermitDetails() {
                         ? "Gas Line Work Permit"
                         : "Work Permit"}
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => alert("Approve (placeholder)")}
-                    className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700"
-                  >
-                    Approve
-                  </button>
-                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
-                    Conditional
-                  </button>
-                  <button
-                    onClick={() => alert("Reject (placeholder)")}
-                    className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700"
-                  >
-                    Reject
-                  </button>
-                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
-                    Escalate
-                  </button>
                 </div>
               </div>
 

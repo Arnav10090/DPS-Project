@@ -95,7 +95,6 @@ export default function ApproverPermitDetails() {
   const [newApproverComment, setNewApproverComment] = useState("");
   const [newApproverToSafetyComment, setNewApproverToSafetyComment] =
     useState("");
-  const [activeTab, setActiveTab] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {

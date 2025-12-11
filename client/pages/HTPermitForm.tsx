@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormWizard, HTPermitHeader } from "@/components/permit/ht/components";
 import HTPermitPreview from "@/components/permit/ht/HTPermitPreview";
@@ -411,11 +411,34 @@ export default function HTPermitForm() {
     );
   };
 
+  // Auto-open preview modal if URL contains ?preview
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has("preview")) {
+        setShowPreview(true);
+      }
+    } catch {}
+  }, []);
+
+  const handleClosePreview = () => {
+    setShowPreview(false);
+    // If preview was opened from ApproverPermitDetails, navigate back
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("from") === "approver") {
+        navigate("/approver-permit-details");
+      }
+    } catch {}
+  };
+
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
         <div>
-          <h1 className="text-[20px] font-semibold">High Tension Line Work Permit Form</h1>
+          <h1 className="text-[20px] font-semibold">
+            High Tension Line Work Permit Form
+          </h1>
           <div className="text-sm text-gray-500">
             <p>
               <span className="text-sm">{`WCS-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`}</span>
@@ -424,11 +447,11 @@ export default function HTPermitForm() {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-          <div className="text-sm text-gray-700">
-            <p>
-              <strong>Work Permit Form Type:</strong>
-            </p>
-          </div>
+            <div className="text-sm text-gray-700">
+              <p>
+                <strong>Work Permit Form Type:</strong>
+              </p>
+            </div>
             <div className="w-[220px]">
               <Select
                 value={"highTension"}
@@ -490,8 +513,8 @@ export default function HTPermitForm() {
         {showPreview && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center">
             <div
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setShowPreview(false)}
+              className="absolute inset-0 bg-black/100 backdrop-blur-md"
+              onClick={() => handleClosePreview()}
               style={{
                 position: "fixed",
                 top: 0,

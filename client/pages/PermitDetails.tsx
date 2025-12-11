@@ -1637,10 +1637,17 @@ export default function CreatePermit() {
         </div>
 
         {showPreviewModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center">
             <div
-              className="absolute inset-0 bg-black bg-opacity-100 backdrop-blur-md"
+              className="absolute inset-0 bg-black/100 backdrop-blur-md"
               onClick={handleClosePreview}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
             />
 
             <div className="relative bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto p-6 z-10">

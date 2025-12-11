@@ -73,6 +73,11 @@ export default function NavTabs() {
     tabs.push({ to: "/work-closure-approval", label: "Work Closure Approval" });
   }
 
+  if (role === "safety") {
+    // Safety Officer-specific navigation items: Approval Queue
+    tabs.push({ to: "/safety-officer-approval-queue", label: "Approval Queue" });
+  }
+
   if (role !== "approver") {
     // Permit Details for non-approver roles (Requester, Safety Officer)
     tabs.push({

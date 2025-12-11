@@ -1229,8 +1229,8 @@ export default function CreatePermit() {
     setShowPreviewModal(false);
     // If preview was opened from ApproverPermitDetails, navigate back
     try {
-      const referrer = document.referrer;
-      if (referrer && referrer.includes("/approver-permit-details")) {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("from") === "approver") {
         navigate("/approver-permit-details");
       }
     } catch (e) {

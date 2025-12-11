@@ -490,15 +490,42 @@ export default function ApproverQueue() {
           </div>
         )}
 
-        {/* Modern Advanced Filter Studio */}
-        {filtersOpen && (
-          <div className="filter-panel mb-4 p-5 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 backdrop-blur-sm rounded-2xl border border-white/60 shadow-xl shadow-blue-100/20">
-            {/* Filter Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+        {/* Modern Advanced Filter Studio - Always Visible */}
+        <div className="filter-panel mb-4 p-5 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 backdrop-blur-sm rounded-2xl border border-white/60 shadow-xl shadow-blue-100/20">
+          {/* Filter Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                Filters
+              </h3>
+            </div>
+            <div className="text-sm text-gray-600 bg-white/70 px-3 py-1 rounded-full">
+              {getActiveFilters().length} active
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Permit Type Filter */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-4 h-4 text-white"
+                    className="w-3 h-3 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -507,339 +534,283 @@ export default function ApproverQueue() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Advanced Filters
-                </h3>
+                <label className="text-sm font-medium text-gray-700">
+                  Permit Type
+                </label>
               </div>
-              <div className="text-sm text-gray-600 bg-white/70 px-3 py-1 rounded-full">
-                {getActiveFilters().length} active
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Priority Filter - Modern Toggle Style */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-pink-500 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <label className="text-sm font-medium text-gray-700">
-                    Priority Level
-                  </label>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    {
-                      key: "critical",
-                      label: "Critical",
-                      color: "from-red-500 to-red-600",
-                      textColor: "text-red-600",
-                      bgColor: "bg-red-50",
-                      borderColor: "border-red-200",
-                    },
-                    {
-                      key: "high",
-                      label: "High",
-                      color: "from-orange-500 to-orange-600",
-                      textColor: "text-orange-600",
-                      bgColor: "bg-orange-50",
-                      borderColor: "border-orange-200",
-                    },
-                    {
-                      key: "medium",
-                      label: "Medium",
-                      color: "from-yellow-500 to-yellow-600",
-                      textColor: "text-yellow-700",
-                      bgColor: "bg-yellow-50",
-                      borderColor: "border-yellow-200",
-                    },
-                    {
-                      key: "low",
-                      label: "Low",
-                      color: "from-green-500 to-green-600",
-                      textColor: "text-green-600",
-                      bgColor: "bg-green-50",
-                      borderColor: "border-green-200",
-                    },
-                  ].map((p) => (
-                    <button
-                      key={p.key}
-                      onClick={() =>
-                        setFilters((f) => ({
-                          ...f,
-                          priority: f.priority.includes(p.key)
-                            ? f.priority.filter((x) => x !== p.key)
-                            : [...f.priority, p.key],
-                        }))
-                      }
-                      className={`group relative px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 transform hover:scale-105 active:scale-95 ${
-                        filters.priority.includes(p.key)
-                          ? `bg-gradient-to-r ${
-                              p.color
-                            } text-white shadow-lg shadow-${
-                              p.key === "critical"
-                                ? "red"
-                                : p.key === "high"
-                                  ? "orange"
-                                  : p.key === "medium"
-                                    ? "yellow"
-                                    : "green"
-                            }-200/50`
-                          : `${p.bgColor} ${p.textColor} border ${
-                              p.borderColor
-                            } hover:shadow-md hover:shadow-${
-                              p.key === "critical"
-                                ? "red"
-                                : p.key === "high"
-                                  ? "orange"
-                                  : p.key === "medium"
-                                    ? "yellow"
-                                    : "green"
-                            }-100/50`
-                      }`}
-                    >
-                      <span className="relative z-10">{p.label}</span>
-                      {filters.priority.includes(p.key) && (
-                        <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse"></div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Status Filter - Modern Card Style */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <label className="text-sm font-medium text-gray-700">
-                    Status
-                  </label>
-                </div>
-                <div className="space-y-2">
-                  {[
-                    {
-                      key: "Pending",
-                      icon: "⏳",
-                      color: "from-amber-400 to-orange-500",
-                      bgColor: "bg-amber-50",
-                      textColor: "text-amber-700",
-                      borderColor: "border-amber-200",
-                    },
-                    {
-                      key: "Approved",
-                      icon: "✅",
-                      color: "from-green-400 to-emerald-500",
-                      bgColor: "bg-green-50",
-                      textColor: "text-green-700",
-                      borderColor: "border-green-200",
-                    },
-                    {
-                      key: "Rejected",
-                      icon: "❌",
-                      color: "from-red-400 to-pink-500",
-                      bgColor: "bg-red-50",
-                      textColor: "text-red-700",
-                      borderColor: "border-red-200",
-                    },
-                    {
-                      key: "Expired",
-                      icon: "⏰",
-                      color: "from-gray-400 to-slate-500",
-                      bgColor: "bg-gray-50",
-                      textColor: "text-gray-700",
-                      borderColor: "border-gray-200",
-                    },
-                  ].map((s) => (
-                    <label
-                      key={s.key}
-                      className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
-                        filters.status.includes(s.key)
-                          ? `${s.bgColor} ${s.borderColor} shadow-md transform scale-[1.02]`
-                          : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
-                      }`}
-                    >
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          checked={filters.status.includes(s.key)}
-                          onChange={(e) =>
-                            setFilters((f) => ({
-                              ...f,
-                              status: e.target.checked
-                                ? [...f.status, s.key]
-                                : f.status.filter((x) => x !== s.key),
-                            }))
-                          }
-                          className="sr-only"
-                        />
-                        <div
-                          className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
-                            filters.status.includes(s.key)
-                              ? `bg-gradient-to-br ${s.color} text-white shadow-sm`
-                              : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
-                          }`}
-                        >
-                          {filters.status.includes(s.key) ? "✓" : s.icon}
-                        </div>
-                      </div>
-                      <span
-                        className={`text-sm font-medium transition-colors duration-200 ${
-                          filters.status.includes(s.key)
-                            ? s.textColor
-                            : "text-gray-700 group-hover:text-gray-800"
-                        }`}
-                      >
-                        {s.key}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Date Range - Modern Gradient Style */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                  <label className="text-sm font-medium text-gray-700">
-                    Date Range
-                  </label>
-                </div>
-                <div className="space-y-3">
-                  <div className="relative group">
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">
-                      From Date
-                    </label>
+              <div className="space-y-2">
+                {[
+                  {
+                    key: "Work Permit",
+                    label: "Work Permit",
+                    color: "from-blue-400 to-cyan-500",
+                    bgColor: "bg-blue-50",
+                    textColor: "text-blue-700",
+                    borderColor: "border-blue-200",
+                  },
+                  {
+                    key: "High Tension Line Work Permit",
+                    label: "High Tension Line Work Permit",
+                    color: "from-yellow-400 to-orange-500",
+                    bgColor: "bg-yellow-50",
+                    textColor: "text-yellow-700",
+                    borderColor: "border-yellow-200",
+                  },
+                  {
+                    key: "Gas Line Work Permit",
+                    label: "Gas Line Work Permit",
+                    color: "from-red-400 to-pink-500",
+                    bgColor: "bg-red-50",
+                    textColor: "text-red-700",
+                    borderColor: "border-red-200",
+                  },
+                ].map((t) => (
+                  <label
+                    key={t.key}
+                    className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
+                      filters.permitType.includes(t.key)
+                        ? `${t.bgColor} ${t.borderColor} shadow-md transform scale-[1.02]`
+                        : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
+                    }`}
+                  >
                     <div className="relative">
                       <input
-                        type="date"
-                        value={filters.dateFrom}
+                        type="checkbox"
+                        checked={filters.permitType.includes(t.key)}
                         onChange={(e) =>
                           setFilters((f) => ({
                             ...f,
-                            dateFrom: e.target.value,
+                            permitType: e.target.checked
+                              ? [...f.permitType, t.key]
+                              : f.permitType.filter((x) => x !== t.key),
                           }))
                         }
-                        className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
+                        className="sr-only"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/5 to-indigo-400/0 rounded-xl pointer-events-none"></div>
+                      <div
+                        className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
+                          filters.permitType.includes(t.key)
+                            ? `bg-gradient-to-br ${t.color} text-white shadow-sm`
+                            : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                        }`}
+                      >
+                        {filters.permitType.includes(t.key) ? "✓" : ""}
+                      </div>
                     </div>
-                  </div>
-                  <div className="relative group">
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">
-                      To Date
-                    </label>
+                    <span
+                      className={`text-sm font-medium transition-colors duration-200 ${
+                        filters.permitType.includes(t.key)
+                          ? t.textColor
+                          : "text-gray-700 group-hover:text-gray-800"
+                      }`}
+                    >
+                      {t.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Status Filter - Modern Card Style */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-3 h-3 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <label className="text-sm font-medium text-gray-700">
+                  Status
+                </label>
+              </div>
+              <div className="space-y-2">
+                {[
+                  {
+                    key: "Pending",
+                    icon: "⏳",
+                    color: "from-amber-400 to-orange-500",
+                    bgColor: "bg-amber-50",
+                    textColor: "text-amber-700",
+                    borderColor: "border-amber-200",
+                  },
+                  {
+                    key: "Approved",
+                    icon: "✅",
+                    color: "from-green-400 to-emerald-500",
+                    bgColor: "bg-green-50",
+                    textColor: "text-green-700",
+                    borderColor: "border-green-200",
+                  },
+                  {
+                    key: "Rejected",
+                    icon: "❌",
+                    color: "from-red-400 to-pink-500",
+                    bgColor: "bg-red-50",
+                    textColor: "text-red-700",
+                    borderColor: "border-red-200",
+                  },
+                  {
+                    key: "Expired",
+                    icon: "⏰",
+                    color: "from-gray-400 to-slate-500",
+                    bgColor: "bg-gray-50",
+                    textColor: "text-gray-700",
+                    borderColor: "border-gray-200",
+                  },
+                ].map((s) => (
+                  <label
+                    key={s.key}
+                    className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
+                      filters.status.includes(s.key)
+                        ? `${s.bgColor} ${s.borderColor} shadow-md transform scale-[1.02]`
+                        : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
+                    }`}
+                  >
                     <div className="relative">
                       <input
-                        type="date"
-                        value={filters.dateTo}
+                        type="checkbox"
+                        checked={filters.status.includes(s.key)}
                         onChange={(e) =>
-                          setFilters((f) => ({ ...f, dateTo: e.target.value }))
+                          setFilters((f) => ({
+                            ...f,
+                            status: e.target.checked
+                              ? [...f.status, s.key]
+                              : f.status.filter((x) => x !== s.key),
+                          }))
                         }
-                        className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
+                        className="sr-only"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/5 to-indigo-400/0 rounded-xl pointer-events-none"></div>
+                      <div
+                        className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
+                          filters.status.includes(s.key)
+                            ? `bg-gradient-to-br ${s.color} text-white shadow-sm`
+                            : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                        }`}
+                      >
+                        {filters.status.includes(s.key) ? "✓" : s.icon}
+                      </div>
                     </div>
+                    <span
+                      className={`text-sm font-medium transition-colors duration-200 ${
+                        filters.status.includes(s.key)
+                          ? s.textColor
+                          : "text-gray-700 group-hover:text-gray-800"
+                      }`}
+                    >
+                      {s.key}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Date Range - Modern Gradient Style */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-3 h-3 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <label className="text-sm font-medium text-gray-700">
+                  Date Range
+                </label>
+              </div>
+              <div className="space-y-3">
+                <div className="relative group">
+                  <label className="text-xs font-medium text-gray-600 mb-1 block">
+                    From Date
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={filters.dateFrom}
+                      onChange={(e) =>
+                        setFilters((f) => ({
+                          ...f,
+                          dateFrom: e.target.value,
+                        }))
+                      }
+                      className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/5 to-indigo-400/0 rounded-xl pointer-events-none"></div>
+                  </div>
+                </div>
+                <div className="relative group">
+                  <label className="text-xs font-medium text-gray-600 mb-1 block">
+                    To Date
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={filters.dateTo}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, dateTo: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/5 to-indigo-400/0 rounded-xl pointer-events-none"></div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Modern Action Buttons */}
-            <div className="flex flex-wrap justify-between items-center mt-8 pt-6 border-t border-white/60">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full animate-pulse"></div>
-                <span>Real-time filtering active</span>
-              </div>
+          {/* Modern Action Buttons */}
+          <div className="flex flex-wrap justify-between items-center mt-8 pt-6 border-t border-white/60">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full animate-pulse"></div>
+              <span>Real-time filtering active</span>
+            </div>
 
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={clearAllFilters}
-                  className="px-5 py-2.5 text-sm font-medium bg-white/80 hover:bg-white border-2 border-gray-200 hover:border-gray-300 rounded-xl transition-all duration-200 hover:shadow-sm active:scale-95"
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={clearAllFilters}
+                className="px-5 py-2.5 text-sm font-medium bg-white/80 hover:bg-white border-2 border-gray-200 hover:border-gray-300 rounded-xl transition-all duration-200 hover:shadow-sm active:scale-95"
+              >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                  Clear All
-                </Button>
-
-                <Button
-                  onClick={() => setFiltersOpen(false)}
-                  className="px-6 py-2.5 text-sm font-medium bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95"
-                >
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Apply Filters
-                </Button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                Clear All
+              </Button>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Results header */}
         <div className="mb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">

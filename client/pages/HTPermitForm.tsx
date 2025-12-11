@@ -394,7 +394,8 @@ export default function HTPermitForm() {
           // Create a basic permit form with the header data
           const data = createInitialData();
           if (header.permitNumber) data.permitNo = header.permitNumber;
-          if (header.certificateNumber) data.certificateNo = header.certificateNumber;
+          if (header.certificateNumber)
+            data.certificateNo = header.certificateNumber;
           return data;
         }
       }

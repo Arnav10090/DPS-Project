@@ -419,7 +419,9 @@ export default function GasPermit() {
           }
         }
         // Load requester comments for gas permit
-        const requesterStr = localStorage.getItem("dps_requester_safety_comments_gas");
+        const requesterStr = localStorage.getItem(
+          "dps_requester_safety_comments_gas",
+        );
         if (requesterStr) {
           const requesterData = JSON.parse(requesterStr);
           // These comments can be displayed in the preview

@@ -90,7 +90,9 @@ export default function SafetyOfficerApprovalQueue() {
   const [preview, setPreview] = useState<Permit | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
   const [selectedPermit, setSelectedPermit] = useState<Permit | null>(null);
-  const [selectedPermitType, setSelectedPermitType] = useState<"work" | "highTension" | "gasLine" | null>(null);
+  const [selectedPermitType, setSelectedPermitType] = useState<
+    "work" | "highTension" | "gasLine" | null
+  >(null);
   const userRole = localStorage.getItem("dps_role");
 
   // Function to handle View button click and populate SafetyPermitDetails form

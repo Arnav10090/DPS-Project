@@ -1238,15 +1238,22 @@ export default function CreatePermit() {
           });
         }
         // Load requester comments for work permit
-        const requesterStr = localStorage.getItem("dps_requester_safety_comments_work");
+        const requesterStr = localStorage.getItem(
+          "dps_requester_safety_comments_work",
+        );
         if (requesterStr) {
           const requesterData = JSON.parse(requesterStr);
           update({
-            requesterSafetyRequireUrgent: !!requesterData.requesterSafetyRequireUrgent,
-            requesterSafetySafetyManagerApproval: !!requesterData.requesterSafetySafetyManagerApproval,
-            requesterSafetyPlannedShutdown: !!requesterData.requesterSafetyPlannedShutdown,
-            requesterSafetyPlannedShutdownDate: requesterData.requesterSafetyPlannedShutdownDate || "",
-            requesterSafetyCustomComments: requesterData.requesterSafetyCustomComments || [],
+            requesterSafetyRequireUrgent:
+              !!requesterData.requesterSafetyRequireUrgent,
+            requesterSafetySafetyManagerApproval:
+              !!requesterData.requesterSafetySafetyManagerApproval,
+            requesterSafetyPlannedShutdown:
+              !!requesterData.requesterSafetyPlannedShutdown,
+            requesterSafetyPlannedShutdownDate:
+              requesterData.requesterSafetyPlannedShutdownDate || "",
+            requesterSafetyCustomComments:
+              requesterData.requesterSafetyCustomComments || [],
           });
         }
       }

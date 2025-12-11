@@ -81,12 +81,75 @@ const SAMPLE: Permit[] = [
 ];
 
 export default function ApproverQueue() {
+  const navigate = useNavigate();
   const [permits, setPermits] = useState<Permit[]>(SAMPLE);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [query, setQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [preview, setPreview] = useState<Permit | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+
+  // Function to handle View button click and populate ApproverPermitDetails form
+  const handleViewPermit = (permit: Permit) => {
+    try {
+      // Map permit type to form type
+      let permitDocType: "work" | "highTension" | "gasLine" = "work";
+      if (permit.type === "High Tension Line Work Permit") {
+        permitDocType = "highTension";
+      } else if (permit.type === "Gas Line Work Permit") {
+        permitDocType = "gasLine";
+      }
+
+      // Store permit header information
+      const headerData = {
+        permitRequester: permit.requester,
+        permitApprover1: "",
+        permitApprover2: "",
+        safetyManager: "",
+        permitIssueDate: new Date().toISOString().split("T")[0],
+        expectedReturnDate: "",
+        certificateNumber: "",
+        permitNumber: permit.permitId,
+      };
+      localStorage.setItem("dps_permit_header", JSON.stringify(headerData));
+
+      // Store requester comments (from permit queue data)
+      const requesterComments = {
+        requesterRequireUrgent: false,
+        requesterSafetyManagerApproval: false,
+        requesterPlannedShutdown: false,
+        requesterPlannedShutdownDate: "",
+        requesterCustomComments: [
+          {
+            text: `Description: ${permit.description}`,
+            checked: false,
+          },
+          {
+            text: `Location: ${permit.location}`,
+            checked: false,
+          },
+          {
+            text: `Estimated Duration: ${permit.estimatedHours} hours`,
+            checked: false,
+          },
+        ],
+      };
+
+      const storageKey =
+        permitDocType === "highTension"
+          ? "dps_requester_comments_ht"
+          : permitDocType === "gasLine"
+            ? "dps_requester_comments_gas"
+            : "dps_requester_comments_work";
+
+      localStorage.setItem(storageKey, JSON.stringify(requesterComments));
+
+      // Navigate to the appropriate permit details page
+      navigate("/approver-permit-details");
+    } catch (e) {
+      console.error("Error viewing permit:", e);
+    }
+  };
 
   // comprehensive filter state
   const [filters, setFilters] = useState({

@@ -81,12 +81,12 @@ const SAMPLE: Permit[] = [
 ];
 
 export default function SafetyOfficerApprovalQueue() {
-  const navigate = useNavigate();
   const [permits, setPermits] = useState<Permit[]>(SAMPLE);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [query, setQuery] = useState("");
   const [preview, setPreview] = useState<Permit | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const [selectedPermit, setSelectedPermit] = useState<Permit | null>(null);
   const userRole = localStorage.getItem("dps_role");
 
   // Function to handle View button click and populate SafetyPermitDetails form
@@ -145,8 +145,8 @@ export default function SafetyOfficerApprovalQueue() {
 
       localStorage.setItem(storageKey, JSON.stringify(requesterComments));
 
-      // Navigate to the safety permit details page
-      navigate("/safety-permit-details");
+      // Set selected permit to show details inline instead of navigating
+      setSelectedPermit(permit);
     } catch (e) {
       console.error("Error viewing permit:", e);
     }

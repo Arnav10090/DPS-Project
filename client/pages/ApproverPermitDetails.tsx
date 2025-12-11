@@ -182,6 +182,7 @@ export default function ApproverPermitDetails() {
           expectedReturnDate: h.expectedReturnDate || "",
           certificateNumber: h.certificateNumber || "",
           permitNumber: h.permitNumber || "",
+          permitDocType: h.permitDocType || "work",
         });
       }
     } catch (e) {

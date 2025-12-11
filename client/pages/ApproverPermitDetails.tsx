@@ -261,7 +261,9 @@ export default function ApproverPermitDetails() {
               {/* Permit Header */}
               <div className="mt-6 mb-6">
                 <div>
-                  <div className="text-sm text-slate-600 font-bold">Permit Type</div>
+                  <div className="text-sm text-slate-600 font-bold">
+                    Permit Type
+                  </div>
                   <div className="text-sm text-slate-600">
                     {form.permitDocType === "highTension"
                       ? "High Tension Line Work Permit"
@@ -287,7 +289,9 @@ export default function ApproverPermitDetails() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1 font-bold">Location</div>
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
+                    Location
+                  </div>
                   <div className="text-sm text-slate-700">Plant A - Bay 3</div>
                 </div>
                 <div>
@@ -297,7 +301,9 @@ export default function ApproverPermitDetails() {
                   <div className="text-sm text-slate-700">3 hrs</div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1 font-bold">Personnel</div>
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
+                    Personnel
+                  </div>
                   <div className="text-sm text-slate-700">
                     {form.permitRequester || "Jane Doe"} • Maintenance
                   </div>

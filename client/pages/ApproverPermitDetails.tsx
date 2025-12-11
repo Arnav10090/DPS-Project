@@ -407,7 +407,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Approver 1
                     </div>
                     <input
@@ -432,7 +432,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Approver 2
                     </div>
                     <input
@@ -457,7 +457,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Safety Manager
                     </div>
                     <input
@@ -484,7 +484,7 @@ export default function ApproverPermitDetails() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Issue Date
                     </div>
                     <input
@@ -508,7 +508,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Expected Return Date
                     </div>
                     <input

@@ -1232,11 +1232,14 @@ export default function CreatePermit() {
 
   const handleClosePreview = () => {
     setShowPreviewModal(false);
-    // If preview was opened from ApproverPermitDetails, navigate back
+    // If preview was opened from ApproverPermitDetails or SafetyOfficerApprovalQueue, navigate back
     try {
       const sp = new URLSearchParams(window.location.search);
-      if (sp.get("from") === "approver") {
+      const from = sp.get("from");
+      if (from === "approver") {
         navigate("/approver-permit-details");
+      } else if (from === "safety") {
+        navigate("/safety-officer-approval-queue");
       }
     } catch (e) {
       // ignore

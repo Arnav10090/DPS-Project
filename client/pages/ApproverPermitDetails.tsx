@@ -113,23 +113,23 @@ export default function ApproverPermitDetails() {
     try {
       if (typeof window === "undefined") return;
 
-      // Try to load from work form first
-      let raw = localStorage.getItem("dps_requester_comments_work");
-
-      // If not found, check the permit type and load accordingly
-      if (!raw) {
-        const header = localStorage.getItem("dps_permit_header");
-        if (header) {
-          const h = JSON.parse(header);
-          const permitNumber = h.permitNumber || "";
-          // Determine permit type based on header or other clues
-          // For now, we'll try all keys
-          const htRaw = localStorage.getItem("dps_requester_comments_ht");
-          const gasRaw = localStorage.getItem("dps_requester_comments_gas");
-          raw = htRaw || gasRaw || raw;
-        }
+      // First, check if header exists to get permitDocType
+      const header = localStorage.getItem("dps_permit_header");
+      let permitDocType = "work";
+      if (header) {
+        const h = JSON.parse(header);
+        permitDocType = h.permitDocType || "work";
       }
 
+      // Load requester comments based on document type
+      const storageKey =
+        permitDocType === "highTension"
+          ? "dps_requester_comments_ht"
+          : permitDocType === "gasLine"
+            ? "dps_requester_comments_gas"
+            : "dps_requester_comments_work";
+
+      const raw = localStorage.getItem(storageKey);
       if (!raw) return;
       const data = JSON.parse(raw);
       update({

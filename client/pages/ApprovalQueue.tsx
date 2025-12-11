@@ -303,10 +303,6 @@ export default function ApproverQueue() {
             <span className="font-medium">{permit.location}</span>
           </div>
           <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-600">Risk:</span>
-            <span className="font-medium">{permit.risk}</span>
-          </div>
-          <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Status:</span>
             <span className="font-medium">{permit.safetyStatus}</span>
           </div>

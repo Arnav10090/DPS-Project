@@ -1224,14 +1224,6 @@ export default function CreatePermit() {
       const sp = new URLSearchParams(window.location.search);
       if (sp.has("preview")) {
         setShowPreviewModal(true);
-        // If coming from approver preview with docType parameter, set the form's permitDocType
-        const docType = sp.get("docType");
-        if (
-          docType &&
-          (docType === "work" || docType === "highTension" || docType === "gasLine")
-        ) {
-          update({ permitDocType: docType as PermitDocType });
-        }
       }
     } catch (e) {
       // ignore

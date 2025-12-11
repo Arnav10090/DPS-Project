@@ -284,7 +284,7 @@ export default function ApproverPermitDetails() {
         </div>
       </header>
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
-        {/* Only Section 1: Permit Details - Moved to top */}
+        {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
@@ -330,7 +330,7 @@ export default function ApproverPermitDetails() {
               </div>
 
               {/* Permit Details in 2-Column Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <div className="text-xs text-slate-600 mb-1">
                     Work Description
@@ -360,7 +360,14 @@ export default function ApproverPermitDetails() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
 
+        {/* Section 2: Permit Details & Comments */}
+        <div className="rounded-xl border bg-white p-4 shadow-sm">
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
               {/* Tabs */}
               <div className="flex items-center gap-2 border rounded-lg p-1 bg-gray-50 w-fit mb-6">
                 <button
@@ -390,7 +397,7 @@ export default function ApproverPermitDetails() {
               </div>
 
               {/* Tab Content */}
-              <div className="space-y-4">
+              <div className="space-y-4 mb-6 pb-6 border-b">
                 {activeTab === 0 && (
                   <div>
                     <h3 className="text-sm font-medium">Risk Matrix</h3>

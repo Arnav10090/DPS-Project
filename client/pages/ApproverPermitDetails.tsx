@@ -382,7 +382,7 @@ export default function ApproverPermitDetails() {
                 {/* Top requester/approver fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Requester
                     </div>
                     <input

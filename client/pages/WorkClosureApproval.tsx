@@ -712,8 +712,12 @@ export default function ApproverClosure() {
 
   return (
     <div className="max-w-[1400px] mx-auto p-6">
-      <div className="mb-4">
-        <Button variant="outline" onClick={() => setSelectedClosure(null)}>
+      <div className="mb-6">
+        <Button
+          variant="outline"
+          onClick={() => setSelectedClosure(null)}
+          className="text-sm font-medium px-4 py-2 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+        >
           ← Back to List
         </Button>
       </div>

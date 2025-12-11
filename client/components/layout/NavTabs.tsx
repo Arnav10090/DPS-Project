@@ -75,7 +75,10 @@ export default function NavTabs() {
 
   if (role === "safety") {
     // Safety Officer-specific navigation items: Approval Queue
-    tabs.push({ to: "/safety-officer-approval-queue", label: "Approval Queue" });
+    tabs.push({
+      to: "/safety-officer-approval-queue",
+      label: "Approval Queue",
+    });
   }
 
   if (role === "requester") {

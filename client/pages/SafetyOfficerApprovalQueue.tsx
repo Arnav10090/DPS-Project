@@ -151,6 +151,7 @@ export default function SafetyOfficerApprovalQueue() {
 
       // Set selected permit to show details inline instead of navigating
       setSelectedPermit(permit);
+      setSelectedPermitType(permitDocType);
     } catch (e) {
       console.error("Error viewing permit:", e);
     }

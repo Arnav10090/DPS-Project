@@ -72,7 +72,6 @@ export default function NavTabs() {
   if (role === "approver") {
     // Approver-specific navigation items: Approval Queue only (Permit Details hidden from nav, accessible via View button)
     tabs.push({ to: "/approval-queue", label: "Approval Queue" });
-    tabs.push({ to: "/review-permits", label: "Review Permits" });
     tabs.push({ to: "/work-closure-approval", label: "Work Closure Approval" });
   }
 

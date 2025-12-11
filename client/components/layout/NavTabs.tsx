@@ -59,7 +59,6 @@ export default function NavTabs() {
   }
   if (role === "requester") {
     tabs.push({ to: "/work-closure-request", label: "Work Closure Request" });
-    tabs.push({ to: "/permits-closed", label: "Permits Closed" });
   }
   if (role === "approver") {
     // Approver-specific navigation items inserted after Permit Details

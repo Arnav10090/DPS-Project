@@ -1200,7 +1200,7 @@ export default function CreatePermit() {
   useEffect(() => {
     if (showPreviewModal) {
       const onKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") setShowPreviewModal(false);
+        if (e.key === "Escape") handleClosePreview();
       };
       document.addEventListener("keydown", onKey);
       const prev = document.body.style.overflow;

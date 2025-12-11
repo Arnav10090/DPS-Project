@@ -27,14 +27,18 @@ type ApproverPermitForm = {
   approverToSafetySafetyManagerApproval?: boolean;
   approverToSafetyPlannedShutdown?: boolean;
   approverToSafetyPlannedShutdownDate?: string;
-  approverToSafetyCustomComments?: Array<string | { text: string; checked?: boolean }>;
+  approverToSafetyCustomComments?: Array<
+    string | { text: string; checked?: boolean }
+  >;
 
   // Read-only safety officer comments to display in this view
   safetyFromOfficerRequireUrgent?: boolean;
   safetyFromOfficerSafetyManagerApproval?: boolean;
   safetyFromOfficerPlannedShutdown?: boolean;
   safetyFromOfficerPlannedShutdownDate?: string;
-  safetyFromOfficerCustomComments?: Array<string | { text: string; checked?: boolean }>;
+  safetyFromOfficerCustomComments?: Array<
+    string | { text: string; checked?: boolean }
+  >;
 
   // Header fields (local only)
   permitRequester?: string;
@@ -89,7 +93,8 @@ const DEFAULT_FORM: ApproverPermitForm = {
 export default function ApproverPermitDetails() {
   const [form, setForm] = useState<ApproverPermitForm>(() => DEFAULT_FORM);
   const [newApproverComment, setNewApproverComment] = useState("");
-  const [newApproverToSafetyComment, setNewApproverToSafetyComment] = useState("");
+  const [newApproverToSafetyComment, setNewApproverToSafetyComment] =
+    useState("");
   const [activeTab, setActiveTab] = useState<number>(0);
   const navigate = useNavigate();
 
@@ -141,9 +146,11 @@ export default function ApproverPermitDetails() {
         const d = JSON.parse(rawSafety);
         update({
           safetyFromOfficerRequireUrgent: !!d.SafetyOfficerRequireUrgent,
-          safetyFromOfficerSafetyManagerApproval: !!d.SafetyOfficerSafetyManagerApproval,
+          safetyFromOfficerSafetyManagerApproval:
+            !!d.SafetyOfficerSafetyManagerApproval,
           safetyFromOfficerPlannedShutdown: !!d.SafetyOfficerPlannedShutdown,
-          safetyFromOfficerPlannedShutdownDate: d.SafetyOfficerPlannedShutdownDate || "",
+          safetyFromOfficerPlannedShutdownDate:
+            d.SafetyOfficerPlannedShutdownDate || "",
           safetyFromOfficerCustomComments: d.SafetyOfficerCustomComments || [],
         });
       }
@@ -182,7 +189,7 @@ export default function ApproverPermitDetails() {
       };
       localStorage.setItem(
         "dps_approver_comments_work",
-        JSON.stringify(payload)
+        JSON.stringify(payload),
       );
     } catch (e) {
       // ignore
@@ -200,14 +207,17 @@ export default function ApproverPermitDetails() {
     try {
       const payload = {
         approverToSafetyRequireUrgent: !!form.approverToSafetyRequireUrgent,
-        approverToSafetySafetyManagerApproval: !!form.approverToSafetySafetyManagerApproval,
+        approverToSafetySafetyManagerApproval:
+          !!form.approverToSafetySafetyManagerApproval,
         approverToSafetyPlannedShutdown: !!form.approverToSafetyPlannedShutdown,
-        approverToSafetyPlannedShutdownDate: form.approverToSafetyPlannedShutdownDate || "",
-        approverToSafetyCustomComments: form.approverToSafetyCustomComments || [],
+        approverToSafetyPlannedShutdownDate:
+          form.approverToSafetyPlannedShutdownDate || "",
+        approverToSafetyCustomComments:
+          form.approverToSafetyCustomComments || [],
       };
       localStorage.setItem(
         "dps_approver_to_safety_comments_work",
-        JSON.stringify(payload)
+        JSON.stringify(payload),
       );
     } catch (e) {
       // ignore
@@ -226,7 +236,7 @@ export default function ApproverPermitDetails() {
         <div>
           <h1 className="text-[20px] font-semibold">Work Permit Form</h1>
           <div className="text-sm text-gray-500">
-            <p> 
+            <p>
               <span className="text-sm">{`WCS-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`}</span>
             </p>
           </div>
@@ -234,7 +244,9 @@ export default function ApproverPermitDetails() {
         <div className="flex items-center gap-6">
           {/* Work Permit Form Type dropdown */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-700 font-medium">Work Permit Form Type:</span>
+            <span className="text-sm text-slate-700 font-medium">
+              Work Permit Form Type:
+            </span>
             <div className="w-[220px]">
               <Select
                 value={form.permitDocType}
@@ -253,7 +265,9 @@ export default function ApproverPermitDetails() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="work">Work Permit</SelectItem>
-                  <SelectItem value="highTension">High Tension Line Work Permit</SelectItem>
+                  <SelectItem value="highTension">
+                    High Tension Line Work Permit
+                  </SelectItem>
                   <SelectItem value="gasLine">Gas Line Work Permit</SelectItem>
                 </SelectContent>
               </Select>
@@ -270,536 +284,770 @@ export default function ApproverPermitDetails() {
         </div>
       </header>
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
-
-      {/* Company header under progress for Approver */}
-      <div className="bg-white border-b">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img src="/placeholder.svg" alt="AM/NS INDIA logo" className="h-[60px] w-auto" />
-          </div>
-          <div className="text-center">
-            <div className="font-bold text-gray-900">ArcelorMittal Nippon Steel India Limited</div>
-            <div className="text-gray-600">HAZIRA</div>
-            <div className="mt-1 text-[20px] font-bold text-gray-900">
-              {form.permitDocType === "highTension"
-                ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
-                : form.permitDocType === "gasLine"
-                ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
-                : "PERMIT TO WORK"}
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 w-[240px]">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Certificate No.</label>
-              <input
-                value={form.certificateNumber || ""}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  update({ certificateNumber: v });
-                  try {
-                    const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                    header.certificateNumber = v;
-                    localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                  } catch {}
-                }}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+        {/* Company header under progress for Approver */}
+        <div className="bg-white border-b">
+          <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg"
+                alt="AM/NS INDIA logo"
+                className="h-[60px] w-auto"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Permit No.</label>
-              <input
-                value={form.permitNumber || ""}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  update({ permitNumber: v });
-                  try {
-                    const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                    header.permitNumber = v;
-                    localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                  } catch {}
-                }}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Only Section 1: Permit Details */}
-      <div className="rounded-xl border bg-white p-4 shadow-sm">
-        <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-            <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
-              Details of such permit
-            </div>
-
-            {/* Permit Header with Actions and Tabs - from Review Permits */}
-            <div className="mt-6 pb-6 border-b">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="text-sm text-slate-600">Permit</div>
-                  <div className="text-xl font-semibold">{form.permitNumber || 'Select a permit'}</div>
-                  <div className="text-sm text-slate-600">{form.permitDocType === 'highTension' ? 'High Tension Line Work Permit' : form.permitDocType === 'gasLine' ? 'Gas Line Work Permit' : 'Work Permit'}</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => alert('Approve (placeholder)')} className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700">Approve</button>
-                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">Conditional</button>
-                  <button onClick={() => alert('Reject (placeholder)')} className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700">Reject</button>
-                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">Escalate</button>
-                </div>
+            <div className="text-center">
+              <div className="font-bold text-gray-900">
+                ArcelorMittal Nippon Steel India Limited
               </div>
-
-              {/* Tabs */}
-              <div className="flex items-center gap-2 border rounded-lg p-1 bg-gray-50 w-fit">
-                <button className={`px-3 py-1.5 rounded text-sm ${activeTab===0 ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700 hover:text-slate-900'}`} onClick={() => setActiveTab(0)}>Work Info</button>
-                <button className={`px-3 py-1.5 rounded text-sm ${activeTab===1 ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700 hover:text-slate-900'}`} onClick={() => setActiveTab(1)}>Risk Assessment</button>
-                <button className={`px-3 py-1.5 rounded text-sm ${activeTab===2 ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700 hover:text-slate-900'}`} onClick={() => setActiveTab(2)}>Compliance</button>
-                <button className={`px-3 py-1.5 rounded text-sm ${activeTab===3 ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700 hover:text-slate-900'}`} onClick={() => setActiveTab(3)}>Documents</button>
-                <button className={`px-3 py-1.5 rounded text-sm ${activeTab===4 ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700 hover:text-slate-900'}`} onClick={() => setActiveTab(4)}>Review History</button>
+              <div className="text-gray-600">HAZIRA</div>
+              <div className="mt-1 text-[20px] font-bold text-gray-900">
+                {form.permitDocType === "highTension"
+                  ? "ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment"
+                  : form.permitDocType === "gasLine"
+                    ? "ADDITIONAL WORK PERMIT FOR GAS LINE"
+                    : "PERMIT TO WORK"}
               </div>
             </div>
-
-            {/* Tab Content */}
-            <div className="mt-6 space-y-4">
-              {activeTab === 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-slate-900 mb-2">Work Description</h3>
-                  <div className="text-sm text-slate-600 mb-4">{form.permitDocType === 'work' ? 'Welding work near fuel line' : form.permitDocType === 'highTension' ? 'High-voltage panel maintenance' : 'Gas line inspection and testing'}</div>
-
-                  <div className="grid grid-cols-2 gap-3 mt-4">
-                    <div>
-                      <div className="text-sm font-medium text-slate-900">Location</div>
-                      <div className="text-sm text-slate-600">Plant A - Bay 3</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-slate-900">Estimated Duration</div>
-                      <div className="text-sm text-slate-600">3 hrs</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4">
-                    <div className="text-sm font-medium text-slate-900">Personnel</div>
-                    <div className="text-sm text-slate-600">{form.permitRequester || 'Jane Doe'} • Maintenance</div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 1 && (
-                <div>
-                  <h3 className="text-sm font-medium">Risk Matrix</h3>
-                  <div className="text-sm text-slate-600">Probability vs Impact chart (placeholder)</div>
-                </div>
-              )}
-
-              {activeTab === 2 && (
-                <div>
-                  <h3 className="text-sm font-medium">Compliance Checklist</h3>
-                  <div className="text-sm text-slate-600">Compliance verification (placeholder)</div>
-                </div>
-              )}
-
-              {activeTab === 3 && (
-                <div>
-                  <h3 className="text-sm font-medium">Documents</h3>
-                  <div className="text-sm text-slate-600">Supporting documents (placeholder)</div>
-                </div>
-              )}
-
-              {activeTab === 4 && (
-                <div>
-                  <h3 className="text-sm font-medium">Review History</h3>
-                  <div className="text-sm text-slate-600">Historical reviews (placeholder)</div>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-6 space-y-4">
-              {/* Top requester/approver fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <div className="text-xs text-slate-600 mb-1">Permit Requester</div>
-                  <input
-                    type="text"
-                    placeholder="Search user..."
-                    className="w-full rounded border px-3 py-2"
-                    value={form.permitRequester || ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      update({ permitRequester: v });
-                      try {
-                        const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                        header.permitRequester = v;
-                        localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                      } catch {}
-                    }}
-                  />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-600 mb-1">Permit Approver 1</div>
-                  <input
-                    type="text"
-                    placeholder="Approver name or role"
-                    className="w-full rounded border px-3 py-2"
-                    value={form.permitApprover1 || ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      update({ permitApprover1: v });
-                      try {
-                        const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                        header.permitApprover1 = v;
-                        localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                      } catch {}
-                    }}
-                  />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-600 mb-1">Permit Approver 2</div>
-                  <input
-                    type="text"
-                    placeholder="Approver name or role"
-                    className="w-full rounded border px-3 py-2"
-                    value={form.permitApprover2 || ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      update({ permitApprover2: v });
-                      try {
-                        const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                        header.permitApprover2 = v;
-                        localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                      } catch {}
-                    }}
-                  />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-600 mb-1">Safety Manager</div>
-                  <input
-                    type="text"
-                    placeholder="Safety Manager name/department"
-                    className="w-full rounded border px-3 py-2"
-                    value={form.safetyManager || ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      update({ safetyManager: v });
-                      try {
-                        const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                        header.safetyManager = v;
-                        localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                      } catch {}
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <div className="text-xs text-slate-600 mb-1">Permit Issue Date</div>
-                  <input
-                    type="date"
-                    className="w-full rounded border px-3 py-2"
-                    value={form.permitIssueDate || ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      update({ permitIssueDate: v });
-                      try {
-                        const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                        header.permitIssueDate = v;
-                        localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                      } catch {}
-                    }}
-                  />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-600 mb-1">Expected Return Date</div>
-                  <input
-                    type="date"
-                    className="w-full rounded border px-3 py-2"
-                    value={form.expectedReturnDate || ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      update({ expectedReturnDate: v });
-                      try {
-                        const header = JSON.parse(localStorage.getItem("dps_permit_header") || "{}");
-                        header.expectedReturnDate = v;
-                        localStorage.setItem("dps_permit_header", JSON.stringify(header));
-                      } catch {}
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Comments from Requester — plain text only */}
-              <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-                <div className="text-md font-medium">Comments from Requester:</div>
-                <div className="mt-2 space-y-1 text-sm">
-                  {form.requesterRequireUrgent && <div>Require on urgent basis</div>}
-                  {form.requesterSafetyManagerApproval && (
-                    <div>Safety Manager approval required</div>
-                  )}
-                  {(form.requesterPlannedShutdown || form.requesterPlannedShutdownDate) && (
-                    <div>Planned shutdown on: {form.requesterPlannedShutdownDate || ""}</div>
-                  )}
-                  {(form.requesterCustomComments || []).map((it, idx) => (
-                    <div key={idx}>- {typeof it === "string" ? it : it.text}</div>
-                  ))}
-                  {!form.requesterRequireUrgent &&
-                    !form.requesterSafetyManagerApproval &&
-                    !(form.requesterPlannedShutdown || form.requesterPlannedShutdownDate) &&
-                    (form.requesterCustomComments || []).length === 0 && (
-                      <div className="text-gray-500">No comments from requester yet.</div>
-                    )}
-                </div>
-              </div>
-
-              {/* Comments from Safety Officer — plain text only */}
-              <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-                <div className="text-md font-medium">Comments from Safety Officer:</div>
-                <div className="mt-2 space-y-1 text-sm">
-                  {form.safetyFromOfficerRequireUrgent && <div>Require on urgent basis</div>}
-                  {form.safetyFromOfficerSafetyManagerApproval && (
-                    <div>Safety Manager approval required</div>
-                  )}
-                  {(form.safetyFromOfficerPlannedShutdown || form.safetyFromOfficerPlannedShutdownDate) && (
-                    <div>
-                      Planned shutdown on: {form.safetyFromOfficerPlannedShutdownDate || ""}
-                    </div>
-                  )}
-                  {(form.safetyFromOfficerCustomComments || []).map((it, idx) => (
-                    <div key={idx}>- {typeof it === "string" ? it : it.text}</div>
-                  ))}
-                  {!form.safetyFromOfficerRequireUrgent &&
-                    !form.safetyFromOfficerSafetyManagerApproval &&
-                    !(form.safetyFromOfficerPlannedShutdown || form.safetyFromOfficerPlannedShutdownDate) &&
-                    (form.safetyFromOfficerCustomComments || []).length === 0 && (
-                      <div className="text-gray-500">No comments from safety officer yet.</div>
-                    )}
-                </div>
-              </div>
-
-              {/* Specific Comments for Approver — approver can set for own role list */}
-              <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                <div className="text-md font-medium">Comments for Requester:</div>
-                <label className="flex items-center gap-2 mt-2">
-                  <input
-                    type="checkbox"
-                    checked={!!form.approverRequireUrgent}
-                    onChange={(e) => update({ approverRequireUrgent: e.target.checked })}
-                  />
-                  Require on urgent basis
+            <div className="flex flex-col gap-2 w-[240px]">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Certificate No.
                 </label>
-                <label className="flex items-center gap-2 mt-2">
-                  <input
-                    type="checkbox"
-                    checked={!!form.approverSafetyManagerApproval}
-                    onChange={(e) =>
-                      update({ approverSafetyManagerApproval: e.target.checked })
-                    }
-                  />
-                  Safety Manager approval required
-                </label>
-                <div className="mt-2 text-md flex items-center gap-2">
-                  <label className="inline-flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={!!form.approverPlannedShutdown}
-                      onChange={(e) => update({ approverPlannedShutdown: e.target.checked })}
-                    />
-                    <span>
-                      Planned shutdown on:
-                    </span>
-                  </label>
-                  <input
-                    type="date"
-                    className="rounded border px-2 py-1 text-sm"
-                    value={form.approverPlannedShutdownDate || ""}
-                    onChange={(e) => update({ approverPlannedShutdownDate: e.target.value })}
-                  />
-                </div>
-
-                {/* Approver custom comments */}
-                <div className="mt-3">
-                  {/* Existing custom comments as checkbox list with delete */}
-                  <div className="mt-2 space-y-1">
-                    {(form.approverCustomComments || []).map((item: any, idx: number) => {
-                      const text = typeof item === "string" ? item : item.text;
-                      const checked = typeof item === "string" ? false : !!item.checked;
-                      return (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between gap-2 w-full"
-                        >
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={(e) => {
-                                const prev = form.approverCustomComments || [];
-                                const next = prev.map((it: any, i: number) => {
-                                  if (i !== idx) return it;
-                                  if (typeof it === "string")
-                                    return { text: it, checked: e.target.checked };
-                                  return { ...it, checked: e.target.checked };
-                                });
-                                update({ approverCustomComments: next });
-                              }}
-                            />
-                            <span className="text-sm">{text}</span>
-                          </div>
-                          <div>
-                            <button
-                              type="button"
-                              aria-label={`Delete comment ${idx + 1}`}
-                              onClick={() => {
-                                const prev = form.approverCustomComments || [];
-                                const next = prev.filter((_: any, i: number) => i !== idx);
-                                update({ approverCustomComments: next });
-                              }}
-                              className="text-xs text-red-600 hover:underline px-2 py-1"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
+                <input
+                  value={form.certificateNumber || ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    update({ certificateNumber: v });
+                    try {
+                      const header = JSON.parse(
+                        localStorage.getItem("dps_permit_header") || "{}",
                       );
-                    })}
-                  </div>
-
-                  {/* Add new comment input */}
-                  <div className="text-xs font-medium mt-2">Add comment</div>
-                  <div className="flex gap-2 mt-2">
-                    <input
-                      type="text"
-                      placeholder="Add comment"
-                      value={newApproverComment}
-                      onChange={(e) => setNewApproverComment(e.target.value)}
-                      className="flex-1 border rounded px-2 py-1"
-                    />
-                    <button
-                      className="px-3 py-1 rounded bg-white border text-sm"
-                      onClick={() => {
-                        const v = newApproverComment.trim();
-                        if (!v) return;
-                        const prev = form.approverCustomComments || [];
-                        const next = [...prev, { text: v, checked: false }];
-                        update({ approverCustomComments: next });
-                        setNewApproverComment("");
-                      }}
-                    >
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Specific Comments for Safety Officer — set by approver */}
-              <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-                <div className="text-md font-medium">Comments for Safety Officer:</div>
-                <label className="flex items-center gap-2 mt-2">
-                  <input
-                    type="checkbox"
-                    checked={!!form.approverToSafetyRequireUrgent}
-                    onChange={(e) => update({ approverToSafetyRequireUrgent: e.target.checked })}
-                  />
-                  Require on urgent basis
-                </label>
-                <label className="flex items-center gap-2 mt-2">
-                  <input
-                    type="checkbox"
-                    checked={!!form.approverToSafetySafetyManagerApproval}
-                    onChange={(e) =>
-                      update({ approverToSafetySafetyManagerApproval: e.target.checked })
-                    }
-                  />
-                  Safety Manager approval required
-                </label>
-                <div className="mt-2 text-md flex items-center gap-2">
-                  <label className="inline-flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={!!form.approverToSafetyPlannedShutdown}
-                      onChange={(e) => update({ approverToSafetyPlannedShutdown: e.target.checked })}
-                    />
-                    <span>Planned shutdown on:</span>
-                  </label>
-                  <input
-                    type="date"
-                    className="rounded border px-2 py-1 text-sm"
-                    value={form.approverToSafetyPlannedShutdownDate || ""}
-                    onChange={(e) => update({ approverToSafetyPlannedShutdownDate: e.target.value })}
-                  />
-                </div>
-
-                {/* Approver to Safety custom comments */}
-                <div className="mt-3">
-                  <div className="mt-2 space-y-1">
-                    {(form.approverToSafetyCustomComments || []).map((item: any, idx: number) => {
-                      const text = typeof item === "string" ? item : item.text;
-                      const checked = typeof item === "string" ? false : !!item.checked;
-                      return (
-                        <div key={idx} className="flex items-center justify-between gap-2 w-full">
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={(e) => {
-                                const prev = form.approverToSafetyCustomComments || [];
-                                const next = prev.map((it: any, i: number) => {
-                                  if (i !== idx) return it;
-                                  if (typeof it === "string") return { text: it, checked: e.target.checked };
-                                  return { ...it, checked: e.target.checked };
-                                });
-                                update({ approverToSafetyCustomComments: next });
-                              }}
-                            />
-                            <span className="text-sm">{text}</span>
-                          </div>
-                          <div>
-                            <button
-                              type="button"
-                              aria-label={`Delete comment ${idx + 1}`}
-                              onClick={() => {
-                                const prev = form.approverToSafetyCustomComments || [];
-                                const next = prev.filter((_: any, i: number) => i !== idx);
-                                update({ approverToSafetyCustomComments: next });
-                              }}
-                              className="text-xs text-red-600 hover:underline px-2 py-1"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
+                      header.certificateNumber = v;
+                      localStorage.setItem(
+                        "dps_permit_header",
+                        JSON.stringify(header),
                       );
-                    })}
-                  </div>
-
-                  <div className="text-xs font-medium mt-2">Add comment</div>
-                  <div className="flex gap-2 mt-2">
-                    <input
-                      type="text"
-                      placeholder="Add comment"
-                      value={newApproverToSafetyComment}
-                      onChange={(e) => setNewApproverToSafetyComment(e.target.value)}
-                      className="flex-1 border rounded px-2 py-1"
-                    />
-                    <button
-                      className="px-3 py-1 rounded bg-white border text-sm"
-                      onClick={() => {
-                        const v = newApproverToSafetyComment.trim();
-                        if (!v) return;
-                        const prev = form.approverToSafetyCustomComments || [];
-                        const next = [...prev, { text: v, checked: false }];
-                        update({ approverToSafetyCustomComments: next });
-                        setNewApproverToSafetyComment("");
-                      }}
-                    >
-                      Add
-                    </button>
-                  </div>
-                </div>
+                    } catch {}
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Permit No.
+                </label>
+                <input
+                  value={form.permitNumber || ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    update({ permitNumber: v });
+                    try {
+                      const header = JSON.parse(
+                        localStorage.getItem("dps_permit_header") || "{}",
+                      );
+                      header.permitNumber = v;
+                      localStorage.setItem(
+                        "dps_permit_header",
+                        JSON.stringify(header),
+                      );
+                    } catch {}
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
               </div>
             </div>
           </div>
         </div>
-      </div>
 
+        {/* Only Section 1: Permit Details */}
+        <div className="rounded-xl border bg-white p-4 shadow-sm">
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              <div className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-md">
+                Details of such permit
+              </div>
+
+              {/* Permit Header with Actions and Tabs - from Review Permits */}
+              <div className="mt-6 pb-6 border-b">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="text-sm text-slate-600">Permit</div>
+                    <div className="text-xl font-semibold">
+                      {form.permitNumber || "Select a permit"}
+                    </div>
+                    <div className="text-sm text-slate-600">
+                      {form.permitDocType === "highTension"
+                        ? "High Tension Line Work Permit"
+                        : form.permitDocType === "gasLine"
+                          ? "Gas Line Work Permit"
+                          : "Work Permit"}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => alert("Approve (placeholder)")}
+                      className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700"
+                    >
+                      Approve
+                    </button>
+                    <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
+                      Conditional
+                    </button>
+                    <button
+                      onClick={() => alert("Reject (placeholder)")}
+                      className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700"
+                    >
+                      Reject
+                    </button>
+                    <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
+                      Escalate
+                    </button>
+                  </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex items-center gap-2 border rounded-lg p-1 bg-gray-50 w-fit">
+                  <button
+                    className={`px-3 py-1.5 rounded text-sm ${activeTab === 0 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                    onClick={() => setActiveTab(0)}
+                  >
+                    Work Info
+                  </button>
+                  <button
+                    className={`px-3 py-1.5 rounded text-sm ${activeTab === 1 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                    onClick={() => setActiveTab(1)}
+                  >
+                    Risk Assessment
+                  </button>
+                  <button
+                    className={`px-3 py-1.5 rounded text-sm ${activeTab === 2 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                    onClick={() => setActiveTab(2)}
+                  >
+                    Compliance
+                  </button>
+                  <button
+                    className={`px-3 py-1.5 rounded text-sm ${activeTab === 3 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                    onClick={() => setActiveTab(3)}
+                  >
+                    Documents
+                  </button>
+                  <button
+                    className={`px-3 py-1.5 rounded text-sm ${activeTab === 4 ? "bg-white text-slate-900 shadow-sm" : "text-slate-700 hover:text-slate-900"}`}
+                    onClick={() => setActiveTab(4)}
+                  >
+                    Review History
+                  </button>
+                </div>
+              </div>
+
+              {/* Tab Content */}
+              <div className="mt-6 space-y-4">
+                {activeTab === 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900 mb-2">
+                      Work Description
+                    </h3>
+                    <div className="text-sm text-slate-600 mb-4">
+                      {form.permitDocType === "work"
+                        ? "Welding work near fuel line"
+                        : form.permitDocType === "highTension"
+                          ? "High-voltage panel maintenance"
+                          : "Gas line inspection and testing"}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mt-4">
+                      <div>
+                        <div className="text-sm font-medium text-slate-900">
+                          Location
+                        </div>
+                        <div className="text-sm text-slate-600">
+                          Plant A - Bay 3
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-slate-900">
+                          Estimated Duration
+                        </div>
+                        <div className="text-sm text-slate-600">3 hrs</div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <div className="text-sm font-medium text-slate-900">
+                        Personnel
+                      </div>
+                      <div className="text-sm text-slate-600">
+                        {form.permitRequester || "Jane Doe"} • Maintenance
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 1 && (
+                  <div>
+                    <h3 className="text-sm font-medium">Risk Matrix</h3>
+                    <div className="text-sm text-slate-600">
+                      Probability vs Impact chart (placeholder)
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 2 && (
+                  <div>
+                    <h3 className="text-sm font-medium">
+                      Compliance Checklist
+                    </h3>
+                    <div className="text-sm text-slate-600">
+                      Compliance verification (placeholder)
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 3 && (
+                  <div>
+                    <h3 className="text-sm font-medium">Documents</h3>
+                    <div className="text-sm text-slate-600">
+                      Supporting documents (placeholder)
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 4 && (
+                  <div>
+                    <h3 className="text-sm font-medium">Review History</h3>
+                    <div className="text-sm text-slate-600">
+                      Historical reviews (placeholder)
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 space-y-4">
+                {/* Top requester/approver fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Requester
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search user..."
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitRequester || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitRequester: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitRequester = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Approver 1
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Approver name or role"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitApprover1 || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitApprover1: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitApprover1 = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Approver 2
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Approver name or role"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitApprover2 || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitApprover2: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitApprover2 = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Safety Manager
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Safety Manager name/department"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.safetyManager || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ safetyManager: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.safetyManager = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Permit Issue Date
+                    </div>
+                    <input
+                      type="date"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.permitIssueDate || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ permitIssueDate: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.permitIssueDate = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-600 mb-1">
+                      Expected Return Date
+                    </div>
+                    <input
+                      type="date"
+                      className="w-full rounded border px-3 py-2"
+                      value={form.expectedReturnDate || ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        update({ expectedReturnDate: v });
+                        try {
+                          const header = JSON.parse(
+                            localStorage.getItem("dps_permit_header") || "{}",
+                          );
+                          header.expectedReturnDate = v;
+                          localStorage.setItem(
+                            "dps_permit_header",
+                            JSON.stringify(header),
+                          );
+                        } catch {}
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Comments from Requester — plain text only */}
+                <div className="mt-2 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments from Requester:
+                  </div>
+                  <div className="mt-2 space-y-1 text-sm">
+                    {form.requesterRequireUrgent && (
+                      <div>Require on urgent basis</div>
+                    )}
+                    {form.requesterSafetyManagerApproval && (
+                      <div>Safety Manager approval required</div>
+                    )}
+                    {(form.requesterPlannedShutdown ||
+                      form.requesterPlannedShutdownDate) && (
+                      <div>
+                        Planned shutdown on:{" "}
+                        {form.requesterPlannedShutdownDate || ""}
+                      </div>
+                    )}
+                    {(form.requesterCustomComments || []).map((it, idx) => (
+                      <div key={idx}>
+                        - {typeof it === "string" ? it : it.text}
+                      </div>
+                    ))}
+                    {!form.requesterRequireUrgent &&
+                      !form.requesterSafetyManagerApproval &&
+                      !(
+                        form.requesterPlannedShutdown ||
+                        form.requesterPlannedShutdownDate
+                      ) &&
+                      (form.requesterCustomComments || []).length === 0 && (
+                        <div className="text-gray-500">
+                          No comments from requester yet.
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                {/* Comments from Safety Officer — plain text only */}
+                <div className="mt-2 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments from Safety Officer:
+                  </div>
+                  <div className="mt-2 space-y-1 text-sm">
+                    {form.safetyFromOfficerRequireUrgent && (
+                      <div>Require on urgent basis</div>
+                    )}
+                    {form.safetyFromOfficerSafetyManagerApproval && (
+                      <div>Safety Manager approval required</div>
+                    )}
+                    {(form.safetyFromOfficerPlannedShutdown ||
+                      form.safetyFromOfficerPlannedShutdownDate) && (
+                      <div>
+                        Planned shutdown on:{" "}
+                        {form.safetyFromOfficerPlannedShutdownDate || ""}
+                      </div>
+                    )}
+                    {(form.safetyFromOfficerCustomComments || []).map(
+                      (it, idx) => (
+                        <div key={idx}>
+                          - {typeof it === "string" ? it : it.text}
+                        </div>
+                      ),
+                    )}
+                    {!form.safetyFromOfficerRequireUrgent &&
+                      !form.safetyFromOfficerSafetyManagerApproval &&
+                      !(
+                        form.safetyFromOfficerPlannedShutdown ||
+                        form.safetyFromOfficerPlannedShutdownDate
+                      ) &&
+                      (form.safetyFromOfficerCustomComments || []).length ===
+                        0 && (
+                        <div className="text-gray-500">
+                          No comments from safety officer yet.
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                {/* Specific Comments for Approver — approver can set for own role list */}
+                <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments for Requester:
+                  </div>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverRequireUrgent}
+                      onChange={(e) =>
+                        update({ approverRequireUrgent: e.target.checked })
+                      }
+                    />
+                    Require on urgent basis
+                  </label>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverSafetyManagerApproval}
+                      onChange={(e) =>
+                        update({
+                          approverSafetyManagerApproval: e.target.checked,
+                        })
+                      }
+                    />
+                    Safety Manager approval required
+                  </label>
+                  <div className="mt-2 text-md flex items-center gap-2">
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={!!form.approverPlannedShutdown}
+                        onChange={(e) =>
+                          update({ approverPlannedShutdown: e.target.checked })
+                        }
+                      />
+                      <span>Planned shutdown on:</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="rounded border px-2 py-1 text-sm"
+                      value={form.approverPlannedShutdownDate || ""}
+                      onChange={(e) =>
+                        update({ approverPlannedShutdownDate: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  {/* Approver custom comments */}
+                  <div className="mt-3">
+                    {/* Existing custom comments as checkbox list with delete */}
+                    <div className="mt-2 space-y-1">
+                      {(form.approverCustomComments || []).map(
+                        (item: any, idx: number) => {
+                          const text =
+                            typeof item === "string" ? item : item.text;
+                          const checked =
+                            typeof item === "string" ? false : !!item.checked;
+                          return (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between gap-2 w-full"
+                            >
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    const prev =
+                                      form.approverCustomComments || [];
+                                    const next = prev.map(
+                                      (it: any, i: number) => {
+                                        if (i !== idx) return it;
+                                        if (typeof it === "string")
+                                          return {
+                                            text: it,
+                                            checked: e.target.checked,
+                                          };
+                                        return {
+                                          ...it,
+                                          checked: e.target.checked,
+                                        };
+                                      },
+                                    );
+                                    update({ approverCustomComments: next });
+                                  }}
+                                />
+                                <span className="text-sm">{text}</span>
+                              </div>
+                              <div>
+                                <button
+                                  type="button"
+                                  aria-label={`Delete comment ${idx + 1}`}
+                                  onClick={() => {
+                                    const prev =
+                                      form.approverCustomComments || [];
+                                    const next = prev.filter(
+                                      (_: any, i: number) => i !== idx,
+                                    );
+                                    update({ approverCustomComments: next });
+                                  }}
+                                  className="text-xs text-red-600 hover:underline px-2 py-1"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+
+                    {/* Add new comment input */}
+                    <div className="text-xs font-medium mt-2">Add comment</div>
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Add comment"
+                        value={newApproverComment}
+                        onChange={(e) => setNewApproverComment(e.target.value)}
+                        className="flex-1 border rounded px-2 py-1"
+                      />
+                      <button
+                        className="px-3 py-1 rounded bg-white border text-sm"
+                        onClick={() => {
+                          const v = newApproverComment.trim();
+                          if (!v) return;
+                          const prev = form.approverCustomComments || [];
+                          const next = [...prev, { text: v, checked: false }];
+                          update({ approverCustomComments: next });
+                          setNewApproverComment("");
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Specific Comments for Safety Officer — set by approver */}
+                <div className="mt-4 bg-yellow-50 p-3 rounded-md">
+                  <div className="text-md font-medium">
+                    Comments for Safety Officer:
+                  </div>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverToSafetyRequireUrgent}
+                      onChange={(e) =>
+                        update({
+                          approverToSafetyRequireUrgent: e.target.checked,
+                        })
+                      }
+                    />
+                    Require on urgent basis
+                  </label>
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form.approverToSafetySafetyManagerApproval}
+                      onChange={(e) =>
+                        update({
+                          approverToSafetySafetyManagerApproval:
+                            e.target.checked,
+                        })
+                      }
+                    />
+                    Safety Manager approval required
+                  </label>
+                  <div className="mt-2 text-md flex items-center gap-2">
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={!!form.approverToSafetyPlannedShutdown}
+                        onChange={(e) =>
+                          update({
+                            approverToSafetyPlannedShutdown: e.target.checked,
+                          })
+                        }
+                      />
+                      <span>Planned shutdown on:</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="rounded border px-2 py-1 text-sm"
+                      value={form.approverToSafetyPlannedShutdownDate || ""}
+                      onChange={(e) =>
+                        update({
+                          approverToSafetyPlannedShutdownDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  {/* Approver to Safety custom comments */}
+                  <div className="mt-3">
+                    <div className="mt-2 space-y-1">
+                      {(form.approverToSafetyCustomComments || []).map(
+                        (item: any, idx: number) => {
+                          const text =
+                            typeof item === "string" ? item : item.text;
+                          const checked =
+                            typeof item === "string" ? false : !!item.checked;
+                          return (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between gap-2 w-full"
+                            >
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    const prev =
+                                      form.approverToSafetyCustomComments || [];
+                                    const next = prev.map(
+                                      (it: any, i: number) => {
+                                        if (i !== idx) return it;
+                                        if (typeof it === "string")
+                                          return {
+                                            text: it,
+                                            checked: e.target.checked,
+                                          };
+                                        return {
+                                          ...it,
+                                          checked: e.target.checked,
+                                        };
+                                      },
+                                    );
+                                    update({
+                                      approverToSafetyCustomComments: next,
+                                    });
+                                  }}
+                                />
+                                <span className="text-sm">{text}</span>
+                              </div>
+                              <div>
+                                <button
+                                  type="button"
+                                  aria-label={`Delete comment ${idx + 1}`}
+                                  onClick={() => {
+                                    const prev =
+                                      form.approverToSafetyCustomComments || [];
+                                    const next = prev.filter(
+                                      (_: any, i: number) => i !== idx,
+                                    );
+                                    update({
+                                      approverToSafetyCustomComments: next,
+                                    });
+                                  }}
+                                  className="text-xs text-red-600 hover:underline px-2 py-1"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+
+                    <div className="text-xs font-medium mt-2">Add comment</div>
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Add comment"
+                        value={newApproverToSafetyComment}
+                        onChange={(e) =>
+                          setNewApproverToSafetyComment(e.target.value)
+                        }
+                        className="flex-1 border rounded px-2 py-1"
+                      />
+                      <button
+                        className="px-3 py-1 rounded bg-white border text-sm"
+                        onClick={() => {
+                          const v = newApproverToSafetyComment.trim();
+                          if (!v) return;
+                          const prev =
+                            form.approverToSafetyCustomComments || [];
+                          const next = [...prev, { text: v, checked: false }];
+                          update({ approverToSafetyCustomComments: next });
+                          setNewApproverToSafetyComment("");
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -809,7 +1057,8 @@ export default function ApproverPermitDetails() {
 export function ApproverHTPermitDetailsSection() {
   const [form, setForm] = useState<ApproverPermitForm>(() => DEFAULT_FORM);
   const [newApproverComment, setNewApproverComment] = useState("");
-  const [newApproverToSafetyComment, setNewApproverToSafetyComment] = useState("");
+  const [newApproverToSafetyComment, setNewApproverToSafetyComment] =
+    useState("");
 
   const update = (patch: Partial<ApproverPermitForm>) =>
     setForm((s) => ({ ...s, ...patch }));
@@ -830,21 +1079,28 @@ export function ApproverHTPermitDetailsSection() {
       }
       // Migration: use HT-specific Safety->Approver key; if missing, migrate from generic
       if (!localStorage.getItem("dps_safety_to_approver_comments_ht")) {
-        const legacySA = localStorage.getItem("dps_safety_to_approver_comments");
+        const legacySA = localStorage.getItem(
+          "dps_safety_to_approver_comments",
+        );
         if (legacySA) {
           localStorage.setItem("dps_safety_to_approver_comments_ht", legacySA);
         }
       }
       // Load Safety Officer -> Approver comments and show them in "Comments from Safety Officer"
-      const rawSafety = localStorage.getItem("dps_safety_to_approver_comments_ht");
+      const rawSafety = localStorage.getItem(
+        "dps_safety_to_approver_comments_ht",
+      );
       if (rawSafety) {
         const d = JSON.parse(rawSafety);
         update({
           safetyFromOfficerRequireUrgent: !!d.safetyToApproverRequireUrgent,
-          safetyFromOfficerSafetyManagerApproval: !!d.safetyToApproverSafetyManagerApproval,
+          safetyFromOfficerSafetyManagerApproval:
+            !!d.safetyToApproverSafetyManagerApproval,
           safetyFromOfficerPlannedShutdown: !!d.safetyToApproverPlannedShutdown,
-          safetyFromOfficerPlannedShutdownDate: d.safetyToApproverPlannedShutdownDate || "",
-          safetyFromOfficerCustomComments: d.safetyToApproverCustomComments || [],
+          safetyFromOfficerPlannedShutdownDate:
+            d.safetyToApproverPlannedShutdownDate || "",
+          safetyFromOfficerCustomComments:
+            d.safetyToApproverCustomComments || [],
         });
       }
       const header = localStorage.getItem("dps_permit_header");
@@ -873,10 +1129,7 @@ export function ApproverHTPermitDetailsSection() {
         approverPlannedShutdownDate: form.approverPlannedShutdownDate || "",
         approverCustomComments: form.approverCustomComments || [],
       };
-      localStorage.setItem(
-        "dps_approver_comments_ht",
-        JSON.stringify(payload)
-      );
+      localStorage.setItem("dps_approver_comments_ht", JSON.stringify(payload));
     } catch {}
   }, [
     form.approverRequireUrgent,
@@ -891,11 +1144,13 @@ export function ApproverHTPermitDetailsSection() {
     try {
       const payload = {
         approverToSafetyRequireUrgent: !!form.approverToSafetyRequireUrgent,
-        approverToSafetySafetyManagerApproval: !!form.approverToSafetySafetyManagerApproval,
+        approverToSafetySafetyManagerApproval:
+          !!form.approverToSafetySafetyManagerApproval,
         approverToSafetyPlannedShutdown: !!form.approverToSafetyPlannedShutdown,
         approverToSafetyPlannedShutdownDate:
           form.approverToSafetyPlannedShutdownDate || "",
-        approverToSafetyCustomComments: form.approverToSafetyCustomComments || [],
+        approverToSafetyCustomComments:
+          form.approverToSafetyCustomComments || [],
       };
       localStorage.setItem(
         "dps_approver_to_safety_comments_ht",
@@ -921,7 +1176,9 @@ export function ApproverHTPermitDetailsSection() {
           <div className="mt-4 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Requester</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Requester
+                </div>
                 <input
                   type="text"
                   placeholder="Search user..."
@@ -931,7 +1188,9 @@ export function ApproverHTPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Approver 1</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Approver 1
+                </div>
                 <input
                   type="text"
                   placeholder="Approver name or role"
@@ -941,7 +1200,9 @@ export function ApproverHTPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Approver 2</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Approver 2
+                </div>
                 <input
                   type="text"
                   placeholder="Approver name or role"
@@ -951,7 +1212,9 @@ export function ApproverHTPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Safety Manager</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Safety Manager
+                </div>
                 <input
                   type="text"
                   placeholder="Safety Manager name/department"
@@ -963,7 +1226,9 @@ export function ApproverHTPermitDetailsSection() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Issue Date</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Issue Date
+                </div>
                 <input
                   type="date"
                   className="w-full rounded border px-3 py-2"
@@ -972,40 +1237,59 @@ export function ApproverHTPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Expected Return Date</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Expected Return Date
+                </div>
                 <input
                   type="date"
                   className="w-full rounded border px-3 py-2"
                   value={form.expectedReturnDate || ""}
-                  onChange={(e) => update({ expectedReturnDate: e.target.value })}
+                  onChange={(e) =>
+                    update({ expectedReturnDate: e.target.value })
+                  }
                 />
               </div>
             </div>
 
             <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-              <div className="text-md font-medium">Comments from Requester:</div>
+              <div className="text-md font-medium">
+                Comments from Requester:
+              </div>
               <div className="mt-2 space-y-1 text-sm">
-                {form.requesterRequireUrgent && <div>Require on urgent basis</div>}
+                {form.requesterRequireUrgent && (
+                  <div>Require on urgent basis</div>
+                )}
                 {form.requesterSafetyManagerApproval && (
                   <div>Safety Manager approval required</div>
                 )}
-                {(form.requesterPlannedShutdown || form.requesterPlannedShutdownDate) && (
-                  <div>Planned shutdown on: {form.requesterPlannedShutdownDate || ""}</div>
+                {(form.requesterPlannedShutdown ||
+                  form.requesterPlannedShutdownDate) && (
+                  <div>
+                    Planned shutdown on:{" "}
+                    {form.requesterPlannedShutdownDate || ""}
+                  </div>
                 )}
                 {(form.requesterCustomComments || []).map((it, idx) => (
                   <div key={idx}>- {typeof it === "string" ? it : it.text}</div>
                 ))}
                 {!form.requesterRequireUrgent &&
                   !form.requesterSafetyManagerApproval &&
-                  !(form.requesterPlannedShutdown || form.requesterPlannedShutdownDate) &&
+                  !(
+                    form.requesterPlannedShutdown ||
+                    form.requesterPlannedShutdownDate
+                  ) &&
                   (form.requesterCustomComments || []).length === 0 && (
-                    <div className="text-gray-500">No comments from requester yet.</div>
+                    <div className="text-gray-500">
+                      No comments from requester yet.
+                    </div>
                   )}
               </div>
             </div>
 
             <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-              <div className="text-md font-medium">Comments from Safety Officer:</div>
+              <div className="text-md font-medium">
+                Comments from Safety Officer:
+              </div>
               <div className="mt-2 space-y-1 text-sm">
                 {form.safetyFromOfficerRequireUrgent && (
                   <div>Require on urgent basis</div>
@@ -1016,7 +1300,8 @@ export function ApproverHTPermitDetailsSection() {
                 {(form.safetyFromOfficerPlannedShutdown ||
                   form.safetyFromOfficerPlannedShutdownDate) && (
                   <div>
-                    Planned shutdown on: {form.safetyFromOfficerPlannedShutdownDate || ""}
+                    Planned shutdown on:{" "}
+                    {form.safetyFromOfficerPlannedShutdownDate || ""}
                   </div>
                 )}
                 {(form.safetyFromOfficerCustomComments || []).map((it, idx) => (
@@ -1029,7 +1314,9 @@ export function ApproverHTPermitDetailsSection() {
                     form.safetyFromOfficerPlannedShutdownDate
                   ) &&
                   (form.safetyFromOfficerCustomComments || []).length === 0 && (
-                    <div className="text-gray-500">No comments from safety officer yet.</div>
+                    <div className="text-gray-500">
+                      No comments from safety officer yet.
+                    </div>
                   )}
               </div>
             </div>
@@ -1040,7 +1327,9 @@ export function ApproverHTPermitDetailsSection() {
                 <input
                   type="checkbox"
                   checked={!!form.approverRequireUrgent}
-                  onChange={(e) => update({ approverRequireUrgent: e.target.checked })}
+                  onChange={(e) =>
+                    update({ approverRequireUrgent: e.target.checked })
+                  }
                 />
                 Require on urgent basis
               </label>
@@ -1059,7 +1348,9 @@ export function ApproverHTPermitDetailsSection() {
                   <input
                     type="checkbox"
                     checked={!!form.approverPlannedShutdown}
-                    onChange={(e) => update({ approverPlannedShutdown: e.target.checked })}
+                    onChange={(e) =>
+                      update({ approverPlannedShutdown: e.target.checked })
+                    }
                   />
                   <span>Planned shutdown on:</span>
                 </label>
@@ -1067,50 +1358,63 @@ export function ApproverHTPermitDetailsSection() {
                   type="date"
                   className="rounded border px-2 py-1 text-sm"
                   value={form.approverPlannedShutdownDate || ""}
-                  onChange={(e) => update({ approverPlannedShutdownDate: e.target.value })}
+                  onChange={(e) =>
+                    update({ approverPlannedShutdownDate: e.target.value })
+                  }
                 />
               </div>
               <div className="mt-3">
                 <div className="mt-2 space-y-1">
-                  {(form.approverCustomComments || []).map((item: any, idx: number) => {
-                    const text = typeof item === "string" ? item : item.text;
-                    const checked = typeof item === "string" ? false : !!item.checked;
-                    return (
-                      <div key={idx} className="flex items-center justify-between gap-2 w-full">
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={(e) => {
-                              const prev = form.approverCustomComments || [];
-                              const next = prev.map((it: any, i: number) => {
-                                if (i !== idx) return it;
-                                if (typeof it === "string")
-                                  return { text: it, checked: e.target.checked };
-                                return { ...it, checked: e.target.checked };
-                              });
-                              update({ approverCustomComments: next });
-                            }}
-                          />
-                          <span className="text-sm">{text}</span>
+                  {(form.approverCustomComments || []).map(
+                    (item: any, idx: number) => {
+                      const text = typeof item === "string" ? item : item.text;
+                      const checked =
+                        typeof item === "string" ? false : !!item.checked;
+                      return (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between gap-2 w-full"
+                        >
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={(e) => {
+                                const prev = form.approverCustomComments || [];
+                                const next = prev.map((it: any, i: number) => {
+                                  if (i !== idx) return it;
+                                  if (typeof it === "string")
+                                    return {
+                                      text: it,
+                                      checked: e.target.checked,
+                                    };
+                                  return { ...it, checked: e.target.checked };
+                                });
+                                update({ approverCustomComments: next });
+                              }}
+                            />
+                            <span className="text-sm">{text}</span>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              aria-label={`Delete comment ${idx + 1}`}
+                              onClick={() => {
+                                const prev = form.approverCustomComments || [];
+                                const next = prev.filter(
+                                  (_: any, i: number) => i !== idx,
+                                );
+                                update({ approverCustomComments: next });
+                              }}
+                              className="text-xs text-red-600 hover:underline px-2 py-1"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
-                        <div>
-                          <button
-                            type="button"
-                            aria-label={`Delete comment ${idx + 1}`}
-                            onClick={() => {
-                              const prev = form.approverCustomComments || [];
-                              const next = prev.filter((_: any, i: number) => i !== idx);
-                              update({ approverCustomComments: next });
-                            }}
-                            className="text-xs text-red-600 hover:underline px-2 py-1"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    },
+                  )}
                 </div>
                 <div className="text-xs font-medium mt-2">Add comment</div>
                 <div className="flex gap-2 mt-2">
@@ -1139,7 +1443,9 @@ export function ApproverHTPermitDetailsSection() {
             </div>
 
             <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-              <div className="text-md font-medium">Comments for Safety Officer:</div>
+              <div className="text-md font-medium">
+                Comments for Safety Officer:
+              </div>
               <label className="flex items-center gap-2 mt-2">
                 <input
                   type="checkbox"
@@ -1168,7 +1474,9 @@ export function ApproverHTPermitDetailsSection() {
                     type="checkbox"
                     checked={!!form.approverToSafetyPlannedShutdown}
                     onChange={(e) =>
-                      update({ approverToSafetyPlannedShutdown: e.target.checked })
+                      update({
+                        approverToSafetyPlannedShutdown: e.target.checked,
+                      })
                     }
                   />
                   <span>Planned shutdown on:</span>
@@ -1178,7 +1486,9 @@ export function ApproverHTPermitDetailsSection() {
                   className="rounded border px-2 py-1 text-sm"
                   value={form.approverToSafetyPlannedShutdownDate || ""}
                   onChange={(e) =>
-                    update({ approverToSafetyPlannedShutdownDate: e.target.value })
+                    update({
+                      approverToSafetyPlannedShutdownDate: e.target.value,
+                    })
                   }
                 />
               </div>
@@ -1199,14 +1509,20 @@ export function ApproverHTPermitDetailsSection() {
                               type="checkbox"
                               checked={checked}
                               onChange={(e) => {
-                                const prev = form.approverToSafetyCustomComments || [];
+                                const prev =
+                                  form.approverToSafetyCustomComments || [];
                                 const next = prev.map((it: any, i: number) => {
                                   if (i !== idx) return it;
                                   if (typeof it === "string")
-                                    return { text: it, checked: e.target.checked };
+                                    return {
+                                      text: it,
+                                      checked: e.target.checked,
+                                    };
                                   return { ...it, checked: e.target.checked };
                                 });
-                                update({ approverToSafetyCustomComments: next });
+                                update({
+                                  approverToSafetyCustomComments: next,
+                                });
                               }}
                             />
                             <span className="text-sm">{text}</span>
@@ -1216,9 +1532,14 @@ export function ApproverHTPermitDetailsSection() {
                               type="button"
                               aria-label={`Delete comment ${idx + 1}`}
                               onClick={() => {
-                                const prev = form.approverToSafetyCustomComments || [];
-                                const next = prev.filter((_: any, i: number) => i !== idx);
-                                update({ approverToSafetyCustomComments: next });
+                                const prev =
+                                  form.approverToSafetyCustomComments || [];
+                                const next = prev.filter(
+                                  (_: any, i: number) => i !== idx,
+                                );
+                                update({
+                                  approverToSafetyCustomComments: next,
+                                });
                               }}
                               className="text-xs text-red-600 hover:underline px-2 py-1"
                             >
@@ -1236,7 +1557,9 @@ export function ApproverHTPermitDetailsSection() {
                     type="text"
                     placeholder="Add comment"
                     value={newApproverToSafetyComment}
-                    onChange={(e) => setNewApproverToSafetyComment(e.target.value)}
+                    onChange={(e) =>
+                      setNewApproverToSafetyComment(e.target.value)
+                    }
                     className="flex-1 border rounded px-2 py-1"
                   />
                   <button
@@ -1265,7 +1588,8 @@ export function ApproverHTPermitDetailsSection() {
 export function ApproverGLPermitDetailsSection() {
   const [form, setForm] = useState<ApproverPermitForm>(() => DEFAULT_FORM);
   const [newApproverComment, setNewApproverComment] = useState("");
-  const [newApproverToSafetyComment, setNewApproverToSafetyComment] = useState("");
+  const [newApproverToSafetyComment, setNewApproverToSafetyComment] =
+    useState("");
 
   const update = (patch: Partial<ApproverPermitForm>) =>
     setForm((s) => ({ ...s, ...patch }));
@@ -1286,21 +1610,28 @@ export function ApproverGLPermitDetailsSection() {
       }
       // Migration: ensure gas-specific Safety -> Approver key exists; if not, migrate from generic
       if (!localStorage.getItem("dps_safety_to_approver_comments_gas")) {
-        const legacySA = localStorage.getItem("dps_safety_to_approver_comments");
+        const legacySA = localStorage.getItem(
+          "dps_safety_to_approver_comments",
+        );
         if (legacySA) {
           localStorage.setItem("dps_safety_to_approver_comments_gas", legacySA);
         }
       }
       // Load Safety Officer -> Approver comments and surface them under "Comments from Safety Officer"
-      const rawSafety = localStorage.getItem("dps_safety_to_approver_comments_gas");
+      const rawSafety = localStorage.getItem(
+        "dps_safety_to_approver_comments_gas",
+      );
       if (rawSafety) {
         const d = JSON.parse(rawSafety);
         update({
           safetyFromOfficerRequireUrgent: !!d.safetyToApproverRequireUrgent,
-          safetyFromOfficerSafetyManagerApproval: !!d.safetyToApproverSafetyManagerApproval,
+          safetyFromOfficerSafetyManagerApproval:
+            !!d.safetyToApproverSafetyManagerApproval,
           safetyFromOfficerPlannedShutdown: !!d.safetyToApproverPlannedShutdown,
-          safetyFromOfficerPlannedShutdownDate: d.safetyToApproverPlannedShutdownDate || "",
-          safetyFromOfficerCustomComments: d.safetyToApproverCustomComments || [],
+          safetyFromOfficerPlannedShutdownDate:
+            d.safetyToApproverPlannedShutdownDate || "",
+          safetyFromOfficerCustomComments:
+            d.safetyToApproverCustomComments || [],
         });
       }
       const header = localStorage.getItem("dps_permit_header");
@@ -1331,7 +1662,7 @@ export function ApproverGLPermitDetailsSection() {
       };
       localStorage.setItem(
         "dps_approver_comments_gas",
-        JSON.stringify(payload)
+        JSON.stringify(payload),
       );
     } catch {}
   }, [
@@ -1346,11 +1677,13 @@ export function ApproverGLPermitDetailsSection() {
     try {
       const payload = {
         approverToSafetyRequireUrgent: !!form.approverToSafetyRequireUrgent,
-        approverToSafetySafetyManagerApproval: !!form.approverToSafetySafetyManagerApproval,
+        approverToSafetySafetyManagerApproval:
+          !!form.approverToSafetySafetyManagerApproval,
         approverToSafetyPlannedShutdown: !!form.approverToSafetyPlannedShutdown,
         approverToSafetyPlannedShutdownDate:
           form.approverToSafetyPlannedShutdownDate || "",
-        approverToSafetyCustomComments: form.approverToSafetyCustomComments || [],
+        approverToSafetyCustomComments:
+          form.approverToSafetyCustomComments || [],
       };
       localStorage.setItem(
         "dps_approver_to_safety_comments_gas",
@@ -1376,7 +1709,9 @@ export function ApproverGLPermitDetailsSection() {
           <div className="mt-4 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Requester</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Requester
+                </div>
                 <input
                   type="text"
                   placeholder="Search user..."
@@ -1386,7 +1721,9 @@ export function ApproverGLPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Approver 1</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Approver 1
+                </div>
                 <input
                   type="text"
                   placeholder="Approver name or role"
@@ -1396,7 +1733,9 @@ export function ApproverGLPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Approver 2</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Approver 2
+                </div>
                 <input
                   type="text"
                   placeholder="Approver name or role"
@@ -1406,7 +1745,9 @@ export function ApproverGLPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Safety Manager</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Safety Manager
+                </div>
                 <input
                   type="text"
                   placeholder="Safety Manager name/department"
@@ -1418,7 +1759,9 @@ export function ApproverGLPermitDetailsSection() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-slate-600 mb-1">Permit Issue Date</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Permit Issue Date
+                </div>
                 <input
                   type="date"
                   className="w-full rounded border px-3 py-2"
@@ -1427,40 +1770,59 @@ export function ApproverGLPermitDetailsSection() {
                 />
               </div>
               <div>
-                <div className="text-xs text-slate-600 mb-1">Expected Return Date</div>
+                <div className="text-xs text-slate-600 mb-1">
+                  Expected Return Date
+                </div>
                 <input
                   type="date"
                   className="w-full rounded border px-3 py-2"
                   value={form.expectedReturnDate || ""}
-                  onChange={(e) => update({ expectedReturnDate: e.target.value })}
+                  onChange={(e) =>
+                    update({ expectedReturnDate: e.target.value })
+                  }
                 />
               </div>
             </div>
 
             <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-              <div className="text-md font-medium">Comments from Requester:</div>
+              <div className="text-md font-medium">
+                Comments from Requester:
+              </div>
               <div className="mt-2 space-y-1 text-sm">
-                {form.requesterRequireUrgent && <div>Require on urgent basis</div>}
+                {form.requesterRequireUrgent && (
+                  <div>Require on urgent basis</div>
+                )}
                 {form.requesterSafetyManagerApproval && (
                   <div>Safety Manager approval required</div>
                 )}
-                {(form.requesterPlannedShutdown || form.requesterPlannedShutdownDate) && (
-                  <div>Planned shutdown on: {form.requesterPlannedShutdownDate || ""}</div>
+                {(form.requesterPlannedShutdown ||
+                  form.requesterPlannedShutdownDate) && (
+                  <div>
+                    Planned shutdown on:{" "}
+                    {form.requesterPlannedShutdownDate || ""}
+                  </div>
                 )}
                 {(form.requesterCustomComments || []).map((it, idx) => (
                   <div key={idx}>- {typeof it === "string" ? it : it.text}</div>
                 ))}
                 {!form.requesterRequireUrgent &&
                   !form.requesterSafetyManagerApproval &&
-                  !(form.requesterPlannedShutdown || form.requesterPlannedShutdownDate) &&
+                  !(
+                    form.requesterPlannedShutdown ||
+                    form.requesterPlannedShutdownDate
+                  ) &&
                   (form.requesterCustomComments || []).length === 0 && (
-                    <div className="text-gray-500">No comments from requester yet.</div>
+                    <div className="text-gray-500">
+                      No comments from requester yet.
+                    </div>
                   )}
               </div>
             </div>
 
             <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-              <div className="text-md font-medium">Comments from Safety Officer:</div>
+              <div className="text-md font-medium">
+                Comments from Safety Officer:
+              </div>
               <div className="mt-2 space-y-1 text-sm">
                 {form.safetyFromOfficerRequireUrgent && (
                   <div>Require on urgent basis</div>
@@ -1471,7 +1833,8 @@ export function ApproverGLPermitDetailsSection() {
                 {(form.safetyFromOfficerPlannedShutdown ||
                   form.safetyFromOfficerPlannedShutdownDate) && (
                   <div>
-                    Planned shutdown on: {form.safetyFromOfficerPlannedShutdownDate || ""}
+                    Planned shutdown on:{" "}
+                    {form.safetyFromOfficerPlannedShutdownDate || ""}
                   </div>
                 )}
                 {(form.safetyFromOfficerCustomComments || []).map((it, idx) => (
@@ -1484,7 +1847,9 @@ export function ApproverGLPermitDetailsSection() {
                     form.safetyFromOfficerPlannedShutdownDate
                   ) &&
                   (form.safetyFromOfficerCustomComments || []).length === 0 && (
-                    <div className="text-gray-500">No comments from safety officer yet.</div>
+                    <div className="text-gray-500">
+                      No comments from safety officer yet.
+                    </div>
                   )}
               </div>
             </div>
@@ -1495,7 +1860,9 @@ export function ApproverGLPermitDetailsSection() {
                 <input
                   type="checkbox"
                   checked={!!form.approverRequireUrgent}
-                  onChange={(e) => update({ approverRequireUrgent: e.target.checked })}
+                  onChange={(e) =>
+                    update({ approverRequireUrgent: e.target.checked })
+                  }
                 />
                 Require on urgent basis
               </label>
@@ -1514,7 +1881,9 @@ export function ApproverGLPermitDetailsSection() {
                   <input
                     type="checkbox"
                     checked={!!form.approverPlannedShutdown}
-                    onChange={(e) => update({ approverPlannedShutdown: e.target.checked })}
+                    onChange={(e) =>
+                      update({ approverPlannedShutdown: e.target.checked })
+                    }
                   />
                   <span>Planned shutdown on:</span>
                 </label>
@@ -1522,50 +1891,63 @@ export function ApproverGLPermitDetailsSection() {
                   type="date"
                   className="rounded border px-2 py-1 text-sm"
                   value={form.approverPlannedShutdownDate || ""}
-                  onChange={(e) => update({ approverPlannedShutdownDate: e.target.value })}
+                  onChange={(e) =>
+                    update({ approverPlannedShutdownDate: e.target.value })
+                  }
                 />
               </div>
               <div className="mt-3">
                 <div className="mt-2 space-y-1">
-                  {(form.approverCustomComments || []).map((item: any, idx: number) => {
-                    const text = typeof item === "string" ? item : item.text;
-                    const checked = typeof item === "string" ? false : !!item.checked;
-                    return (
-                      <div key={idx} className="flex items-center justify-between gap-2 w-full">
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={(e) => {
-                              const prev = form.approverCustomComments || [];
-                              const next = prev.map((it: any, i: number) => {
-                                if (i !== idx) return it;
-                                if (typeof it === "string")
-                                  return { text: it, checked: e.target.checked };
-                                return { ...it, checked: e.target.checked };
-                              });
-                              update({ approverCustomComments: next });
-                            }}
-                          />
-                          <span className="text-sm">{text}</span>
+                  {(form.approverCustomComments || []).map(
+                    (item: any, idx: number) => {
+                      const text = typeof item === "string" ? item : item.text;
+                      const checked =
+                        typeof item === "string" ? false : !!item.checked;
+                      return (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between gap-2 w-full"
+                        >
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={(e) => {
+                                const prev = form.approverCustomComments || [];
+                                const next = prev.map((it: any, i: number) => {
+                                  if (i !== idx) return it;
+                                  if (typeof it === "string")
+                                    return {
+                                      text: it,
+                                      checked: e.target.checked,
+                                    };
+                                  return { ...it, checked: e.target.checked };
+                                });
+                                update({ approverCustomComments: next });
+                              }}
+                            />
+                            <span className="text-sm">{text}</span>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              aria-label={`Delete comment ${idx + 1}`}
+                              onClick={() => {
+                                const prev = form.approverCustomComments || [];
+                                const next = prev.filter(
+                                  (_: any, i: number) => i !== idx,
+                                );
+                                update({ approverCustomComments: next });
+                              }}
+                              className="text-xs text-red-600 hover:underline px-2 py-1"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
-                        <div>
-                          <button
-                            type="button"
-                            aria-label={`Delete comment ${idx + 1}`}
-                            onClick={() => {
-                              const prev = form.approverCustomComments || [];
-                              const next = prev.filter((_: any, i: number) => i !== idx);
-                              update({ approverCustomComments: next });
-                            }}
-                            className="text-xs text-red-600 hover:underline px-2 py-1"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    },
+                  )}
                 </div>
                 <div className="text-xs font-medium mt-2">Add comment</div>
                 <div className="flex gap-2 mt-2">
@@ -1594,7 +1976,9 @@ export function ApproverGLPermitDetailsSection() {
             </div>
 
             <div className="mt-4 bg-yellow-50 p-3 rounded-md">
-              <div className="text-md font-medium">Comments for Safety Officer:</div>
+              <div className="text-md font-medium">
+                Comments for Safety Officer:
+              </div>
               <label className="flex items-center gap-2 mt-2">
                 <input
                   type="checkbox"
@@ -1623,7 +2007,9 @@ export function ApproverGLPermitDetailsSection() {
                     type="checkbox"
                     checked={!!form.approverToSafetyPlannedShutdown}
                     onChange={(e) =>
-                      update({ approverToSafetyPlannedShutdown: e.target.checked })
+                      update({
+                        approverToSafetyPlannedShutdown: e.target.checked,
+                      })
                     }
                   />
                   <span>Planned shutdown on:</span>
@@ -1633,7 +2019,9 @@ export function ApproverGLPermitDetailsSection() {
                   className="rounded border px-2 py-1 text-sm"
                   value={form.approverToSafetyPlannedShutdownDate || ""}
                   onChange={(e) =>
-                    update({ approverToSafetyPlannedShutdownDate: e.target.value })
+                    update({
+                      approverToSafetyPlannedShutdownDate: e.target.value,
+                    })
                   }
                 />
               </div>
@@ -1654,14 +2042,20 @@ export function ApproverGLPermitDetailsSection() {
                               type="checkbox"
                               checked={checked}
                               onChange={(e) => {
-                                const prev = form.approverToSafetyCustomComments || [];
+                                const prev =
+                                  form.approverToSafetyCustomComments || [];
                                 const next = prev.map((it: any, i: number) => {
                                   if (i !== idx) return it;
                                   if (typeof it === "string")
-                                    return { text: it, checked: e.target.checked };
+                                    return {
+                                      text: it,
+                                      checked: e.target.checked,
+                                    };
                                   return { ...it, checked: e.target.checked };
                                 });
-                                update({ approverToSafetyCustomComments: next });
+                                update({
+                                  approverToSafetyCustomComments: next,
+                                });
                               }}
                             />
                             <span className="text-sm">{text}</span>
@@ -1671,9 +2065,14 @@ export function ApproverGLPermitDetailsSection() {
                               type="button"
                               aria-label={`Delete comment ${idx + 1}`}
                               onClick={() => {
-                                const prev = form.approverToSafetyCustomComments || [];
-                                const next = prev.filter((_: any, i: number) => i !== idx);
-                                update({ approverToSafetyCustomComments: next });
+                                const prev =
+                                  form.approverToSafetyCustomComments || [];
+                                const next = prev.filter(
+                                  (_: any, i: number) => i !== idx,
+                                );
+                                update({
+                                  approverToSafetyCustomComments: next,
+                                });
                               }}
                               className="text-xs text-red-600 hover:underline px-2 py-1"
                             >
@@ -1691,7 +2090,9 @@ export function ApproverGLPermitDetailsSection() {
                     type="text"
                     placeholder="Add comment"
                     value={newApproverToSafetyComment}
-                    onChange={(e) => setNewApproverToSafetyComment(e.target.value)}
+                    onChange={(e) =>
+                      setNewApproverToSafetyComment(e.target.value)
+                    }
                     className="flex-1 border rounded px-2 py-1"
                   />
                   <button

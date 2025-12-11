@@ -10,7 +10,7 @@ type TabItem = {
   hideForApprover?: boolean;
   hideForSafetyOfficer?: boolean;
   hideForAdmin?: boolean;
-};  
+};
 
 export default function NavTabs() {
   const inRouter = useInRouterContext();
@@ -24,8 +24,8 @@ export default function NavTabs() {
     role === "approver"
       ? "/approver-permit-details"
       : role === "safety"
-      ? "/safety-permit-details"
-      : "/permit-details";
+        ? "/safety-permit-details"
+        : "/permit-details";
   const baseTabs: TabItem[] = [
     { to: "/", label: "Main Dashboard" },
     // Permit Details should be available to Requester, Approver, and Safety Officer
@@ -35,18 +35,30 @@ export default function NavTabs() {
 
   const otherTabs: TabItem[] = [
     { to: "/overall-status", label: "Overall Permit Status" },
-    { to: "/contractor-performance", label: <p>Contractor Performances</p>, hideForRequester: true, hideForAdmin: true },
+    {
+      to: "/contractor-performance",
+      label: <p>Contractor Performances</p>,
+      hideForRequester: true,
+      hideForAdmin: true,
+    },
     { to: "/alarms", label: "Alarms" },
     // Place Spare Tab immediately to the right of Alarms
-    { to: "/system-architecture", label: "System Architecture", hideForRequester: true, hideForApprover: true, hideForSafetyOfficer: true },
+    {
+      to: "/system-architecture",
+      label: "System Architecture",
+      hideForRequester: true,
+      hideForApprover: true,
+      hideForSafetyOfficer: true,
+    },
     { to: "/spare", label: "Spare Tab" },
   ];
 
   // Filter base tabs for specific roles
-  const filteredBaseTabs = baseTabs.filter(tab => 
-    !(role === "approver" && tab.hideForApprover) &&
-    !(role === "safety" && tab.hideForSafetyOfficer) &&
-    !((role === "admin" || role === "administrator") && tab.hideForAdmin)
+  const filteredBaseTabs = baseTabs.filter(
+    (tab) =>
+      !(role === "approver" && tab.hideForApprover) &&
+      !(role === "safety" && tab.hideForSafetyOfficer) &&
+      !((role === "admin" || role === "administrator") && tab.hideForAdmin),
   );
 
   // Insert Work Closure tabs after Permit Details depending on role
@@ -66,15 +78,16 @@ export default function NavTabs() {
     tabs.push({ to: "/review-permits", label: "Review Permits" });
     tabs.push({ to: "/work-closure-approval", label: "Work Closure Approval" });
   }
-  
+
   // Filter out tabs that should be hidden for specific roles
-  const filteredOtherTabs = otherTabs.filter(tab => 
-    !(role === "requester" && tab.hideForRequester) && 
-    !(role === "approver" && tab.hideForApprover) &&
-    !(role === "safety" && tab.hideForSafetyOfficer) &&
-    !((role === "admin" || role === "administrator") && tab.hideForAdmin)
+  const filteredOtherTabs = otherTabs.filter(
+    (tab) =>
+      !(role === "requester" && tab.hideForRequester) &&
+      !(role === "approver" && tab.hideForApprover) &&
+      !(role === "safety" && tab.hideForSafetyOfficer) &&
+      !((role === "admin" || role === "administrator") && tab.hideForAdmin),
   );
-  
+
   tabs.push(...filteredOtherTabs);
 
   return (
@@ -98,7 +111,9 @@ export default function NavTabs() {
                       (location.pathname === "/ht-permit" ||
                         location.pathname === "/gas-permit" ||
                         location.pathname.startsWith("/permit-details") ||
-                        location.pathname.startsWith("/approver-permit-details") ||
+                        location.pathname.startsWith(
+                          "/approver-permit-details",
+                        ) ||
                         location.pathname.startsWith("/safety-permit-details"));
                     const active = isActive || manualActive;
                     return [

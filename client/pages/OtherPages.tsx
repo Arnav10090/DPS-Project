@@ -128,8 +128,7 @@ function makeMockData(count = 24): PermitItem[] {
       returnDate: formatISO(subDays(new Date(), 15)),
       commentsRequester:
         "Install emergency shower and eyewash station in chemical storage area",
-      commentsApprover:
-        "Safety equipment meets all regulatory requirements.",
+      commentsApprover: "Safety equipment meets all regulatory requirements.",
       status: "closed",
     },
     {
@@ -162,7 +161,9 @@ export function OverallStatus() {
   });
 
   const [role, setRole] = React.useState<string | null>(null);
-  const [currentUserName, setCurrentUserName] = React.useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = React.useState<string | null>(
+    null,
+  );
 
   React.useEffect(() => {
     const storedRole = localStorage.getItem("dps_role");
@@ -177,7 +178,9 @@ export function OverallStatus() {
 
       // For requester role, filter to show only current user's permits
       if (role === "requester" && currentUserName) {
-        mockData = mockData.filter(item => item.requester === currentUserName);
+        mockData = mockData.filter(
+          (item) => item.requester === currentUserName,
+        );
       }
 
       setData(mockData);
@@ -666,21 +669,21 @@ export function ContractorPerformance() {
 // Simple hook to get current user role
 function useCurrentRole(): Role | null {
   const [role, setRole] = React.useState<Role | null>(null);
-  
+
   React.useEffect(() => {
-    const storedRole = localStorage.getItem('dps_role') as Role;
+    const storedRole = localStorage.getItem("dps_role") as Role;
     setRole(storedRole);
-    
+
     // Optional: Listen for storage changes to update role in real-time
     const handleStorageChange = () => {
-      const updatedRole = localStorage.getItem('dps_role') as Role;
+      const updatedRole = localStorage.getItem("dps_role") as Role;
       setRole(updatedRole);
     };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
-  
+
   return role;
 }
 
@@ -688,13 +691,13 @@ export function Alarms() {
   const currentRole = useCurrentRole();
 
   // Role-based component rendering
-  if (currentRole === 'requester') {
+  if (currentRole === "requester") {
     return <RequesterAlarms />;
-  } else if (currentRole === 'safety') {
+  } else if (currentRole === "safety") {
     return <SafetyAlarms />;
-  } else if (currentRole === 'approver') {
+  } else if (currentRole === "approver") {
     return <ApproverAlarms />;
-  } else if (currentRole === 'admin') {
+  } else if (currentRole === "admin") {
     return <AdminAlarms />;
   }
 

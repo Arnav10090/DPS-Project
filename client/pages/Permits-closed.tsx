@@ -26,7 +26,8 @@ const PermitsClosed = () => {
 
   // Redirect requesters away from this page
   useEffect(() => {
-    const role = typeof window !== "undefined" ? localStorage.getItem("dps_role") : null;
+    const role =
+      typeof window !== "undefined" ? localStorage.getItem("dps_role") : null;
     if (role === "requester") {
       navigate("/overall-status", { replace: true });
     }
@@ -316,12 +317,8 @@ const PermitsClosed = () => {
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="closureDate">
-                      Closure Date
-                    </SelectItem>
-                    <SelectItem value="workDuration">
-                      Duration
-                    </SelectItem>
+                    <SelectItem value="closureDate">Closure Date</SelectItem>
+                    <SelectItem value="workDuration">Duration</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

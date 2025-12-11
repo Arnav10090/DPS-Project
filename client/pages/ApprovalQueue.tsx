@@ -327,7 +327,7 @@ export default function ApproverQueue() {
             {/* Modern View Button for Cards */}
             <button
               onClick={() => {
-                window.location.href = '/approver-permit-details';
+                window.location.href = "/approver-permit-details";
               }}
               className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
             >
@@ -917,9 +917,9 @@ export default function ApproverQueue() {
                       <TableHead className="min-w-24 px-2 text-xs hidden lg:table-cell">
                         Location
                       </TableHead>
-                        <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">
-                          Actions
-                        </TableHead>
+                      <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">
+                        Actions
+                      </TableHead>
                     </tr>
                   </TableHeader>
                   <TableBody>
@@ -977,7 +977,8 @@ export default function ApproverQueue() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.location.href = '/approver-permit-details';
+                                window.location.href =
+                                  "/approver-permit-details";
                               }}
                               className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
                             >

@@ -108,11 +108,28 @@ export default function ApproverPermitDetails() {
     }
   }, []);
 
-  // Load requester comments persisted from requester page
+  // Load requester comments persisted from requester page or approval queue
   useEffect(() => {
     try {
       if (typeof window === "undefined") return;
-      const raw = localStorage.getItem("dps_requester_comments_work");
+
+      // First, check if header exists to get permitDocType
+      const header = localStorage.getItem("dps_permit_header");
+      let permitDocType = "work";
+      if (header) {
+        const h = JSON.parse(header);
+        permitDocType = h.permitDocType || "work";
+      }
+
+      // Load requester comments based on document type
+      const storageKey =
+        permitDocType === "highTension"
+          ? "dps_requester_comments_ht"
+          : permitDocType === "gasLine"
+            ? "dps_requester_comments_gas"
+            : "dps_requester_comments_work";
+
+      const raw = localStorage.getItem(storageKey);
       if (!raw) return;
       const data = JSON.parse(raw);
       update({
@@ -165,6 +182,7 @@ export default function ApproverPermitDetails() {
           expectedReturnDate: h.expectedReturnDate || "",
           certificateNumber: h.certificateNumber || "",
           permitNumber: h.permitNumber || "",
+          permitDocType: h.permitDocType || "work",
         });
       }
     } catch (e) {
@@ -240,12 +258,11 @@ export default function ApproverPermitDetails() {
                 Details of such permit
               </div>
 
-              {/* Permit Header with Actions */}
-              <div className="mt-6 flex items-center justify-between mb-6">
+              {/* Permit Header */}
+              <div className="mt-6 mb-6">
                 <div>
-                  <div className="text-sm text-slate-600">Permit</div>
-                  <div className="text-xl font-semibold">
-                    {form.permitNumber || "Select a permit"}
+                  <div className="text-sm text-slate-600 font-bold">
+                    Permit Type
                   </div>
                   <div className="text-sm text-slate-600">
                     {form.permitDocType === "highTension"
@@ -255,32 +272,12 @@ export default function ApproverPermitDetails() {
                         : "Work Permit"}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => alert("Approve (placeholder)")}
-                    className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700"
-                  >
-                    Approve
-                  </button>
-                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
-                    Conditional
-                  </button>
-                  <button
-                    onClick={() => alert("Reject (placeholder)")}
-                    className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700"
-                  >
-                    Reject
-                  </button>
-                  <button className="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
-                    Escalate
-                  </button>
-                </div>
               </div>
 
               {/* Permit Details in 2-Column Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
                     Work Description
                   </div>
                   <div className="text-sm text-slate-700">
@@ -292,17 +289,21 @@ export default function ApproverPermitDetails() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">Location</div>
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
+                    Location
+                  </div>
                   <div className="text-sm text-slate-700">Plant A - Bay 3</div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
                     Estimated Duration
                   </div>
                   <div className="text-sm text-slate-700">3 hrs</div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-600 mb-1">Personnel</div>
+                  <div className="text-xs text-slate-600 mb-1 font-bold">
+                    Personnel
+                  </div>
                   <div className="text-sm text-slate-700">
                     {form.permitRequester || "Jane Doe"} • Maintenance
                   </div>
@@ -390,7 +391,16 @@ export default function ApproverPermitDetails() {
         <div className="flex justify-end">
           <button
             type="button"
-            onClick={() => navigate("/permit-details?preview=1&from=approver")}
+            onClick={() => {
+              const docType = form.permitDocType || "work";
+              let previewUrl = "/permit-details?preview=1&from=approver";
+              if (docType === "highTension") {
+                previewUrl = "/ht-permit?preview=1&from=approver";
+              } else if (docType === "gasLine") {
+                previewUrl = "/gas-permit?preview=1&from=approver";
+              }
+              navigate(previewUrl);
+            }}
             className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
           >
             Preview Requester Form
@@ -405,7 +415,7 @@ export default function ApproverPermitDetails() {
                 {/* Top requester/approver fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Requester
                     </div>
                     <input
@@ -430,7 +440,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Approver 1
                     </div>
                     <input
@@ -455,7 +465,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Approver 2
                     </div>
                     <input
@@ -480,7 +490,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Safety Manager
                     </div>
                     <input
@@ -507,7 +517,7 @@ export default function ApproverPermitDetails() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Permit Issue Date
                     </div>
                     <input
@@ -531,7 +541,7 @@ export default function ApproverPermitDetails() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 mb-1">
+                    <div className="text-xs text-slate-600 mb-1 font-bold">
                       Expected Return Date
                     </div>
                     <input
@@ -927,6 +937,24 @@ export default function ApproverPermitDetails() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Action Buttons at Bottom */}
+      <div className="mx-auto max-w-7xl px-4 pb-6">
+        <div className="flex items-center justify-end gap-2">
+          <button
+            onClick={() => alert("Approve (placeholder)")}
+            className="px-4 py-2 rounded bg-green-600 text-white text-sm hover:bg-green-700"
+          >
+            Approve
+          </button>
+          <button
+            onClick={() => alert("Reject (placeholder)")}
+            className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700"
+          >
+            Reject
+          </button>
         </div>
       </div>
     </div>

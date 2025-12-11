@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -80,12 +81,76 @@ const SAMPLE: Permit[] = [
 ];
 
 export default function ApproverQueue() {
+  const navigate = useNavigate();
   const [permits, setPermits] = useState<Permit[]>(SAMPLE);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [query, setQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [preview, setPreview] = useState<Permit | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+
+  // Function to handle View button click and populate ApproverPermitDetails form
+  const handleViewPermit = (permit: Permit) => {
+    try {
+      // Map permit type to form type
+      let permitDocType: "work" | "highTension" | "gasLine" = "work";
+      if (permit.type === "High Tension Line Work Permit") {
+        permitDocType = "highTension";
+      } else if (permit.type === "Gas Line Work Permit") {
+        permitDocType = "gasLine";
+      }
+
+      // Store permit header information
+      const headerData = {
+        permitRequester: permit.requester,
+        permitApprover1: "",
+        permitApprover2: "",
+        safetyManager: "",
+        permitIssueDate: new Date().toISOString().split("T")[0],
+        expectedReturnDate: "",
+        certificateNumber: "",
+        permitNumber: permit.permitId,
+        permitDocType,
+      };
+      localStorage.setItem("dps_permit_header", JSON.stringify(headerData));
+
+      // Store requester comments (from permit queue data)
+      const requesterComments = {
+        requesterRequireUrgent: false,
+        requesterSafetyManagerApproval: false,
+        requesterPlannedShutdown: false,
+        requesterPlannedShutdownDate: "",
+        requesterCustomComments: [
+          {
+            text: `Description: ${permit.description}`,
+            checked: false,
+          },
+          {
+            text: `Location: ${permit.location}`,
+            checked: false,
+          },
+          {
+            text: `Estimated Duration: ${permit.estimatedHours} hours`,
+            checked: false,
+          },
+        ],
+      };
+
+      const storageKey =
+        permitDocType === "highTension"
+          ? "dps_requester_comments_ht"
+          : permitDocType === "gasLine"
+            ? "dps_requester_comments_gas"
+            : "dps_requester_comments_work";
+
+      localStorage.setItem(storageKey, JSON.stringify(requesterComments));
+
+      // Navigate to the appropriate permit details page
+      navigate("/approver-permit-details");
+    } catch (e) {
+      console.error("Error viewing permit:", e);
+    }
+  };
 
   // comprehensive filter state
   const [filters, setFilters] = useState({
@@ -326,9 +391,7 @@ export default function ApproverQueue() {
           <div className="flex gap-1.5">
             {/* Modern View Button for Cards */}
             <button
-              onClick={() => {
-                window.location.href = "/approver-permit-details";
-              }}
+              onClick={() => handleViewPermit(permit)}
               className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
             >
               <span className="relative z-10 flex items-center gap-1">
@@ -977,8 +1040,7 @@ export default function ApproverQueue() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.location.href =
-                                  "/approver-permit-details";
+                                handleViewPermit(p);
                               }}
                               className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
                             >

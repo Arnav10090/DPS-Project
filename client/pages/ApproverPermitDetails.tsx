@@ -387,9 +387,13 @@ export default function ApproverPermitDetails() {
             type="button"
             onClick={() => {
               const docType = form.permitDocType || "work";
-              navigate(
-                `/permit-details?preview=1&from=approver&docType=${docType}`
-              );
+              let previewUrl = "/permit-details?preview=1&from=approver";
+              if (docType === "highTension") {
+                previewUrl = "/ht-permit?preview=1&from=approver";
+              } else if (docType === "gasLine") {
+                previewUrl = "/gas-permit?preview=1&from=approver";
+              }
+              navigate(previewUrl);
             }}
             className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
           >

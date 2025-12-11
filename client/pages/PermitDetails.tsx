@@ -1619,7 +1619,7 @@ export default function CreatePermit() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm"
-            onClick={() => setShowPreviewModal(false)}
+            onClick={handleClosePreview}
           />
 
           <div className="relative bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto p-6 z-10">

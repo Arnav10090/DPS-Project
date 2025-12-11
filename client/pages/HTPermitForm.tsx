@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormWizard, HTPermitHeader } from "@/components/permit/ht/components";
 import HTPermitPreview from "@/components/permit/ht/HTPermitPreview";
@@ -410,6 +410,16 @@ export default function HTPermitForm() {
       "Permit submitted successfully. You can use the browser Print to save a PDF.",
     );
   };
+
+  // Auto-open preview modal if URL contains ?preview
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has("preview")) {
+        setShowPreview(true);
+      }
+    } catch {}
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">

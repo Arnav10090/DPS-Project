@@ -7,12 +7,148 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 import { formatDistanceToNow, format } from "date-fns";
 import { Check, Clock, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+type ClosureRequest = {
+  id: string;
+  requester: string;
+  department: string;
+  workType: string;
+  location: string;
+  startedAt: string;
+  deadline: string;
+  requestedClosure: string;
+  duration: string;
+  safetyOfficer: string;
+  approver: string;
+  submittedAt: string;
+  status: "CLOSURE REQUESTED" | "OVERDUE" | "APPROVED";
+  overdue: string;
+  scope: string;
+  completionReport: string;
+};
+
+const SAMPLE_CLOSURES: ClosureRequest[] = [
+  {
+    id: "WCS-2024-001",
+    requester: "John Doe",
+    department: "Maintenance Team",
+    workType: "Electrical Maintenance",
+    location: "Building A, Electrical Room 2A",
+    startedAt: "15 Jan 2024, 09:00 AM",
+    deadline: "16 Jan 2024, 05:00 PM",
+    requestedClosure: "16 Jan 2024, 07:00 PM",
+    duration: "34 hours",
+    safetyOfficer: "Mike Chen",
+    approver: "Sarah Wilson",
+    submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    status: "CLOSURE REQUESTED",
+    overdue: "OVERDUE BY 2 HOURS",
+    scope:
+      "Electrical maintenance in Building A, Floor 2. Safety checks: isolation of supply, permit holder to ensure no combustible materials near work area. Required tools: insulated tools, voltage detector, PPE as per SOP.",
+    completionReport:
+      "Work performed as per scope. Replaced damaged conduits and repaired junction box. No incidents. Post-work insulation resistance tested and within limits.",
+  },
+  {
+    id: "WCS-2024-002",
+    requester: "Jane Smith",
+    department: "Operations",
+    workType: "Pipe Inspection",
+    location: "Building B, Pipeline Section 4",
+    startedAt: "17 Jan 2024, 08:00 AM",
+    deadline: "18 Jan 2024, 04:00 PM",
+    requestedClosure: "18 Jan 2024, 03:30 PM",
+    duration: "28 hours",
+    safetyOfficer: "Alex Rodriguez",
+    approver: "Sarah Wilson",
+    submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+    status: "CLOSURE REQUESTED",
+    overdue: "ON TIME",
+    scope:
+      "Pipeline inspection and pressure testing. Safety: pressure vessel precautions, breathing apparatus required in confined spaces. Documentation: all test results to be recorded.",
+    completionReport:
+      "All inspection points completed successfully. Pressure tests passed. Minor corrosion noted in section 4B, documented for future action. No safety incidents.",
+  },
+  {
+    id: "WCS-2024-003",
+    requester: "Robert Johnson",
+    department: "Safety Team",
+    workType: "Hot Work Permit",
+    location: "Building C, Workshop Area",
+    startedAt: "19 Jan 2024, 10:00 AM",
+    deadline: "19 Jan 2024, 06:00 PM",
+    requestedClosure: "19 Jan 2024, 05:45 PM",
+    duration: "8 hours",
+    safetyOfficer: "Mike Chen",
+    approver: "Sarah Wilson",
+    submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 1).toISOString(),
+    status: "CLOSURE REQUESTED",
+    overdue: "ON TIME",
+    scope:
+      "Hot work welding operations. Fire watch required for 30 minutes post-work. Ensure all combustible materials removed. Use certified welding equipment only.",
+    completionReport:
+      "Welding completed per specifications. Fire watch completed. All equipment tested and functioning correctly. No damage to surrounding areas.",
+  },
+];
+
+const files = [
+  {
+    id: "f1",
+    src: "https://via.placeholder.com/600x400?text=Photo+1",
+    name: "photo1.jpg",
+    size: "1.2 MB",
+  },
+  {
+    id: "f2",
+    src: "https://via.placeholder.com/600x400?text=Photo+2",
+    name: "photo2.jpg",
+    size: "980 KB",
+  },
+  {
+    id: "f3",
+    src: "https://via.placeholder.com/600x400?text=Photo+3",
+    name: "doc1.pdf",
+    size: "240 KB",
+  },
+  {
+    id: "f4",
+    src: "https://via.placeholder.com/600x400?text=Photo+4",
+    name: "photo4.jpg",
+    size: "2.1 MB",
+  },
+  {
+    id: "f5",
+    src: "https://via.placeholder.com/600x400?text=Photo+5",
+    name: "photo5.jpg",
+    size: "840 KB",
+  },
+  {
+    id: "f6",
+    src: "https://via.placeholder.com/600x400?text=Photo+6",
+    name: "report.pdf",
+    size: "450 KB",
+  },
+];
+
 export default function ApproverClosure() {
   const navigate = useNavigate();
+  const [closures, setClosures] = useState<ClosureRequest[]>(SAMPLE_CLOSURES);
+  const [query, setQuery] = useState("");
+  const [selectedClosure, setSelectedClosure] = useState<ClosureRequest | null>(
+    null,
+  );
+
   const [decision, setDecision] = useState<"approve" | "reject" | "request">(
     "approve",
   );
@@ -35,70 +171,14 @@ export default function ApproverClosure() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const permit = useMemo(
-    () => ({
-      id: "WCS-2024-001",
-      requester: "John Doe",
-      department: "Maintenance Team",
-      workType: "Electrical Maintenance",
-      location: "Building A, Electrical Room 2A",
-      startedAt: "15 Jan 2024, 09:00 AM",
-      deadline: "16 Jan 2024, 05:00 PM",
-      requestedClosure: "16 Jan 2024, 07:00 PM",
-      duration: "34 hours",
-      safetyOfficer: "Mike Chen",
-      approver: "Sarah Wilson",
-      submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-      status: "CLOSURE REQUESTED",
-      overdue: "OVERDUE BY 2 HOURS",
-    }),
-    [],
-  );
-
-  const files = useMemo(
-    () => [
-      {
-        id: "f1",
-        src: "https://via.placeholder.com/600x400?text=Photo+1",
-        name: "photo1.jpg",
-        size: "1.2 MB",
-      },
-      {
-        id: "f2",
-        src: "https://via.placeholder.com/600x400?text=Photo+2",
-        name: "photo2.jpg",
-        size: "980 KB",
-      },
-      {
-        id: "f3",
-        src: "https://via.placeholder.com/600x400?text=Photo+3",
-        name: "doc1.pdf",
-        size: "240 KB",
-      },
-      {
-        id: "f4",
-        src: "https://via.placeholder.com/600x400?text=Photo+4",
-        name: "photo4.jpg",
-        size: "2.1 MB",
-      },
-      {
-        id: "f5",
-        src: "https://via.placeholder.com/600x400?text=Photo+5",
-        name: "photo5.jpg",
-        size: "840 KB",
-      },
-      {
-        id: "f6",
-        src: "https://via.placeholder.com/600x400?text=Photo+6",
-        name: "report.pdf",
-        size: "450 KB",
-      },
-    ],
-    [],
-  );
+  const [filters, setFilters] = useState({
+    status: [] as string[],
+    department: [] as string[],
+    dateFrom: "",
+    dateTo: "",
+  });
 
   useEffect(() => {
-    // setup minimal signature canvas events
     const canvas = sigCanvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -156,6 +236,81 @@ export default function ApproverClosure() {
     setSignature(null);
   }
 
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return closures.filter((c) => {
+      if (q) {
+        const hay = [c.id, c.requester, c.department, c.location, c.workType]
+          .join(" ")
+          .toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      if (filters.status.length && !filters.status.includes(c.status))
+        return false;
+      if (
+        filters.department.length &&
+        !filters.department.includes(c.department)
+      )
+        return false;
+      if (filters.dateFrom) {
+        const from = new Date(filters.dateFrom);
+        if (new Date(c.submittedAt) < from) return false;
+      }
+      if (filters.dateTo) {
+        const to = new Date(filters.dateTo);
+        if (new Date(c.submittedAt) > to) return false;
+      }
+      return true;
+    });
+  }, [closures, query, filters]);
+
+  function clearAllFilters() {
+    setFilters({
+      status: [],
+      department: [],
+      dateFrom: "",
+      dateTo: "",
+    });
+  }
+
+  function removeFilter(filterType: string, value: string) {
+    setFilters((f) => ({
+      ...f,
+      [filterType]: Array.isArray(f[filterType as keyof typeof f])
+        ? (f[filterType as keyof typeof f] as string[]).filter(
+            (v) => v !== value,
+          )
+        : filterType === "dateFrom" || filterType === "dateTo"
+          ? ""
+          : f[filterType as keyof typeof f],
+    }));
+  }
+
+  function getActiveFilters() {
+    const active = [];
+    filters.status.forEach((s) => {
+      active.push({ type: "status", value: s, label: `Status: ${s}` });
+    });
+    filters.department.forEach((d) => {
+      active.push({ type: "department", value: d, label: `Department: ${d}` });
+    });
+    if (filters.dateFrom) {
+      active.push({
+        type: "dateFrom",
+        value: filters.dateFrom,
+        label: `From: ${new Date(filters.dateFrom).toLocaleDateString()}`,
+      });
+    }
+    if (filters.dateTo) {
+      active.push({
+        type: "dateTo",
+        value: filters.dateTo,
+        label: `To: ${new Date(filters.dateTo).toLocaleDateString()}`,
+      });
+    }
+    return active;
+  }
+
   const checklistOk = Object.values(checklist).every(Boolean);
   const commentsRequired = decision !== "approve";
   const commentsOk =
@@ -171,15 +326,454 @@ export default function ApproverClosure() {
     if (!canSubmit) return;
     setShowConfirm(true);
   }
+
   function confirmSubmit() {
     setShowConfirm(false);
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
       setSuccess(true);
-      setTimeout(() => navigate("/approver/dashboard"), 3000);
+      setTimeout(() => {
+        setSuccess(false);
+        setSelectedClosure(null);
+        setComments("");
+        setChecklist({
+          item1: true,
+          item2: true,
+          item3: true,
+          item4: true,
+          item5: true,
+          item6: true,
+          item7: false,
+        });
+        setSignature(null);
+      }, 3000);
     }, 1200);
   }
+
+  // List view
+  if (!selectedClosure) {
+    return (
+      <div className="space-y-4 pb-6 px-2 sm:px-4">
+        <div className="rounded-lg border bg-card p-3 sm:p-4 shadow-sm relative">
+          <div className="mb-4 space-y-3">
+            <div className="flex items-center gap-2 w-full" />
+          </div>
+
+          {/* Active Filters Display */}
+          {getActiveFilters().length > 0 && (
+            <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-blue-900">
+                  Applied Filters
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearAllFilters}
+                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 text-xs px-2 py-1"
+                >
+                  Clear All
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {getActiveFilters().map((filter, index) => (
+                  <div
+                    key={`${filter.type}-${filter.value}-${index}`}
+                    className="inline-flex items-center gap-1.5 px-2 py-1 bg-white border border-blue-300 rounded-full text-xs font-medium text-blue-800 shadow-sm"
+                  >
+                    <span>{filter.label}</span>
+                    <button
+                      onClick={() => removeFilter(filter.type, filter.value)}
+                      className="flex-shrink-0 w-3 h-3 rounded-full bg-blue-200 hover:bg-blue-300 flex items-center justify-center transition-colors duration-200"
+                      aria-label={`Remove ${filter.label} filter`}
+                    >
+                      <svg
+                        className="w-2 h-2 text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Filters Section */}
+          <div className="filter-panel mb-4 p-5 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 backdrop-blur-sm rounded-2xl border border-white/60 shadow-xl shadow-blue-100/20">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <svg
+                    className="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">Filters</h3>
+              </div>
+              <div className="text-sm text-gray-600 bg-white/70 px-3 py-1 rounded-full">
+                {getActiveFilters().length} active
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Status Filter */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Status
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  {["CLOSURE REQUESTED", "OVERDUE", "APPROVED"].map((s) => (
+                    <label
+                      key={s}
+                      className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
+                        filters.status.includes(s)
+                          ? "bg-blue-50 border-blue-200 shadow-md transform scale-[1.02]"
+                          : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          checked={filters.status.includes(s)}
+                          onChange={(e) =>
+                            setFilters((f) => ({
+                              ...f,
+                              status: e.target.checked
+                                ? [...f.status, s]
+                                : f.status.filter((x) => x !== s),
+                            }))
+                          }
+                          className="sr-only"
+                        />
+                        <div
+                          className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
+                            filters.status.includes(s)
+                              ? "bg-gradient-to-br from-blue-400 to-cyan-500 text-white shadow-sm"
+                              : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                          }`}
+                        >
+                          {filters.status.includes(s) ? "✓" : ""}
+                        </div>
+                      </div>
+                      <span
+                        className={`text-sm font-medium transition-colors duration-200 ${
+                          filters.status.includes(s)
+                            ? "text-blue-700"
+                            : "text-gray-700 group-hover:text-gray-800"
+                        }`}
+                      >
+                        {s}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Department Filter */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
+                    </svg>
+                  </div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Department
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  {["Maintenance Team", "Operations", "Safety Team"].map(
+                    (d) => (
+                      <label
+                        key={d}
+                        className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
+                          filters.department.includes(d)
+                            ? "bg-purple-50 border-purple-200 shadow-md transform scale-[1.02]"
+                            : "bg-white/70 border-gray-200 hover:bg-white hover:shadow-sm hover:border-gray-300"
+                        }`}
+                      >
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={filters.department.includes(d)}
+                            onChange={(e) =>
+                              setFilters((f) => ({
+                                ...f,
+                                department: e.target.checked
+                                  ? [...f.department, d]
+                                  : f.department.filter((x) => x !== d),
+                              }))
+                            }
+                            className="sr-only"
+                          />
+                          <div
+                            className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs transition-all duration-200 ${
+                              filters.department.includes(d)
+                                ? "bg-gradient-to-br from-purple-400 to-indigo-500 text-white shadow-sm"
+                                : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                            }`}
+                          >
+                            {filters.department.includes(d) ? "✓" : ""}
+                          </div>
+                        </div>
+                        <span
+                          className={`text-sm font-medium transition-colors duration-200 ${
+                            filters.department.includes(d)
+                              ? "text-purple-700"
+                              : "text-gray-700 group-hover:text-gray-800"
+                          }`}
+                        >
+                          {d}
+                        </span>
+                      </label>
+                    ),
+                  )}
+                </div>
+              </div>
+
+              {/* Date Range */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Date Range
+                  </label>
+                </div>
+                <div className="space-y-3">
+                  <div className="relative group">
+                    <label className="text-xs font-medium text-gray-600 mb-1 block">
+                      From Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filters.dateFrom}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, dateFrom: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
+                    />
+                  </div>
+                  <div className="relative group">
+                    <label className="text-xs font-medium text-gray-600 mb-1 block">
+                      To Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filters.dateTo}
+                      onChange={(e) =>
+                        setFilters((f) => ({ ...f, dateTo: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 text-sm bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all duration-200 hover:border-gray-300 hover:shadow-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-between items-center mt-8 pt-6 border-t border-white/60">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full animate-pulse"></div>
+                <span>Real-time filtering active</span>
+              </div>
+              <Button
+                variant="outline"
+                onClick={clearAllFilters}
+                className="px-5 py-2.5 text-sm font-medium bg-white/80 hover:bg-white border-2 border-gray-200 hover:border-gray-300 rounded-xl transition-all duration-200 hover:shadow-sm active:scale-95"
+              >
+                Clear All
+              </Button>
+            </div>
+          </div>
+
+          {/* Search bar */}
+          <div className="mb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <Input
+              placeholder="Search closures..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="flex-1 text-sm"
+            />
+          </div>
+
+          {/* Results header */}
+          <div className="mb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-muted-foreground">Showing</div>
+              <div className="font-semibold text-sm">
+                {filtered.length} pending closures
+              </div>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto -mx-2 sm:mx-0">
+            <div className="min-w-full inline-block">
+              <Table className="min-w-[800px]">
+                <TableHeader>
+                  <tr>
+                    <TableHead className="min-w-24 px-2 text-xs">
+                      Permit ID
+                    </TableHead>
+                    <TableHead className="min-w-24 px-2 text-xs">
+                      Requester
+                    </TableHead>
+                    <TableHead className="min-w-24 px-2 text-xs">
+                      Department
+                    </TableHead>
+                    <TableHead className="min-w-32 px-2 text-xs hidden sm:table-cell">
+                      Location
+                    </TableHead>
+                    <TableHead className="min-w-20 px-2 text-xs">
+                      Status
+                    </TableHead>
+                    <TableHead className="min-w-20 px-2 text-xs hidden md:table-cell">
+                      Submitted
+                    </TableHead>
+                    <TableHead className="w-24 px-2 text-xs text-center flex items-center justify-center">
+                      Actions
+                    </TableHead>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((closure) => (
+                    <TableRow key={closure.id}>
+                      <TableCell className="px-2">
+                        <span className="text-blue-600 font-semibold text-xs">
+                          {closure.id}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-xs px-2">
+                        {closure.requester}
+                      </TableCell>
+                      <TableCell className="text-xs px-2">
+                        {closure.department}
+                      </TableCell>
+                      <TableCell className="text-xs px-2 hidden sm:table-cell">
+                        {closure.location}
+                      </TableCell>
+                      <TableCell className="text-xs px-2">
+                        <span
+                          className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
+                            closure.status === "CLOSURE REQUESTED"
+                              ? "bg-orange-100 text-orange-700"
+                              : closure.status === "OVERDUE"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-green-100 text-green-700"
+                          }`}
+                        >
+                          {closure.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground px-2 hidden md:table-cell">
+                        {formatDistanceToNow(new Date(closure.submittedAt), {
+                          addSuffix: true,
+                        }).replace(" ago", "")}
+                      </TableCell>
+                      <TableCell className="px-2 w-24">
+                        <div className="flex justify-center w-full">
+                          <button
+                            onClick={() => setSelectedClosure(closure)}
+                            className="group relative inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full shadow-md hover:shadow-lg hover:shadow-blue-200/50 active:scale-95 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
+                          >
+                            <span className="relative z-10 flex items-center gap-1">
+                              <svg
+                                className="w-3 h-3"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                />
+                              </svg>
+                              View
+                            </span>
+                            <div className="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          </button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Detail view
+  const permit = selectedClosure;
 
   if (success) {
     return (
@@ -190,14 +784,16 @@ export default function ApproverClosure() {
             Work closure approved and closed
           </div>
           <div className="text-sm text-muted-foreground mt-2">
-            Permit {permit.id} has been closed. Redirecting to dashboard...
+            Permit {permit.id} has been closed. Redirecting...
           </div>
           <div className="mt-4 flex justify-center gap-3">
-            <Button onClick={() => navigate("/approver/dashboard")}>
-              Back to Dashboard
-            </Button>
-            <Button variant="outline" onClick={() => setSuccess(false)}>
-              View Closed Permit
+            <Button
+              onClick={() => {
+                setSuccess(false);
+                setSelectedClosure(null);
+              }}
+            >
+              Back to List
             </Button>
           </div>
         </div>
@@ -207,6 +803,16 @@ export default function ApproverClosure() {
 
   return (
     <div className="max-w-[1400px] mx-auto p-6">
+      <div className="mb-6">
+        <Button
+          variant="outline"
+          onClick={() => setSelectedClosure(null)}
+          className="text-sm font-medium px-4 py-2 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+        >
+          ← Back to List
+        </Button>
+      </div>
+
       <div className="grid lg:grid-cols-[60%_40%] gap-6">
         <div>
           <Card>
@@ -313,10 +919,7 @@ export default function ApproverClosure() {
             </CardHeader>
             <CardContent>
               <div className="bg-blue-50 border border-blue-100 rounded p-4 max-h-[200px] overflow-auto text-sm text-gray-700">
-                Electrical maintenance in Building A, Floor 2. Safety checks:
-                isolation of supply, permit holder to ensure no combustible
-                materials near work area. Required tools: insulated tools,
-                voltage detector, PPE as per SOP.
+                {permit.scope}
                 <ul className="mt-2 list-disc pl-5">
                   <li>Lockout tagout in place</li>
                   <li>Gas check completed</li>
@@ -338,9 +941,7 @@ export default function ApproverClosure() {
             </CardHeader>
             <CardContent>
               <div className="bg-gray-50 border border-gray-200 rounded p-4 max-h-[150px] overflow-auto text-sm text-gray-700">
-                Work performed as per scope. Replaced damaged conduits and
-                repaired junction box. No incidents. Post-work insulation
-                resistance tested and within limits.
+                {permit.completionReport}
               </div>
 
               <div className="mt-4">
@@ -377,7 +978,7 @@ export default function ApproverClosure() {
 
               <div className="mt-4">
                 <div className="text-sm font-semibold">
-                  Uploaded Files (6 items)
+                  Uploaded Files ({files.length} items)
                 </div>
                 <div className="grid grid-cols-3 gap-3 mt-3">
                   {files.map((f, idx) => (

@@ -406,6 +406,17 @@ export default function GasPermit() {
     } catch {}
   }, []);
 
+  const handleClosePreview = () => {
+    setShowPreview(false);
+    // If preview was opened from ApproverPermitDetails, navigate back
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("from") === "approver") {
+        navigate("/approver-permit-details");
+      }
+    } catch {}
+  };
+
   const update = (path: string, value: any) => {
     setForm((f: any) => {
       const copy = JSON.parse(JSON.stringify(f));

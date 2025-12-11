@@ -116,7 +116,13 @@ export default function NavTabs() {
                           "/approver-permit-details",
                         ) ||
                         location.pathname.startsWith("/safety-permit-details"));
-                    const active = isActive || manualActive;
+
+                    // Keep Approval Queue tab active when viewing approver permit details
+                    const isApprovalQueueActive =
+                      t.to === "/approval-queue" &&
+                      location.pathname.startsWith("/approver-permit-details");
+
+                    const active = isActive || manualActive || isApprovalQueueActive;
                     return [
                       "inline-flex items-center rounded-full px-4 py-2 text-[14px] transition-colors",
                       active

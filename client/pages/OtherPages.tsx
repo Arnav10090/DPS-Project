@@ -73,13 +73,30 @@ export function OverallStatus() {
     dir: "desc",
   });
 
+  const [role, setRole] = React.useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const storedRole = localStorage.getItem("dps_role");
+    const storedUserName = localStorage.getItem("dps_user_name");
+    setRole(storedRole);
+    setCurrentUserName(storedUserName);
+  }, []);
+
   React.useEffect(() => {
     const t = setTimeout(() => {
-      setData(makeMockData(32));
+      let mockData = makeMockData(32);
+
+      // For requester role, filter to show only current user's permits
+      if (role === "requester" && currentUserName) {
+        mockData = mockData.filter(item => item.requester === currentUserName);
+      }
+
+      setData(mockData);
       setLoading(false);
     }, 600);
     return () => clearTimeout(t);
-  }, []);
+  }, [role, currentUserName]);
 
   return (
     <section className="space-y-4">

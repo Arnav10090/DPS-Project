@@ -254,23 +254,14 @@ export default function ApproverQueue() {
   function getActiveFilters() {
     const active = [];
 
-    // Priority filters
-    filters.priority.forEach((p) => {
-      active.push({
-        type: "priority",
-        value: p,
-        label: `Priority: ${p.toUpperCase()}`,
-      });
+    // Permit Type filters
+    filters.permitType.forEach((t) => {
+      active.push({ type: "permitType", value: t, label: `Type: ${t}` });
     });
 
     // Status filters
     filters.status.forEach((s) => {
       active.push({ type: "status", value: s, label: `Status: ${s}` });
-    });
-
-    // Type filters
-    filters.type.forEach((t) => {
-      active.push({ type: "type", value: t, label: `Type: ${t}` });
     });
 
     // Requester filters

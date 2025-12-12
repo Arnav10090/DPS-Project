@@ -157,23 +157,10 @@ export default function AdminWorkflows() {
         {/* Sub-header tabs */}
         <div className="flex items-center justify-between bg-white border-b border-gray-200 p-3 mb-6">
           <div className="flex gap-4">
-            <button className="pb-2 border-b-4 border-blue-500">
-              Live Work closure flow
-            </button>
-            <button className="pb-2 text-muted-foreground">
-              Closure Analytics
-            </button>
-            <button className="pb-2 text-muted-foreground">
-              Historical Reports
-            </button>
-            <button className="pb-2 text-muted-foreground">
-              System Alerts
-            </button>
           </div>
           <div className="flex items-center gap-2">
             <Button onClick={exportCSV}>Export Data</Button>
             <Button variant="outline">Generate Report</Button>
-            <Button variant="ghost">System Settings</Button>
           </div>
         </div>
 
@@ -509,21 +496,6 @@ export default function AdminWorkflows() {
                 Next
               </Button>
             </div>
-          </div>
-
-          <div className="mt-6 flex items-center gap-3">
-            <Button
-              onClick={bulkApproveSelected}
-              disabled={!Object.keys(selected).length}
-            >
-              Bulk Approve
-            </Button>
-            <Button onClick={() => alert("Export selected")}>
-              Export Selected
-            </Button>
-            <Button onClick={() => alert("Send reminders")}>
-              Send Reminders
-            </Button>
           </div>
         </div>
       </div>

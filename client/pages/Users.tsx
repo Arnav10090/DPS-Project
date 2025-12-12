@@ -325,9 +325,6 @@ export default function AdminUsers() {
                       <Button size="sm" variant="outline">
                         {u.status === "active" ? "Deactivate" : "Activate"}
                       </Button>
-                      <Button size="sm" variant="link">
-                        Reset Password
-                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -346,8 +343,24 @@ export default function AdminUsers() {
             <div className="grid grid-cols-2 gap-4">
               <Input placeholder="Full name" />
               <Input placeholder="Employee ID" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <Input placeholder="Email" />
+              <Input type="password" placeholder="Password" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <Input placeholder="Phone" />
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                  <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Select>
@@ -378,10 +391,6 @@ export default function AdminUsers() {
               <div className="flex-1">
                 <div className="text-sm font-medium">Account Active</div>
                 <Switch defaultChecked />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium">Expires</div>
-                <Input placeholder="Expiry date" />
               </div>
             </div>
             <div>

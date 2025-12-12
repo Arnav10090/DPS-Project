@@ -65,6 +65,12 @@ export default function NavTabs() {
     // tabs.push({ to: "/form-builder", label: "Form Builder" }); // Temporarily hidden per request
   }
   if (role === "requester") {
+    // Permit Details for requester only (inline for safety officer in approval queue)
+    tabs.push({
+      to: permitDetailsPath,
+      label: "Permit Details",
+      hideForAdmin: true,
+    });
     tabs.push({ to: "/work-closure-request", label: "Work Closure Request" });
   }
   if (role === "approver") {
@@ -78,15 +84,6 @@ export default function NavTabs() {
     tabs.push({
       to: "/safety-officer-approval-queue",
       label: "Approval Queue",
-    });
-  }
-
-  if (role === "requester") {
-    // Permit Details for requester only (inline for safety officer in approval queue)
-    tabs.push({
-      to: permitDetailsPath,
-      label: "Permit Details",
-      hideForAdmin: true,
     });
   }
 

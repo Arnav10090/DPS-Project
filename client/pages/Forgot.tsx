@@ -125,18 +125,12 @@ export default function ForgotPasswordPage() {
                     </Button>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-start text-sm">
                     <Link
                       to={`/auth?role=${role}`}
                       className="text-primary underline"
                     >
                       Back to login
-                    </Link>
-                    <Link
-                     to={`/signup?role=${role}`}
-                      className="text-primary underline"
-                    >
-                      Create account
                     </Link>
                   </div>
                 </div>

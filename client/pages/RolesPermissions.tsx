@@ -359,7 +359,6 @@ export default function AdminRoles() {
         <div className="flex items-center gap-2">
           <Button onClick={() => setShowCreate(true)}>Create New Role</Button>
           <Button variant="outline">Import Role Template</Button>
-          <Button variant="link">Role Assignment Matrix</Button>
         </div>
       </header>
 

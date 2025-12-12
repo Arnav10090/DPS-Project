@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ShieldAlert, Clock, Users, MessageSquare, CheckCircle, AlertTriangle, Search, Filter, X, Settings } from "lucide-react";
+import { ShieldAlert, Clock, Users, MessageSquare, CheckCircle, AlertTriangle, Search, Filter, X, Settings, Trash2 } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -81,6 +81,7 @@ export default function ApproverAlarms() {
 
   const markAllRead = () => setItems((s) => s.map((i) => ({ ...i, unread: false })));
   const markRead = (id: string) => setItems((s) => s.map((i) => (i.id === id ? { ...i, unread: false } : i)));
+  const deleteAlarm = (id: string) => setItems((s) => s.filter((i) => i.id !== id));
 
   const isToday = (s: string) => /minute|hour/i.test(s);
   const isThisWeek = (s: string) => /day/i.test(s) || isToday(s);
@@ -154,31 +155,6 @@ export default function ApproverAlarms() {
           <Button variant="ghost" size="icon">
             <Settings className="h-4 w-4" />
           </Button>
-        </div>
-      </div>
-
-      {/* Quick Filter Tabs */}
-      <div className="flex items-center justify-between bg-muted/30 rounded-lg p-1">
-        <div className="flex gap-1">
-          {quickFiltersWithCounts.map((filter) => (
-            <button
-              key={filter.key}
-              onClick={() => setQuickFilter(filter.key)}
-              className={`
-                px-4 py-2 rounded-md text-sm font-medium transition-all duration-200
-                ${quickFilter === filter.key
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                }
-              `}
-            >
-              {filter.label}
-              <span className="ml-2 text-xs opacity-70">({filter.count})</span>
-            </button>
-          ))}
-        </div>
-        <div className="text-sm text-muted-foreground">
-          Showing {filtered.length} of {items.length} notifications
         </div>
       </div>
 
@@ -322,6 +298,9 @@ export default function ApproverAlarms() {
                         <Button size="sm" variant="outline">
                           Delegate
                         </Button>
+                        <Button size="sm" variant="ghost" onClick={() => deleteAlarm(n.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -384,6 +363,9 @@ export default function ApproverAlarms() {
                             )}
                             <Button size="sm" variant="outline">
                               View Details
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={() => deleteAlarm(notification.id)}>
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </div>

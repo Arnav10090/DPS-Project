@@ -71,7 +71,11 @@ export default function Header() {
             </div>
             <div className="h-5 w-px bg-gray-300 mx-1" />
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white cursor-pointer hover:shadow-md transition-shadow" title="User Profile" aria-label="User Profile">
+              <div
+                className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white cursor-pointer hover:shadow-md transition-shadow"
+                title="User Profile"
+                aria-label="User Profile"
+              >
                 <User className="h-4 w-4" />
               </div>
             </div>

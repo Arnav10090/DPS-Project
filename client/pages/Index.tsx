@@ -290,32 +290,32 @@ export default function Index() {
           isAdministrator
             ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7"
             : isRequester
-            ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4"
-            : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
+              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4"
+              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
         }`}
       >
         {statusCards.map((card, index) => {
           // Create filter-based navigation for requester/approver/safety KPI cards
           const handleCardClick = () => {
-            let filterParam = '';
+            let filterParam = "";
             if (isRequester) {
               const filterMap: Record<string, string> = {
-                'All-Permits': 'all',
-                'Approved-Permits': 'approved',
-                'Rejected-Permits': 'rejected',
-                'Permits-Under-Hold': 'hold',
+                "All-Permits": "all",
+                "Approved-Permits": "approved",
+                "Rejected-Permits": "rejected",
+                "Permits-Under-Hold": "hold",
               };
-              filterParam = filterMap[card.title.replace(/\s+/g, '-')] || 'all';
+              filterParam = filterMap[card.title.replace(/\s+/g, "-")] || "all";
             } else if (isApprover || isSafetyOfficer) {
               const filterMap: Record<string, string> = {
-                'New-Permits': 'new',
-                'Approved-Permits': 'approved',
-                'Pending-Approval': 'pending',
-                'Returned-Permits': 'returned',
-                'Permits-Under-Hold': 'hold',
-                'Rejected-Permits': 'rejected',
+                "New-Permits": "new",
+                "Approved-Permits": "approved",
+                "Pending-Approval": "pending",
+                "Returned-Permits": "returned",
+                "Permits-Under-Hold": "hold",
+                "Rejected-Permits": "rejected",
               };
-              filterParam = filterMap[card.title.replace(/\s+/g, '-')] || 'all';
+              filterParam = filterMap[card.title.replace(/\s+/g, "-")] || "all";
             }
 
             if (filterParam && !isAdministrator) {

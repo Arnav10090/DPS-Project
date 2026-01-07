@@ -60,10 +60,13 @@ export default function FooterAlerts() {
           <div className="flex items-center gap-3">
             <span className="h-4 w-1.5 bg-[#ff9800] rounded" />
             <span className="font-medium">
-              System & Solutions related Alarms message at bottom, which can be extend for S/E rows. Top side latest alarms
+              System & Solutions related Alarms message at bottom, which can be
+              extend for S/E rows. Top side latest alarms
             </span>
           </div>
-          <span className="text-sm text-gray-600">{open ? "Collapse" : "Expand"}</span>
+          <span className="text-sm text-gray-600">
+            {open ? "Collapse" : "Expand"}
+          </span>
         </button>
         <div
           id="alerts-panel"
@@ -72,15 +75,18 @@ export default function FooterAlerts() {
           <div className="overflow-hidden">
             <ul className="mt-2 divide-y">
               {alerts.map((a) => (
-                <li key={a.id} className="py-2 flex items-center justify-between text-sm">
+                <li
+                  key={a.id}
+                  className="py-2 flex items-center justify-between text-sm"
+                >
                   <div className="flex items-center gap-2">
                     <span
                       className={`h-2.5 w-2.5 rounded-full ${
                         a.severity === "error"
                           ? "bg-brand-error"
                           : a.severity === "warning"
-                          ? "bg-brand-warning"
-                          : "bg-[hsl(207_75%_47%)]"
+                            ? "bg-brand-warning"
+                            : "bg-[hsl(207_75%_47%)]"
                       }`}
                       aria-label={a.severity}
                     />
@@ -91,7 +97,9 @@ export default function FooterAlerts() {
               ))}
             </ul>
             {latestTop ? (
-              <div className="mt-2 text-xs text-gray-600">Latest: {latestTop.message}</div>
+              <div className="mt-2 text-xs text-gray-600">
+                Latest: {latestTop.message}
+              </div>
             ) : null}
           </div>
         </div>

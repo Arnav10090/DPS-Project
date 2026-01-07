@@ -10,8 +10,17 @@ interface Props {
   onCardClick?: () => void;
 }
 
-export default function StatusCard({ title, count, Icon, accentClass, to, onCardClick }: Props) {
-  const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+export default function StatusCard({
+  title,
+  count,
+  Icon,
+  accentClass,
+  to,
+  onCardClick,
+}: Props) {
+  const [ripples, setRipples] = useState<
+    { id: number; x: number; y: number }[]
+  >([]);
   const ref = useRef<HTMLDivElement>(null);
   const nav = useNavigate();
 
@@ -36,14 +45,21 @@ export default function StatusCard({ title, count, Icon, accentClass, to, onCard
       role="button"
       tabIndex={0}
       onClick={onClick}
-      onKeyDown={(e) => e.key === "Enter" && onClick((e as unknown) as React.MouseEvent)}
+      onKeyDown={(e) =>
+        e.key === "Enter" && onClick(e as unknown as React.MouseEvent)
+      }
       className="relative group select-none rounded-lg bg-white border-2 border-gray-200 shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary active:scale-[0.98] cursor-pointer"
       aria-label={`${title} - ${count}`}
     >
-      <div className={`absolute inset-0 rounded-lg bg-gradient-to-br ${accentClass} opacity-[0.08]`} />
+      <div
+        className={`absolute inset-0 rounded-lg bg-gradient-to-br ${accentClass} opacity-[0.08]`}
+      />
       <div className="p-5 relative z-10">
         <div className="flex items-center justify-between">
-          <div className="h-10 w-10 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: "rgba(0,0,0,0.15)" }}>
+          <div
+            className="h-10 w-10 rounded-full flex items-center justify-center text-white"
+            style={{ backgroundColor: "rgba(0,0,0,0.15)" }}
+          >
             <Icon className="h-5 w-5 text-gray-700" />
           </div>
         </div>

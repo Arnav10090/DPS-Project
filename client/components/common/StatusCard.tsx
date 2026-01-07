@@ -62,9 +62,13 @@ export default function StatusCard({
           <Icon className="h-4 w-4 text-gray-700" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-xs font-medium text-gray-600 truncate">{title}</div>
+          <div className="text-xs font-medium text-gray-600 truncate">
+            {title}
+          </div>
         </div>
-        <div className="text-xl font-bold text-gray-900 flex-shrink-0">{count}</div>
+        <div className="text-xl font-bold text-gray-900 flex-shrink-0">
+          {count}
+        </div>
       </div>
       {ripples.map((r) => (
         <span

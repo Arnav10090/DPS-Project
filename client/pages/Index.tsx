@@ -1,9 +1,9 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import StatusCard from "@/components/common/StatusCard";
 import ContractorStatsChart from "@/components/charts/ContractorStatsChart";
 import ContractorKpisChart from "@/components/charts/ContractorKpisChart";
-import RequesterBarChart from "@/components/charts/RequesterBarChart";
-import RequesterLineChart from "@/components/charts/RequesterLineChart";
+import RequesterMergedChart from "@/components/charts/RequesterMergedChart";
 import AdminBarChart from "@/components/charts/AdminBarChart";
 import AdminLineChart from "@/components/charts/AdminLineChart";
 import {
@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 export default function Index() {
+  const navigate = useNavigate();
   const counters = useMemo(
     () => ({
       new: 12,

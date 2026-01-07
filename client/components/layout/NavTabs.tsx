@@ -99,8 +99,8 @@ export default function NavTabs() {
   tabs.push(...filteredOtherTabs);
 
   return (
-    <nav className="sticky top-16 z-40 bg-[#f5f5f5] border-b">
-      <div className="mx-auto max-w-none w-full px-4 py-2">
+    <nav className="sticky top-16 z-40 bg-[#f5f5f5] border-b w-full">
+      <div className="w-full px-4 py-2">
         <ul className="flex flex-nowrap justify-center gap-2 whitespace-nowrap">
           {tabs.map((t) => (
             <li key={String(t.to)}>

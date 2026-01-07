@@ -7,9 +7,10 @@ interface Props {
   Icon: React.ComponentType<{ className?: string }>;
   accentClass: string;
   to?: string;
+  onCardClick?: () => void;
 }
 
-export default function StatusCard({ title, count, Icon, accentClass, to }: Props) {
+export default function StatusCard({ title, count, Icon, accentClass, to, onCardClick }: Props) {
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
   const ref = useRef<HTMLDivElement>(null);
   const nav = useNavigate();
@@ -22,7 +23,11 @@ export default function StatusCard({ title, count, Icon, accentClass, to }: Prop
     const id = Date.now();
     setRipples((r) => [...r, { id, x, y }]);
     setTimeout(() => setRipples((r) => r.filter((i) => i.id !== id)), 600);
-    if (to) nav(to);
+    if (onCardClick) {
+      onCardClick();
+    } else if (to) {
+      nav(to);
+    }
   };
 
   return (

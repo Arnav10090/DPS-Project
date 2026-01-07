@@ -6,12 +6,12 @@ import FooterAlerts from "@/components/common/FooterAlerts";
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <Header />
       <NavTabs />
       <AlertTicker />
-      <main className="flex-1 pb-24">
-        <div className="mx-auto max-w-[1400px] px-8 py-4">
+      <main className="flex-1 w-full overflow-hidden">
+        <div className="w-full h-full px-4 py-4 overflow-y-auto">
           <Outlet />
         </div>
       </main>

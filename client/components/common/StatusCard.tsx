@@ -7,10 +7,20 @@ interface Props {
   Icon: React.ComponentType<{ className?: string }>;
   accentClass: string;
   to?: string;
+  onCardClick?: () => void;
 }
 
-export default function StatusCard({ title, count, Icon, accentClass, to }: Props) {
-  const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+export default function StatusCard({
+  title,
+  count,
+  Icon,
+  accentClass,
+  to,
+  onCardClick,
+}: Props) {
+  const [ripples, setRipples] = useState<
+    { id: number; x: number; y: number }[]
+  >([]);
   const ref = useRef<HTMLDivElement>(null);
   const nav = useNavigate();
 
@@ -22,7 +32,11 @@ export default function StatusCard({ title, count, Icon, accentClass, to }: Prop
     const id = Date.now();
     setRipples((r) => [...r, { id, x, y }]);
     setTimeout(() => setRipples((r) => r.filter((i) => i.id !== id)), 600);
-    if (to) nav(to);
+    if (onCardClick) {
+      onCardClick();
+    } else if (to) {
+      nav(to);
+    }
   };
 
   return (
@@ -31,19 +45,30 @@ export default function StatusCard({ title, count, Icon, accentClass, to }: Prop
       role="button"
       tabIndex={0}
       onClick={onClick}
-      onKeyDown={(e) => e.key === "Enter" && onClick((e as unknown) as React.MouseEvent)}
-      className="relative group select-none rounded-card bg-white shadow-card hover:shadow-cardHover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary active:scale-[0.98]"
+      onKeyDown={(e) =>
+        e.key === "Enter" && onClick(e as unknown as React.MouseEvent)
+      }
+      className="relative group select-none rounded-lg bg-white border-2 border-gray-200 shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary active:scale-[0.98] cursor-pointer"
       aria-label={`${title} - ${count}`}
     >
-      <div className={`absolute inset-0 rounded-card bg-gradient-to-br ${accentClass} opacity-[0.06]`} />
-      <div className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="h-10 w-10 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: "rgba(0,0,0,0.25)" }}>
-            <Icon className="h-5 w-5 text-gray-700" />
+      <div
+        className={`absolute inset-0 rounded-lg bg-gradient-to-br ${accentClass} opacity-[0.08]`}
+      />
+      <div className="px-4 py-3 relative z-10 flex items-center gap-3">
+        <div
+          className="h-8 w-8 flex-shrink-0 rounded-full flex items-center justify-center text-white"
+          style={{ backgroundColor: "rgba(0,0,0,0.15)" }}
+        >
+          <Icon className="h-4 w-4 text-gray-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-xs font-medium text-gray-600 truncate">
+            {title}
           </div>
         </div>
-        <div className="mt-3 text-sm font-medium text-gray-500">{title}</div>
-        <div className="mt-1 text-3xl font-bold text-gray-900">{count}</div>
+        <div className="text-xl font-bold text-gray-900 flex-shrink-0">
+          {count}
+        </div>
       </div>
       {ripples.map((r) => (
         <span
@@ -52,7 +77,7 @@ export default function StatusCard({ title, count, Icon, accentClass, to }: Prop
           style={{ left: r.x - 8, top: r.y - 8 }}
         />
       ))}
-      <div className="absolute inset-0 rounded-card ring-1 ring-black/5 group-hover:translate-y-[-4px] transition-transform" />
+      <div className="absolute inset-0 rounded-lg ring-1 ring-black/5 group-hover:ring-1 group-hover:ring-black/10 transition-all" />
     </div>
   );
 }

@@ -1579,7 +1579,7 @@ export default function CreatePermit() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
+      <header className="mb-4 flex items-center justify-between w-full px-4 pt-6">
         <div>
           <h1 className="text-[20px] font-semibold">Work Permit Form</h1>
           <div className="text-sm text-gray-500">
@@ -1623,7 +1623,7 @@ export default function CreatePermit() {
           </div>
         </div>
       </header>
-      <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+      <div className="w-full px-4 pb-6 space-y-6">
         <ModernPagination
           steps={steps}
           currentStep={currentStep}
@@ -1635,7 +1635,7 @@ export default function CreatePermit() {
 
         {/* Company header, matching HT header style (moved below progress) */}
         <div className="bg-white mt-3">
-          <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
+          <div className="w-full px-4 py-4 flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
               <img
                 src="/placeholder.svg"

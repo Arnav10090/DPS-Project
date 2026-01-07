@@ -166,7 +166,7 @@ export default function WorkClosureRequest() {
   if (submitted) {
     return (
       <div className="pb-8">
-        <div className="bg-background p-6 rounded-md max-w-[1200px] mx-auto">
+        <div className="bg-background p-6 rounded-md w-full">
           <div className="bg-white rounded-md p-8 text-center shadow">
             <CheckCircle size={48} className="mx-auto text-emerald-500" />
             <h2 className="text-2xl font-semibold mt-4">
@@ -199,7 +199,7 @@ export default function WorkClosureRequest() {
       {/* Page banner (in addition to global header) */}
       <div className="w-full bg-gradient-to-r from-slate-800 to-blue-800 text-white shadow-md mb-6" />
 
-      <div className="max-w-[1200px] mx-auto px-6">
+      <div className="w-full px-6">
         {/* Work Summary Card */}
         <div className="mb-6">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 h-[219px] flex items-start">

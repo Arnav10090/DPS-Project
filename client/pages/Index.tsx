@@ -1,9 +1,9 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import StatusCard from "@/components/common/StatusCard";
 import ContractorStatsChart from "@/components/charts/ContractorStatsChart";
 import ContractorKpisChart from "@/components/charts/ContractorKpisChart";
-import RequesterBarChart from "@/components/charts/RequesterBarChart";
-import RequesterLineChart from "@/components/charts/RequesterLineChart";
+import RequesterMergedChart from "@/components/charts/RequesterMergedChart";
 import AdminBarChart from "@/components/charts/AdminBarChart";
 import AdminLineChart from "@/components/charts/AdminLineChart";
 import {
@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 export default function Index() {
+  const navigate = useNavigate();
   const counters = useMemo(
     () => ({
       new: 12,
@@ -286,50 +287,78 @@ export default function Index() {
       <section
         aria-label="Status cards"
         className={`grid gap-4 ${
-          isAdministrator 
-            ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7" 
-            : isRequester 
-            ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4" 
-            : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
+          isAdministrator
+            ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7"
+            : isRequester
+              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4"
+              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
         }`}
       >
-        {statusCards.map((card, index) => (
-          <StatusCard
-            key={index}
-            title={card.title}
-            count={card.count}
-            Icon={card.Icon}
-            accentClass={card.accentClass}
-            to={card.to}
-          />
-        ))}
+        {statusCards.map((card, index) => {
+          // Create filter-based navigation for requester/approver/safety KPI cards
+          const handleCardClick = () => {
+            let filterParam = "";
+            if (isRequester) {
+              const filterMap: Record<string, string> = {
+                "All-Permits": "all",
+                "Approved-Permits": "approved",
+                "Rejected-Permits": "rejected",
+                "Permits-Under-Hold": "hold",
+              };
+              filterParam = filterMap[card.title.replace(/\s+/g, "-")] || "all";
+            } else if (isApprover || isSafetyOfficer) {
+              const filterMap: Record<string, string> = {
+                "New-Permits": "new",
+                "Approved-Permits": "approved",
+                "Pending-Approval": "pending",
+                "Returned-Permits": "returned",
+                "Permits-Under-Hold": "hold",
+                "Rejected-Permits": "rejected",
+              };
+              filterParam = filterMap[card.title.replace(/\s+/g, "-")] || "all";
+            }
+
+            if (filterParam && !isAdministrator) {
+              navigate(`/overall-status?filter=${filterParam}`);
+            } else if (card.to) {
+              navigate(card.to);
+            }
+          };
+
+          return (
+            <StatusCard
+              key={index}
+              title={card.title}
+              count={card.count}
+              Icon={card.Icon}
+              accentClass={card.accentClass}
+              to={isAdministrator ? card.to : undefined}
+              onCardClick={!isAdministrator ? handleCardClick : undefined}
+            />
+          );
+        })}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <section className="w-full">
         {isRequester ? (
-          // Requester view - components handle their own styling
-          <>
-            <div className="lg:col-span-2">
-              <RequesterBarChart />
-            </div>
-            <div>
-              <RequesterLineChart />
-            </div>
-          </>
+          // Requester view - merged chart component handles its own styling
+          <div className="w-full">
+            <RequesterMergedChart />
+          </div>
         ) : isAdministrator ? (
           // Administrator view - components handle their own styling
-          <>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
             <div className="lg:col-span-2">
               <AdminBarChart />
             </div>
             <div>
               <AdminLineChart />
             </div>
-          </>
+          </div>
         ) : (
           // Contractor/other roles view - dashboard provides styling
-          <>
-            <div className="lg:col-span-2 bg-white rounded-card shadow-card">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+            <div className="bg-white rounded-card shadow-card">
               <div className="bg-[#f44336] text-white px-4 py-2 rounded-t-card font-medium">
                 Contractor Statistics
               </div>
@@ -352,7 +381,7 @@ export default function Index() {
                 <ContractorKpisChart />
               </div>
             </div>
-          </>
+          </div>
         )}
       </section>
     </div>

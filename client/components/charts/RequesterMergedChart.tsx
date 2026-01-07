@@ -354,7 +354,7 @@ const RequesterMergedChart: React.FC = () => {
   return (
     <div className="w-full bg-white rounded-lg shadow-sm">
       <div className="bg-red-500 text-white px-6 py-4 rounded-t-lg">
-        <h2 className="text-lg font-semibold">Requester Statistics & KPIs</h2>
+        <h2 className="text-lg font-semibold">Requester Statistics</h2>
       </div>
 
       <div className="p-6">

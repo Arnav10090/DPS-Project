@@ -100,10 +100,10 @@ export default function NavTabs() {
 
   return (
     <nav className="sticky top-16 z-40 bg-[#f5f5f5] border-b w-full">
-      <div className="w-full px-4 py-2">
-        <ul className="flex flex-nowrap justify-center gap-2 whitespace-nowrap">
+      <div className="w-full px-0 py-0">
+        <ul className="flex w-full h-full">
           {tabs.map((t) => (
-            <li key={String(t.to)}>
+            <li key={String(t.to)} className="flex-1 min-w-0">
               {inRouter ? (
                 <NavLink
                   to={t.to}
@@ -132,22 +132,22 @@ export default function NavTabs() {
                     const active =
                       isActive || manualActive || isApprovalQueueActive;
                     return [
-                      "inline-flex items-center rounded-full px-4 py-2 text-[14px] transition-colors",
+                      "flex items-center justify-center w-full h-full px-2 py-3 text-[14px] transition-colors border-r",
                       active
                         ? "bg-[#4CAF50] text-white shadow"
-                        : "bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 border",
+                        : "bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-gray-200",
                     ].join(" ");
                   }}
                   aria-label={typeof t.label === "string" ? t.label : undefined}
                 >
-                  {t.label}
+                  <span className="truncate">{t.label}</span>
                 </NavLink>
               ) : (
                 <a
                   href={t.to}
-                  className="inline-flex items-center rounded-full px-4 py-2 text-sm bg-white text-gray-700 border"
+                  className="flex items-center justify-center w-full h-full px-2 py-3 text-sm bg-white text-gray-700 border border-gray-200 border-r"
                 >
-                  {t.label}
+                  <span className="truncate">{t.label}</span>
                 </a>
               )}
             </li>

@@ -339,31 +339,26 @@ export default function Index() {
         })}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <section className="w-full">
         {isRequester ? (
-          // Requester view - components handle their own styling
-          <>
-            <div className="lg:col-span-2">
-              <RequesterBarChart />
-            </div>
-            <div>
-              <RequesterLineChart />
-            </div>
-          </>
+          // Requester view - merged chart component handles its own styling
+          <div className="w-full">
+            <RequesterMergedChart />
+          </div>
         ) : isAdministrator ? (
           // Administrator view - components handle their own styling
-          <>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
             <div className="lg:col-span-2">
               <AdminBarChart />
             </div>
             <div>
               <AdminLineChart />
             </div>
-          </>
+          </div>
         ) : (
           // Contractor/other roles view - dashboard provides styling
-          <>
-            <div className="lg:col-span-2 bg-white rounded-card shadow-card">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+            <div className="bg-white rounded-card shadow-card">
               <div className="bg-[#f44336] text-white px-4 py-2 rounded-t-card font-medium">
                 Contractor Statistics
               </div>
@@ -386,7 +381,7 @@ export default function Index() {
                 <ContractorKpisChart />
               </div>
             </div>
-          </>
+          </div>
         )}
       </section>
     </div>

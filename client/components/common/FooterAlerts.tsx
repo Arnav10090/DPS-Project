@@ -50,7 +50,7 @@ export default function FooterAlerts() {
 
   return (
     <div className="w-full bg-[#fff3cd] border-t">
-      <div className="mx-auto max-w-7xl px-4 py-2">
+      <div className="w-full px-4 py-2">
         <button
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center justify-between gap-4 text-left"

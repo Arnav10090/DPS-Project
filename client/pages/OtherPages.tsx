@@ -1,5 +1,6 @@
 import React from "react";
 import { Wifi } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import {
   PermitItem,
   PermitStatusTable,
@@ -154,6 +155,7 @@ function makeMockData(count = 24): PermitItem[] {
 }
 
 export function OverallStatus() {
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<PermitItem[]>([]);
   const [sort, setSort] = React.useState<SortState | null>({
@@ -184,11 +186,35 @@ export function OverallStatus() {
         );
       }
 
+      // Apply filter from KPI card click
+      const filterParam = searchParams.get("filter");
+      if (filterParam) {
+        mockData = mockData.filter((item) => {
+          switch (filterParam) {
+            case "approved":
+              return item.status === "approved";
+            case "pending":
+              return item.status === "pending";
+            case "rejected":
+              return item.status === "rejected";
+            case "new":
+              return item.status === "pending"; // New = pending approval
+            case "returned":
+              return item.status === "in_progress"; // Returned = in progress
+            case "hold":
+              return item.status === "in_progress"; // Hold = in progress
+            case "all":
+            default:
+              return true;
+          }
+        });
+      }
+
       setData(mockData);
       setLoading(false);
     }, 600);
     return () => clearTimeout(t);
-  }, [role, currentUserName]);
+  }, [role, currentUserName, searchParams]);
 
   return (
     <section className="space-y-4">

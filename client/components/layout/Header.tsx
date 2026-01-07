@@ -2,6 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ROLE_META, type Role } from "@/lib/roles";
+import { User } from "lucide-react";
 
 // Helper function to get role display info
 const getRoleInfo = (role: string | null) => {
@@ -52,7 +53,7 @@ export default function Header() {
         <h1 className="text-center text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
           <p>Digital Permit System (DPS)</p>
         </h1>
-        <div className="flex items-center gap-4 min-w-[220px] justify-end">
+        <div className="flex items-center gap-4 min-w-[280px] justify-end">
           <span className="text-sm text-gray-600" aria-label="Current date">
             {today}
           </span>
@@ -67,6 +68,12 @@ export default function Header() {
               <span className={`text-xs font-medium ${roleInfo.textColor}`}>
                 {roleInfo.label}
               </span>
+            </div>
+            <div className="h-5 w-px bg-gray-300 mx-1" />
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white cursor-pointer hover:shadow-md transition-shadow" title="User Profile" aria-label="User Profile">
+                <User className="h-4 w-4" />
+              </div>
             </div>
             <div className="h-5 w-px bg-gray-300 mx-1" />
             <div className="flex items-center gap-2" aria-label="Hitachi logo">

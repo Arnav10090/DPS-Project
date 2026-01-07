@@ -54,17 +54,17 @@ export default function StatusCard({
       <div
         className={`absolute inset-0 rounded-lg bg-gradient-to-br ${accentClass} opacity-[0.08]`}
       />
-      <div className="p-5 relative z-10">
-        <div className="flex items-center justify-between">
-          <div
-            className="h-10 w-10 rounded-full flex items-center justify-center text-white"
-            style={{ backgroundColor: "rgba(0,0,0,0.15)" }}
-          >
-            <Icon className="h-5 w-5 text-gray-700" />
-          </div>
+      <div className="px-4 py-3 relative z-10 flex items-center gap-3">
+        <div
+          className="h-8 w-8 flex-shrink-0 rounded-full flex items-center justify-center text-white"
+          style={{ backgroundColor: "rgba(0,0,0,0.15)" }}
+        >
+          <Icon className="h-4 w-4 text-gray-700" />
         </div>
-        <div className="mt-4 text-sm font-medium text-gray-600">{title}</div>
-        <div className="mt-2 text-3xl font-bold text-gray-900">{count}</div>
+        <div className="flex-1 min-w-0">
+          <div className="text-xs font-medium text-gray-600 truncate">{title}</div>
+        </div>
+        <div className="text-xl font-bold text-gray-900 flex-shrink-0">{count}</div>
       </div>
       {ripples.map((r) => (
         <span

@@ -10,8 +10,8 @@ export default function Layout() {
       <Header />
       <NavTabs />
       <AlertTicker />
-      <main className="flex-1 pb-24">
-        <div className="mx-auto max-w-[1400px] px-8 py-4">
+      <main className="flex-1 pb-24 w-full">
+        <div className="w-full px-4 py-4">
           <Outlet />
         </div>
       </main>

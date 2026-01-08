@@ -379,7 +379,10 @@ const RequesterMergedChart: React.FC = () => {
                 selectedFilter === "last12months" ? "default" : "outline"
               }
               size="sm"
-              onClick={() => setSelectedFilter("last12months")}
+              onClick={() => {
+                setSelectedFilter("last12months");
+                setShowCustomDateInputs(false);
+              }}
               className={
                 selectedFilter === "last12months"
                   ? "bg-red-500 hover:bg-red-600 text-white"
@@ -391,7 +394,10 @@ const RequesterMergedChart: React.FC = () => {
             <Button
               variant={selectedFilter === "last6months" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedFilter("last6months")}
+              onClick={() => {
+                setSelectedFilter("last6months");
+                setShowCustomDateInputs(false);
+              }}
               className={
                 selectedFilter === "last6months"
                   ? "bg-red-500 hover:bg-red-600 text-white"
@@ -403,7 +409,10 @@ const RequesterMergedChart: React.FC = () => {
             <Button
               variant={selectedFilter === "last5years" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedFilter("last5years")}
+              onClick={() => {
+                setSelectedFilter("last5years");
+                setShowCustomDateInputs(false);
+              }}
               className={
                 selectedFilter === "last5years"
                   ? "bg-red-500 hover:bg-red-600 text-white"
@@ -415,7 +424,10 @@ const RequesterMergedChart: React.FC = () => {
             <Button
               variant={selectedFilter === "alltime" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedFilter("alltime")}
+              onClick={() => {
+                setSelectedFilter("alltime");
+                setShowCustomDateInputs(false);
+              }}
               className={
                 selectedFilter === "alltime"
                   ? "bg-red-500 hover:bg-red-600 text-white"
@@ -482,7 +494,10 @@ const RequesterMergedChart: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
                     <span>Last 12 Months</span>
                     <button
-                      onClick={() => setSelectedFilter("last12months")}
+                      onClick={() => {
+                setSelectedFilter("last12months");
+                setShowCustomDateInputs(false);
+              }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove last 12 months filter"
                     >
@@ -494,7 +509,10 @@ const RequesterMergedChart: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
                     <span>Last 6 Months</span>
                     <button
-                      onClick={() => setSelectedFilter("last12months")}
+                      onClick={() => {
+                setSelectedFilter("last12months");
+                setShowCustomDateInputs(false);
+              }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove last 6 months filter"
                     >
@@ -506,7 +524,10 @@ const RequesterMergedChart: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
                     <span>Last 5 Years</span>
                     <button
-                      onClick={() => setSelectedFilter("last12months")}
+                      onClick={() => {
+                setSelectedFilter("last12months");
+                setShowCustomDateInputs(false);
+              }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove last 5 years filter"
                     >
@@ -518,7 +539,10 @@ const RequesterMergedChart: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
                     <span>All Time</span>
                     <button
-                      onClick={() => setSelectedFilter("last12months")}
+                      onClick={() => {
+                setSelectedFilter("last12months");
+                setShowCustomDateInputs(false);
+              }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove all time filter"
                     >

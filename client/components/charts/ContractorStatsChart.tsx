@@ -19,7 +19,7 @@ const data = [
 
 export default function ContractorStatsChart() {
   return (
-    <div className="w-full h-80">
+    <div className="w-full h-[450px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

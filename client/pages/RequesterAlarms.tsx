@@ -376,14 +376,6 @@ export default function RequesterAlarms() {
                     </Button>
                   </>
                 )}
-                <div className="ml-auto flex items-center gap-2">
-                  <Button variant="ghost" size="sm" onClick={markAllRead}>
-                    Mark All as Read
-                  </Button>
-                  <Button variant="destructive" size="sm" onClick={clearAll}>
-                    Clear All
-                  </Button>
-                </div>
               </div>
             </CardHeader>
 

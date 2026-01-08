@@ -101,7 +101,10 @@ export function ModernPagination({
           </div>
         </div>
 
-        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${steps.length}, 1fr)` }}>
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: `repeat(${steps.length}, 1fr)` }}
+        >
           {normalizedSteps.map((step, index) => (
             <div
               key={index}

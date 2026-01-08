@@ -261,7 +261,16 @@ export function OverallStatus() {
       setPage(1); // Reset to first page when filters change
     }, 600);
     return () => clearTimeout(t);
-  }, [role, currentUserName, statusFilter, plantFilter, deptFilter, debouncedSearch, dateFrom, dateTo]);
+  }, [
+    role,
+    currentUserName,
+    statusFilter,
+    plantFilter,
+    deptFilter,
+    debouncedSearch,
+    dateFrom,
+    dateTo,
+  ]);
 
   // Debounce search
   React.useEffect(() => {
@@ -371,7 +380,11 @@ export function OverallStatus() {
             ))}
           </div>
         ) : (
-          <PermitStatusTable data={paginatedData} sort={sort} setSort={setSort} />
+          <PermitStatusTable
+            data={paginatedData}
+            sort={sort}
+            setSort={setSort}
+          />
         )}
       </div>
 

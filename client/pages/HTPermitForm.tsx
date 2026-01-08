@@ -553,7 +553,10 @@ export default function HTPermitForm() {
                     <input
                       value={initial.certificateNo || ""}
                       onChange={(e) => {
-                        const newData = { ...initial, certificateNo: e.target.value };
+                        const newData = {
+                          ...initial,
+                          certificateNo: e.target.value,
+                        };
                         onSaveDraft(newData);
                       }}
                       className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
@@ -566,7 +569,10 @@ export default function HTPermitForm() {
                     <input
                       value={initial.permitNo || ""}
                       onChange={(e) => {
-                        const newData = { ...initial, permitNo: e.target.value };
+                        const newData = {
+                          ...initial,
+                          permitNo: e.target.value,
+                        };
                         onSaveDraft(newData);
                       }}
                       className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"

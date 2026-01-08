@@ -216,35 +216,52 @@ export function OverallStatus() {
         );
       }
 
-      // Apply filter from KPI card click
-      const filterParam = searchParams.get("filter");
-      if (filterParam) {
-        mockData = mockData.filter((item) => {
-          switch (filterParam) {
-            case "approved":
-              return item.status === "approved";
-            case "pending":
-              return item.status === "pending";
-            case "rejected":
-              return item.status === "rejected";
-            case "new":
-              return item.status === "pending"; // New = pending approval
-            case "returned":
-              return item.status === "in_progress"; // Returned = in progress
-            case "hold":
-              return item.status === "in_progress"; // Hold = in progress
-            case "all":
-            default:
-              return true;
-          }
-        });
+      // Apply status filter
+      if (statusFilter) {
+        mockData = mockData.filter((item) => item.status === statusFilter);
+      }
+
+      // Apply plant filter
+      if (plantFilter) {
+        mockData = mockData.filter((item) => item.plant === plantFilter);
+      }
+
+      // Apply department filter
+      if (deptFilter) {
+        mockData = mockData.filter((item) => item.dept === deptFilter);
+      }
+
+      // Apply search filter
+      if (debouncedSearch) {
+        mockData = mockData.filter(
+          (item) =>
+            item.permitNo
+              .toLowerCase()
+              .includes(debouncedSearch.toLowerCase()) ||
+            item.requester
+              .toLowerCase()
+              .includes(debouncedSearch.toLowerCase()),
+        );
+      }
+
+      // Apply date filters
+      if (dateFrom) {
+        mockData = mockData.filter(
+          (item) => new Date(item.date) >= new Date(dateFrom),
+        );
+      }
+      if (dateTo) {
+        mockData = mockData.filter(
+          (item) => new Date(item.date) <= new Date(dateTo),
+        );
       }
 
       setData(mockData);
       setLoading(false);
+      setPage(1); // Reset to first page when filters change
     }, 600);
     return () => clearTimeout(t);
-  }, [role, currentUserName, searchParams]);
+  }, [role, currentUserName, statusFilter, plantFilter, deptFilter, debouncedSearch, dateFrom, dateTo]);
 
   return (
     <section className="space-y-4">

@@ -811,13 +811,35 @@ export default function ApproverPermitDetails() {
                       />
                       <button
                         className="px-3 py-1 rounded bg-white border text-sm"
-                        onClick={() => {
+                        onClick={async () => {
                           const v = newApproverComment.trim();
                           if (!v) return;
                           const prev = form.approverCustomComments || [];
                           const next = [...prev, { text: v, checked: false }];
                           update({ approverCustomComments: next });
                           setNewApproverComment("");
+
+                          // Send email notification to requester and safety officer
+                          try {
+                            const recipients = getEmailsByNames([
+                              form.requesterName,
+                              form.safetyOfficerName,
+                            ]);
+
+                            if (recipients.length > 0) {
+                              await sendCommentNotification({
+                                senderName: form.approverName || "Approver",
+                                senderRole: "approver",
+                                permitType: "work",
+                                permitId: form.permitNumber,
+                                comment: v,
+                                recipients,
+                              });
+                              toast.success("Comment sent to Requester and Safety Officer");
+                            }
+                          } catch (error) {
+                            console.error("Failed to send comment notification:", error);
+                          }
                         }}
                       >
                         Add

@@ -526,7 +526,7 @@ export default function GasPermit() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
+      <header className="mb-4 flex items-center justify-between w-full px-4 pt-6">
         <div>
           <h1 className="text-[20px] font-semibold">
             Gas Line Work Permit Form
@@ -591,7 +591,7 @@ export default function GasPermit() {
           )}
         </div>
       </header>
-      <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+      <div className="w-full px-4 pb-6 space-y-6">
         {!isRestricted && (
           <ModernPagination
             steps={uiSteps.map((s) => s.name)}

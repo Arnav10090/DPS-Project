@@ -122,7 +122,7 @@ export default function PermitFilters({
               type="date"
               value={dateFrom || ""}
               onChange={(e) => setDateFrom(e.target.value || null)}
-              className="h-9 w-32 min-w-0 text-xs"
+              className="h-9 w-40 min-w-0 text-xs"
               aria-label="From date"
             />
           </div>
@@ -133,7 +133,7 @@ export default function PermitFilters({
               type="date"
               value={dateTo || ""}
               onChange={(e) => setDateTo(e.target.value || null)}
-              className="h-9 w-32 min-w-0 text-xs"
+              className="h-9 w-40 min-w-0 text-xs"
               aria-label="To date"
             />
           </div>
@@ -142,7 +142,7 @@ export default function PermitFilters({
             value={plantFilter ?? "__all__"}
             onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
           >
-            <SelectTrigger className="h-9 w-36 text-sm">
+            <SelectTrigger className="h-9 w-48 text-sm">
               <SelectValue placeholder="Plant" />
             </SelectTrigger>
             <SelectContent>
@@ -159,7 +159,7 @@ export default function PermitFilters({
             value={statusFilter ?? "__all__"}
             onValueChange={(v) => setStatusFilter(v === "__all__" ? null : v)}
           >
-            <SelectTrigger className="h-9 w-36 text-sm">
+            <SelectTrigger className="h-9 w-48 text-sm">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>

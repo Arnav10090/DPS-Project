@@ -11,6 +11,9 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { sendPermitSubmissionNotification, sendCommentNotification } from "@/lib/email-service";
+import { getEmailsByNames } from "@/lib/user-lookup";
+import { toast } from "sonner";
 
 type PermitType = "hot" | "cold" | "other";
 

@@ -521,54 +521,6 @@ export default function HTPermitForm() {
           )}
         </div>
       </header>
-      <div className="bg-white mt-3">
-        <div className="w-full px-4 py-4 flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img
-              src="/placeholder.svg"
-              alt="AM/NS INDIA logo"
-              className="h-[60px] w-auto"
-            />
-          </div>
-          <div className="text-center">
-            <div className="font-bold text-gray-900">
-              ArcelorMittal Nippon Steel India Limited
-            </div>
-            <div className="text-gray-600">HAZIRA</div>
-            <div className="mt-1 text-[20px] font-bold text-gray-900">
-              ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 w-[240px]">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Certificate No.
-              </label>
-              <input
-                value={initial.certificateNo || ""}
-                onChange={(e) => {
-                  const newData = { ...initial, certificateNo: e.target.value };
-                  onSaveDraft(newData);
-                }}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Permit No.
-              </label>
-              <input
-                value={initial.permitNo || ""}
-                onChange={(e) => {
-                  const newData = { ...initial, permitNo: e.target.value };
-                  onSaveDraft(newData);
-                }}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="w-full px-4 pb-6 space-y-6">
         <FormWizard
           initial={initial}
@@ -576,6 +528,54 @@ export default function HTPermitForm() {
           onSubmit={onSubmit}
           onPreviewRequest={() => setShowPreview(true)}
         />
+        <div className="bg-white">
+          <div className="w-full px-4 py-4 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg"
+                alt="AM/NS INDIA logo"
+                className="h-[60px] w-auto"
+              />
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-gray-900">
+                ArcelorMittal Nippon Steel India Limited
+              </div>
+              <div className="text-gray-600">HAZIRA</div>
+              <div className="mt-1 text-[20px] font-bold text-gray-900">
+                ADDITIONAL WORK PERMIT FOR HIGH TENSION LINE/Equipment
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 w-[240px]">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Certificate No.
+                </label>
+                <input
+                  value={initial.certificateNo || ""}
+                  onChange={(e) => {
+                    const newData = { ...initial, certificateNo: e.target.value };
+                    onSaveDraft(newData);
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Permit No.
+                </label>
+                <input
+                  value={initial.permitNo || ""}
+                  onChange={(e) => {
+                    const newData = { ...initial, permitNo: e.target.value };
+                    onSaveDraft(newData);
+                  }}
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="text-xs text-gray-500">
           Use Ctrl/Cmd+P to generate a print-ready PDF.
         </div>

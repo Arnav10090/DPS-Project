@@ -338,8 +338,31 @@ export default function AdminUsers() {
     setImportResults([]);
 
     try {
-      const text = await file.text();
-      const rows = parseCSV(text);
+      let rows: string[][] = [];
+
+      if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
+        // Parse XLSX file
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        if (!worksheet) {
+          throw new Error("No worksheet found in Excel file");
+        }
+
+        // Convert sheet to 2D array of strings
+        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        rows = data.map((row: unknown) => {
+          if (Array.isArray(row)) {
+            return row.map((cell) => (cell === null || cell === undefined ? "" : String(cell)));
+          }
+          return [];
+        });
+      } else {
+        // Parse CSV file
+        const text = await file.text();
+        rows = parseCSV(text);
+      }
 
       if (rows.length < 2) {
         setImportResults([

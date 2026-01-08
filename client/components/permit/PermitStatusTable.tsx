@@ -21,7 +21,6 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import PermitFilters from "@/components/permit/PermitFilters";
 
 export type PermitStatus = "approved" | "pending" | "rejected" | "in_progress" | "closed";
 

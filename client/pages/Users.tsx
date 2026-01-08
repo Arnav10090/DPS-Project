@@ -388,7 +388,22 @@ export default function AdminUsers() {
           >
             Add New User
           </Button>
-          <Button variant="outline">Bulk Import</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setImportResults([]);
+              fileInputRef.current?.click();
+            }}
+          >
+            Bulk Import
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv,.xlsx"
+            onChange={handleFileImport}
+            className="hidden"
+          />
           <Button variant="outline">Export User List</Button>
           <Button variant="ghost">User Activity Report</Button>
         </div>

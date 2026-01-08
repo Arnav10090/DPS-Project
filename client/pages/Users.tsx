@@ -746,6 +746,131 @@ export default function AdminUsers() {
         </DialogContent>
       </Dialog>
 
+      {/* Edit User Dialog */}
+      <Dialog open={showEdit} onOpenChange={setShowEdit}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+          </DialogHeader>
+          {editFormData && (
+            <form className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Full name</label>
+                  <Input
+                    value={editFormData.name}
+                    onChange={(e) =>
+                      setEditFormData({ ...editFormData, name: e.target.value })
+                    }
+                    placeholder="Full name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Employee ID</label>
+                  <Input
+                    value={editFormData.employeeId}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        employeeId: e.target.value,
+                      })
+                    }
+                    placeholder="Employee ID"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Email</label>
+                  <Input
+                    value={editFormData.email}
+                    onChange={(e) =>
+                      setEditFormData({ ...editFormData, email: e.target.value })
+                    }
+                    placeholder="Email"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Department</label>
+                  <Select
+                    value={editFormData.department}
+                    onValueChange={(value) =>
+                      setEditFormData({
+                        ...editFormData,
+                        department: value,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments.map((d) => (
+                        <SelectItem key={d} value={d}>
+                          {d}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Role</label>
+                  <Select
+                    value={editFormData.role}
+                    onValueChange={(value) =>
+                      setEditFormData({
+                        ...editFormData,
+                        role: value,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Requester">Requester</SelectItem>
+                      <SelectItem value="Approver">Approver</SelectItem>
+                      <SelectItem value="Safety Officer">Safety Officer</SelectItem>
+                      <SelectItem value="Administrator">Administrator</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Status</label>
+                <Select
+                  value={editFormData.status}
+                  onValueChange={(value) =>
+                    setEditFormData({
+                      ...editFormData,
+                      status: value as "active" | "inactive",
+                    })
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <DialogFooter>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={() => setShowEdit(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSaveEditUser}>Save Changes</Button>
+                </div>
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Bulk Import Results Modal */}
       <Dialog
         open={importResults.length > 0}

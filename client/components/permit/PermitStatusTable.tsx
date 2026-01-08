@@ -54,9 +54,6 @@ export type SortKey = keyof Pick<
   | "date"
   | "permitNo"
   | "requester"
-  | "approver1"
-  | "approver2"
-  | "safetyApprover"
   | "returnDate"
 >;
 

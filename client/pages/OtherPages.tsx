@@ -1,6 +1,6 @@
 import React from "react";
 import { Wifi } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   PermitItem,
   PermitStatusTable,
@@ -14,6 +14,7 @@ import ApproverAlarms from "./ApproverAlarms";
 import SafetyAlarms from "./SafetyAlarms.tsx";
 import AdminAlarms from "./AdminAlarms";
 import { Role } from "@/lib/roles"; // Add this line
+import PermitFilters from "@/components/permit/PermitFilters";
 
 function makeMockData(count = 24): PermitItem[] {
   const plants = ["HSM-1", "HSM-2", "CRM", "BOF", "DRI", "Sinter", "Utilities"];

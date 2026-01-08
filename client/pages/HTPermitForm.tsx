@@ -521,7 +521,7 @@ export default function HTPermitForm() {
           )}
         </div>
       </header>
-      <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+      <div className="w-full px-4 pb-6 space-y-6">
         <FormWizard
           initial={initial}
           onSaveDraft={onSaveDraft}

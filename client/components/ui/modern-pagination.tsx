@@ -101,12 +101,12 @@ export function ModernPagination({
           </div>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${steps.length}, 1fr)` }}>
           {normalizedSteps.map((step, index) => (
             <div
               key={index}
               className={`
-                relative p-3 rounded-lg border-2 transition-all duration-300 cursor-pointer hover:shadow-md flex-shrink-0
+                relative p-3 rounded-lg border-2 transition-all duration-300 cursor-pointer hover:shadow-md
                 ${
                   index === currentStep
                     ? "border-blue-500 bg-blue-50 shadow-md"
@@ -115,7 +115,6 @@ export function ModernPagination({
                       : "border-gray-200 bg-gray-50 hover:border-gray-300"
                 }
               `}
-              style={{ minWidth: "120px" }}
               onClick={() => handleStepClick(index)}
             >
               <div className="flex flex-col items-center gap-2">

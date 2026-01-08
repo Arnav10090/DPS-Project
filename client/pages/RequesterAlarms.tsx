@@ -270,7 +270,7 @@ export default function RequesterAlarms() {
                   </div>
 
                   {/* Status Dropdown */}
-                  <div className="w-64">
+                  <div className="w-56">
                     <label className="block text-xs font-semibold text-slate-700 mb-1.5">Status</label>
                     <div className="relative">
                       <select
@@ -287,6 +287,16 @@ export default function RequesterAlarms() {
                       </select>
                       <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500" />
                     </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2 ml-auto">
+                    <Button variant="ghost" size="sm" onClick={markAllRead} className="h-9">
+                      Mark All as Read
+                    </Button>
+                    <Button variant="destructive" size="sm" onClick={clearAll} className="h-9">
+                      Clear All
+                    </Button>
                   </div>
                 </div>
               </div>

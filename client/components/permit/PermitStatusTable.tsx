@@ -27,7 +27,8 @@ export type PermitStatus =
   | "pending"
   | "rejected"
   | "in_progress"
-  | "closed";
+  | "closed"
+  | "new";
 
 export type PermitItem = {
   id: string;

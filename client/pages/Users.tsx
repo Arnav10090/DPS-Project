@@ -366,6 +366,154 @@ export default function AdminUsers() {
     );
   }
 
+  // Export users as CSV
+  function exportAsCSV(usersToExport: User[]) {
+    const headers = [
+      "ID",
+      "Name",
+      "Employee ID",
+      "Email",
+      "Department",
+      "Role",
+      "Status",
+      "Last Login",
+    ];
+
+    const csvContent = [
+      headers.join(","),
+      ...usersToExport.map((u) =>
+        [
+          u.id,
+          `"${u.name}"`,
+          u.employeeId,
+          u.email,
+          u.department,
+          u.role,
+          u.status,
+          u.lastLogin
+            ? format(new Date(u.lastLogin), "yyyy-MM-dd HH:mm:ss")
+            : "",
+        ].join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `users_${format(new Date(), "yyyy-MM-dd_HHmmss")}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+
+  // Export users as XLSX
+  function exportAsXLSX(usersToExport: User[]) {
+    const data = [
+      [
+        "ID",
+        "Name",
+        "Employee ID",
+        "Email",
+        "Department",
+        "Role",
+        "Status",
+        "Last Login",
+      ],
+      ...usersToExport.map((u) => [
+        u.id,
+        u.name,
+        u.employeeId,
+        u.email,
+        u.department,
+        u.role,
+        u.status,
+        u.lastLogin ? format(new Date(u.lastLogin), "yyyy-MM-dd HH:mm:ss") : "",
+      ]),
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+    XLSX.writeFile(
+      workbook,
+      `users_${format(new Date(), "yyyy-MM-dd_HHmmss")}.xlsx`
+    );
+  }
+
+  // Handle export users
+  function handleExportUsers(format: "csv" | "xlsx") {
+    const usersToExport =
+      exportType === "selected"
+        ? filtered.filter((u) => selected[u.id])
+        : filtered;
+
+    if (usersToExport.length === 0) {
+      alert("No users to export");
+      return;
+    }
+
+    if (format === "csv") {
+      exportAsCSV(usersToExport);
+    } else {
+      exportAsXLSX(usersToExport);
+    }
+
+    setShowExportFormat(false);
+    setExportType("all");
+  }
+
+  // Handle bulk actions
+  function handleBulkAction(action: string) {
+    const selectedUsers = filtered.filter((u) => selected[u.id]);
+
+    if (selectedUsers.length === 0) {
+      alert("Please select at least one user");
+      return;
+    }
+
+    switch (action) {
+      case "activate":
+        setUsers((prev) =>
+          prev.map((u) =>
+            selectedUsers.some((su) => su.id === u.id)
+              ? { ...u, status: "active" }
+              : u
+          )
+        );
+        setSelected({});
+        break;
+
+      case "deactivate":
+        setUsers((prev) =>
+          prev.map((u) =>
+            selectedUsers.some((su) => su.id === u.id)
+              ? { ...u, status: "inactive" }
+              : u
+          )
+        );
+        setSelected({});
+        break;
+
+      case "change-dept":
+        setShowChangeDept(true);
+        break;
+
+      case "export":
+        setExportType("selected");
+        setShowExportFormat(true);
+        break;
+
+      case "notify":
+        alert(
+          `Notifications sent to ${selectedUsers.length} user(s): ${selectedUsers.map((u) => u.email).join(", ")}`
+        );
+        setSelected({});
+        break;
+    }
+  }
+
   // Handle file import
   async function handleFileImport(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];

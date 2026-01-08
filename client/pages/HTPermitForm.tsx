@@ -530,7 +530,7 @@ export default function HTPermitForm() {
             onPreviewRequest={() => setShowPreview(true)}
           />
         </div>
-        <div className="bg-white mt-0">
+        <div className="bg-white mt-3">
           <div className="w-full px-4 py-4 flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
               <img

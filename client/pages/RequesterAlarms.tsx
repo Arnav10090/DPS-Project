@@ -108,14 +108,14 @@ const SAMPLE: NotificationItem[] = [
   }
 ];
 
-const TYPE_CONFIG: Record<NotificationType, { color: string; icon: any; label: string }> = {
-  approved: { color: "border-l-4 border-green-600", icon: CheckCircle, label: "Approved" },
-  rejected: { color: "border-l-4 border-red-600", icon: XCircle, label: "Rejected" },
-  under_review: { color: "border-l-4 border-blue-600", icon: Clock, label: "Under Review" },
-  closed: { color: "border-l-4 border-gray-600", icon: FileText, label: "Closed" },
-  action_required: { color: "border-l-4 border-orange-600", icon: AlertCircle, label: "Action Required" },
-  expiring: { color: "border-l-4 border-yellow-600", icon: Clock, label: "Expiring" },
-  system: { color: "border-l-4 border-slate-400", icon: Bell, label: "System" },
+const TYPE_CONFIG: Record<NotificationType, { color: string; icon: any; label: string; alarmType: string }> = {
+  approved: { color: "border-l-4 border-green-600", icon: CheckCircle, label: "Approved", alarmType: "Permit Approved" },
+  rejected: { color: "border-l-4 border-red-600", icon: XCircle, label: "Rejected", alarmType: "Permit Rejected" },
+  under_review: { color: "border-l-4 border-blue-600", icon: Clock, label: "Under Review", alarmType: "Permit Review" },
+  closed: { color: "border-l-4 border-gray-600", icon: FileText, label: "Closed", alarmType: "Permit Closure" },
+  action_required: { color: "border-l-4 border-orange-600", icon: AlertCircle, label: "Action Required", alarmType: "Action Required" },
+  expiring: { color: "border-l-4 border-yellow-600", icon: Clock, label: "Expiring", alarmType: "Permit Expiring" },
+  system: { color: "border-l-4 border-slate-400", icon: Bell, label: "System", alarmType: "System" },
 };
 
 const PRIORITY_COLOR: Record<string, string> = {

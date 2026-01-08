@@ -456,7 +456,7 @@ export default function HTPermitForm() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
+      <header className="mb-4 flex items-center justify-between w-full px-4 pt-6">
         <div>
           <h1 className="text-[20px] font-semibold">
             High Tension Line Work Permit Form

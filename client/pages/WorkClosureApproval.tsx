@@ -981,20 +981,11 @@ export default function ApproverClosure() {
                   Uploaded Files (2 photos, 1 document)
                 </div>
                 <div className="grid grid-cols-3 gap-3 mt-3">
-                  {files.filter((f) => {
-                    const isPhoto = f.name.match(/\.(jpg|jpeg|png|webp)$/i);
-                    const isDoc = f.name.match(/\.(pdf|doc|docx)$/i);
-                    const photoCount = files.filter((file) => file.name.match(/\.(jpg|jpeg|png|webp)$/i)).length;
-                    const docCount = files.filter((file) => file.name.match(/\.(pdf|doc|docx)$/i)).length;
-
-                    if (isPhoto) {
-                      return files.filter((file) => file.name.match(/\.(jpg|jpeg|png|webp)$/i)).indexOf(f) < 2;
-                    }
-                    if (isDoc) {
-                      return files.filter((file) => file.name.match(/\.(pdf|doc|docx)$/i)).indexOf(f) < 1;
-                    }
-                    return false;
-                  }).map((f, idx) => (
+                  {(() => {
+                    const photos = files.filter((f) => f.name.match(/\.(jpg|jpeg|png|webp)$/i)).slice(0, 2);
+                    const docs = files.filter((f) => f.name.match(/\.(pdf|doc|docx)$/i)).slice(0, 1);
+                    return [...photos, ...docs];
+                  })().map((f) => (
                     <div
                       key={f.id}
                       className="border rounded overflow-hidden bg-white"

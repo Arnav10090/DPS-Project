@@ -23,13 +23,42 @@ export default function ContractorStatsChart() {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" label={{ value: "X axis - Different contractor name", position: "insideBottom", offset: -5 }} />
-          <YAxis label={{ value: "Y axis - Quantity", angle: -90, position: "insideLeft", offset: 10 }} />
+          <XAxis
+            dataKey="name"
+            label={{
+              value: "X axis - Different contractor name",
+              position: "insideBottom",
+              offset: -5,
+            }}
+          />
+          <YAxis
+            label={{
+              value: "Y axis - Quantity",
+              angle: -90,
+              position: "insideLeft",
+              offset: 10,
+            }}
+          />
           <Tooltip />
           <Legend />
-          <Bar dataKey="issued" name="Permits issued qty" fill="#1976d2" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="returned" name="Permits returned qty" fill="#4caf50" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="time" name="Permits returned on time" fill="#ff9800" radius={[4, 4, 0, 0]} />
+          <Bar
+            dataKey="issued"
+            name="Permits issued qty"
+            fill="#1976d2"
+            radius={[4, 4, 0, 0]}
+          />
+          <Bar
+            dataKey="returned"
+            name="Permits returned qty"
+            fill="#4caf50"
+            radius={[4, 4, 0, 0]}
+          />
+          <Bar
+            dataKey="time"
+            name="Permits returned on time"
+            fill="#ff9800"
+            radius={[4, 4, 0, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

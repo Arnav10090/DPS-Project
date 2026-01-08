@@ -413,7 +413,9 @@ export default function RequesterAlarms() {
                         <SelectItem value="under_review">
                           Under Review ({stats.underReview})
                         </SelectItem>
-                        <SelectItem value="closed">Closed ({stats.closed})</SelectItem>
+                        <SelectItem value="closed">
+                          Closed ({stats.closed})
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

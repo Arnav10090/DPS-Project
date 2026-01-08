@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { format } from "date-fns";
+import * as XLSX from "xlsx";
 
 type User = {
   id: string;
@@ -142,8 +143,15 @@ export default function AdminUsers() {
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [showCreate, setShowCreate] = useState(false);
   const [showBulkImport, setShowBulkImport] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editFormData, setEditFormData] = useState<User | null>(null);
   const [importResults, setImportResults] = useState<ImportResult[]>([]);
   const [importInProgress, setImportInProgress] = useState(false);
+  const [showExportFormat, setShowExportFormat] = useState(false);
+  const [exportType, setExportType] = useState<"all" | "selected">("all");
+  const [showChangeDept, setShowChangeDept] = useState(false);
+  const [selectedDeptChange, setSelectedDeptChange] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const departments = useMemo(
@@ -328,6 +336,184 @@ export default function AdminUsers() {
     }
   }
 
+  // Handle edit user
+  function handleEditUser(user: User) {
+    setEditingUser(user);
+    setEditFormData({ ...user });
+    setShowEdit(true);
+  }
+
+  // Handle save edited user
+  function handleSaveEditUser() {
+    if (!editFormData) return;
+
+    setUsers((prev) =>
+      prev.map((u) => (u.id === editFormData.id ? editFormData : u)),
+    );
+    setShowEdit(false);
+    setEditingUser(null);
+    setEditFormData(null);
+  }
+
+  // Handle deactivate/activate user
+  function handleToggleUserStatus(userId: string) {
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === userId
+          ? { ...u, status: u.status === "active" ? "inactive" : "active" }
+          : u,
+      ),
+    );
+  }
+
+  // Export users as CSV
+  function exportAsCSV(usersToExport: User[]) {
+    const headers = [
+      "ID",
+      "Name",
+      "Employee ID",
+      "Email",
+      "Department",
+      "Role",
+      "Status",
+      "Last Login",
+    ];
+
+    const csvContent = [
+      headers.join(","),
+      ...usersToExport.map((u) =>
+        [
+          u.id,
+          `"${u.name}"`,
+          u.employeeId,
+          u.email,
+          u.department,
+          u.role,
+          u.status,
+          u.lastLogin
+            ? format(new Date(u.lastLogin), "yyyy-MM-dd HH:mm:ss")
+            : "",
+        ].join(","),
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `users_${format(new Date(), "yyyy-MM-dd_HHmmss")}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+
+  // Export users as XLSX
+  function exportAsXLSX(usersToExport: User[]) {
+    const data = [
+      [
+        "ID",
+        "Name",
+        "Employee ID",
+        "Email",
+        "Department",
+        "Role",
+        "Status",
+        "Last Login",
+      ],
+      ...usersToExport.map((u) => [
+        u.id,
+        u.name,
+        u.employeeId,
+        u.email,
+        u.department,
+        u.role,
+        u.status,
+        u.lastLogin ? format(new Date(u.lastLogin), "yyyy-MM-dd HH:mm:ss") : "",
+      ]),
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+    XLSX.writeFile(
+      workbook,
+      `users_${format(new Date(), "yyyy-MM-dd_HHmmss")}.xlsx`,
+    );
+  }
+
+  // Handle export users
+  function handleExportUsers(format: "csv" | "xlsx") {
+    const usersToExport =
+      exportType === "selected"
+        ? filtered.filter((u) => selected[u.id])
+        : filtered;
+
+    if (usersToExport.length === 0) {
+      alert("No users to export");
+      return;
+    }
+
+    if (format === "csv") {
+      exportAsCSV(usersToExport);
+    } else {
+      exportAsXLSX(usersToExport);
+    }
+
+    setShowExportFormat(false);
+    setExportType("all");
+  }
+
+  // Handle bulk actions
+  function handleBulkAction(action: string) {
+    const selectedUsers = filtered.filter((u) => selected[u.id]);
+
+    if (selectedUsers.length === 0) {
+      alert("Please select at least one user");
+      return;
+    }
+
+    switch (action) {
+      case "activate":
+        setUsers((prev) =>
+          prev.map((u) =>
+            selectedUsers.some((su) => su.id === u.id)
+              ? { ...u, status: "active" }
+              : u,
+          ),
+        );
+        setSelected({});
+        break;
+
+      case "deactivate":
+        setUsers((prev) =>
+          prev.map((u) =>
+            selectedUsers.some((su) => su.id === u.id)
+              ? { ...u, status: "inactive" }
+              : u,
+          ),
+        );
+        setSelected({});
+        break;
+
+      case "change-dept":
+        setShowChangeDept(true);
+        break;
+
+      case "export":
+        setExportType("selected");
+        setShowExportFormat(true);
+        break;
+
+      case "notify":
+        alert(
+          `Notifications sent to ${selectedUsers.length} user(s): ${selectedUsers.map((u) => u.email).join(", ")}`,
+        );
+        setSelected({});
+        break;
+    }
+  }
+
   // Handle file import
   async function handleFileImport(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -337,8 +523,33 @@ export default function AdminUsers() {
     setImportResults([]);
 
     try {
-      const text = await file.text();
-      const rows = parseCSV(text);
+      let rows: string[][] = [];
+
+      if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
+        // Parse XLSX file
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        if (!worksheet) {
+          throw new Error("No worksheet found in Excel file");
+        }
+
+        // Convert sheet to 2D array of strings
+        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        rows = data.map((row: unknown) => {
+          if (Array.isArray(row)) {
+            return row.map((cell) =>
+              cell === null || cell === undefined ? "" : String(cell),
+            );
+          }
+          return [];
+        });
+      } else {
+        // Parse CSV file
+        const text = await file.text();
+        rows = parseCSV(text);
+      }
 
       if (rows.length < 2) {
         setImportResults([
@@ -430,7 +641,15 @@ export default function AdminUsers() {
             onChange={handleFileImport}
             className="hidden"
           />
-          <Button variant="outline">Export User List</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setExportType("all");
+              setShowExportFormat(true);
+            }}
+          >
+            Export User List
+          </Button>
           <Button variant="ghost">User Activity Report</Button>
         </div>
       </header>
@@ -502,7 +721,7 @@ export default function AdminUsers() {
                   Select All
                 </span>
               </label>
-              <Select>
+              <Select onValueChange={handleBulkAction}>
                 <SelectTrigger className="w-[200px]">
                   <SelectValue placeholder="Bulk actions" />
                 </SelectTrigger>
@@ -584,10 +803,18 @@ export default function AdminUsers() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Button size="sm" variant="ghost">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleEditUser(u)}
+                      >
                         Edit
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleToggleUserStatus(u.id)}
+                      >
                         {u.status === "active" ? "Deactivate" : "Activate"}
                       </Button>
                     </div>
@@ -678,6 +905,233 @@ export default function AdminUsers() {
               </div>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit User Dialog */}
+      <Dialog open={showEdit} onOpenChange={setShowEdit}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+          </DialogHeader>
+          {editFormData && (
+            <form className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Full name</label>
+                  <Input
+                    value={editFormData.name}
+                    onChange={(e) =>
+                      setEditFormData({ ...editFormData, name: e.target.value })
+                    }
+                    placeholder="Full name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Employee ID</label>
+                  <Input
+                    value={editFormData.employeeId}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        employeeId: e.target.value,
+                      })
+                    }
+                    placeholder="Employee ID"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Email</label>
+                  <Input
+                    value={editFormData.email}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        email: e.target.value,
+                      })
+                    }
+                    placeholder="Email"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Department</label>
+                  <Select
+                    value={editFormData.department}
+                    onValueChange={(value) =>
+                      setEditFormData({
+                        ...editFormData,
+                        department: value,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments.map((d) => (
+                        <SelectItem key={d} value={d}>
+                          {d}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Role</label>
+                  <Select
+                    value={editFormData.role}
+                    onValueChange={(value) =>
+                      setEditFormData({
+                        ...editFormData,
+                        role: value,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Requester">Requester</SelectItem>
+                      <SelectItem value="Approver">Approver</SelectItem>
+                      <SelectItem value="Safety Officer">
+                        Safety Officer
+                      </SelectItem>
+                      <SelectItem value="Administrator">
+                        Administrator
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Status</label>
+                <Select
+                  value={editFormData.status}
+                  onValueChange={(value) =>
+                    setEditFormData({
+                      ...editFormData,
+                      status: value as "active" | "inactive",
+                    })
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <DialogFooter>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={() => setShowEdit(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSaveEditUser}>Save Changes</Button>
+                </div>
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Export Format Dialog */}
+      <Dialog open={showExportFormat} onOpenChange={setShowExportFormat}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Export Users</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Select the format you'd like to export the users in:
+            </p>
+            <div className="flex gap-3">
+              <Button
+                className="flex-1"
+                onClick={() => handleExportUsers("csv")}
+              >
+                Export as CSV
+              </Button>
+              <Button
+                className="flex-1"
+                onClick={() => handleExportUsers("xlsx")}
+              >
+                Export as Excel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change Department Dialog */}
+      <Dialog open={showChangeDept} onOpenChange={setShowChangeDept}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Change Department</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Select the department to move the selected users to:
+            </p>
+            <Select
+              value={selectedDeptChange}
+              onValueChange={setSelectedDeptChange}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Department" />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.map((d) => (
+                  <SelectItem key={d} value={d}>
+                    {d}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <DialogFooter>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowChangeDept(false);
+                    setSelectedDeptChange("");
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (!selectedDeptChange) {
+                      alert("Please select a department");
+                      return;
+                    }
+
+                    const selectedUsers = filtered.filter(
+                      (u) => selected[u.id],
+                    );
+                    setUsers((prev) =>
+                      prev.map((u) =>
+                        selectedUsers.some((su) => su.id === u.id)
+                          ? { ...u, department: selectedDeptChange }
+                          : u,
+                      ),
+                    );
+
+                    setSelected({});
+                    setShowChangeDept(false);
+                    setSelectedDeptChange("");
+                  }}
+                >
+                  Change Department
+                </Button>
+              </div>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
 

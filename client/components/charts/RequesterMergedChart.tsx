@@ -357,65 +357,116 @@ const RequesterMergedChart: React.FC = () => {
         <h2 className="text-lg font-semibold">Requester Statistics</h2>
       </div>
 
-      <div className="p-6">
-        {/* Filter Buttons */}
-        <div className="mb-6 flex flex-wrap gap-3">
-          <Button
-            variant={selectedFilter === "last12months" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("last12months")}
-            className={
-              selectedFilter === "last12months"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            Last 12 Months
-          </Button>
-          <Button
-            variant={selectedFilter === "last6months" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("last6months")}
-            className={
-              selectedFilter === "last6months"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            Last 6 Months
-          </Button>
-          <Button
-            variant={selectedFilter === "last5years" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("last5years")}
-            className={
-              selectedFilter === "last5years"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            Last 5 Years
-          </Button>
-          <Button
-            variant={selectedFilter === "alltime" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("alltime")}
-            className={
-              selectedFilter === "alltime"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            All Time
-          </Button>
+      <div className="px-6 py-6 pb-0">
+        {/* Filter Buttons and Legend */}
+        <div className="mb-6 flex items-center justify-between gap-3">
+          {/* Filter Buttons - Left Side */}
+          <div className="flex flex-wrap gap-3">
+            <Button
+              variant={
+                selectedFilter === "last12months" ? "default" : "outline"
+              }
+              size="sm"
+              onClick={() => setSelectedFilter("last12months")}
+              className={
+                selectedFilter === "last12months"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Last 12 Months
+            </Button>
+            <Button
+              variant={selectedFilter === "last6months" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("last6months")}
+              className={
+                selectedFilter === "last6months"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Last 6 Months
+            </Button>
+            <Button
+              variant={selectedFilter === "last5years" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("last5years")}
+              className={
+                selectedFilter === "last5years"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Last 5 Years
+            </Button>
+            <Button
+              variant={selectedFilter === "alltime" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("alltime")}
+              className={
+                selectedFilter === "alltime"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              All Time
+            </Button>
+          </div>
+
+          {/* Legend - Right Side */}
+          <div className="flex flex-wrap gap-6 justify-end text-sm">
+            <div className="flex items-center gap-2">
+              <div
+                className="w-5 h-5 rounded"
+                style={{ backgroundColor: "#3b82f6" }}
+              />
+              <span className="font-medium">totalPermits</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-5 h-5 rounded"
+                style={{ backgroundColor: "#10b981" }}
+              />
+              <span className="font-medium">permitsApproved</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-5 h-5 rounded"
+                style={{ backgroundColor: "#f59e0b" }}
+              />
+              <span className="font-medium">permitsRejected</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-5 h-3"
+                style={{ borderTop: "3px solid #8b5cf6" }}
+              />
+              <span className="font-medium">Returned on time %</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-5 h-3"
+                style={{ borderTop: "3px solid #ec4899" }}
+              />
+              <span className="font-medium">Time for approval (mins)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-5 h-3"
+                style={{ borderTop: "3px solid #06b6d4" }}
+              />
+              <span className="font-medium">Total time for permit (hours)</span>
+            </div>
+          </div>
         </div>
 
         {/* Chart */}
-        <div className="h-96">
+        <div className="h-[calc(100vh-350px)]">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={filteredData}
-              margin={{ top: 20, right: 30, left: 100, bottom: 100 }}
+              margin={{ top: 20, right: 30, left: 100, bottom: 80 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis
@@ -443,12 +494,7 @@ const RequesterMergedChart: React.FC = () => {
                 }}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend
-                wrapperStyle={{ paddingTop: "20px" }}
-                height={40}
-                layout="horizontal"
-                align="center"
-              />
+              <Legend wrapperStyle={{ display: "none" }} height={0} />
 
               {/* Bar Charts */}
               <Bar

@@ -79,10 +79,10 @@ export default function PermitFilters({
   }
 
   return (
-    <div className="mb-4 space-y-3">
-      <div className="bg-card border p-4 rounded-lg shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-        <div className="flex items-center gap-3 w-full lg:w-auto flex-wrap lg:flex-nowrap">
-          <div className="relative flex-1 min-w-0">
+    <div className="mb-4 space-y-2">
+      <div className="bg-card border p-3 rounded-lg shadow-sm">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="relative flex-1 min-w-60">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <svg
                 className="w-4 h-4 text-muted-foreground"
@@ -102,7 +102,7 @@ export default function PermitFilters({
               placeholder="Search permits, companies, or permit numbers..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 pr-10 w-full lg:w-[min(720px,60vw)] h-11 min-w-0"
+              className="pl-10 pr-10 w-full h-9 min-w-0 text-sm"
               aria-label="Search permits"
             />
             {search && (
@@ -116,97 +116,84 @@ export default function PermitFilters({
             )}
           </div>
 
-          <div className="flex flex-col w-full lg:w-auto">
-            <div className="flex items-center gap-2 w-full lg:w-auto">
-              <div className="text-md text-gray-700">
-                <p>
-                  <strong>From:</strong>
-                </p>
-              </div>
-              <Input
-                type="date"
-                value={dateFrom || ""}
-                onChange={(e) => setDateFrom(e.target.value || null)}
-                className="h-10 w-28 md:w-40 min-w-0"
-                aria-label="From date"
-              />
-              <div className="text-md text-gray-700">
-                <p>
-                  <strong>To:</strong>
-                </p>
-              </div>
-              <Input
-                type="date"
-                value={dateTo || ""}
-                onChange={(e) => setDateTo(e.target.value || null)}
-                className="h-10 w-28 md:w-40 min-w-0"
-                aria-label="To date"
-              />
-            </div>
-
-            <div className="flex items-center gap-1 mt-3 lg:mt-2">
-              <button
-                type="button"
-                onClick={() => applyPreset("today")}
-                className="text-xs px-2 py-1 rounded-md bg-gray-100"
-              >
-                Today
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("week")}
-                className="text-xs px-2 py-1 rounded-md bg-gray-100"
-              >
-                Week
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("month")}
-                className="text-xs px-2 py-1 rounded-md bg-gray-100"
-              >
-                Month
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("30")}
-                className="text-xs px-2 py-1 rounded-md bg-gray-100"
-              >
-                30d
-              </button>
-            </div>
+          <div className="flex items-center gap-2">
+            <div className="text-xs text-gray-600 whitespace-nowrap">From:</div>
+            <Input
+              type="date"
+              value={dateFrom || ""}
+              onChange={(e) => setDateFrom(e.target.value || null)}
+              className="h-9 w-24 min-w-0 text-xs"
+              aria-label="From date"
+            />
           </div>
-        </div>
 
-        <div className="flex items-center gap-2 justify-end lg:ml-2">
-          <div className="ml-2">
-            {activeFilterCount > 0 ? (
-              <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">
-                <span>
-                  {activeFilterCount} filter{activeFilterCount > 1 ? "s" : ""}{" "}
-                  applied
-                </span>
-              </div>
-            ) : null}
+          <div className="flex items-center gap-2">
+            <div className="text-xs text-gray-600 whitespace-nowrap">To:</div>
+            <Input
+              type="date"
+              value={dateTo || ""}
+              onChange={(e) => setDateTo(e.target.value || null)}
+              className="h-9 w-24 min-w-0 text-xs"
+              aria-label="To date"
+            />
           </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => applyPreset("today")}
+              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
+              title="Today"
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPreset("week")}
+              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
+              title="Last 7 days"
+            >
+              Week
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPreset("month")}
+              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
+              title="Last 30 days"
+            >
+              Month
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPreset("30")}
+              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
+              title="Last 30 days"
+            >
+              30d
+            </button>
+          </div>
+
+          {activeFilterCount > 0 && (
+            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs ml-auto">
+              <span>
+                {activeFilterCount} filter{activeFilterCount > 1 ? "s" : ""}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="flex items-center gap-6 flex-wrap">
-        <div className="flex flex-col">
-          <div className="text-md text-gray-700">
-            <p>
-              <strong>Plant:</strong>
-            </p>
-          </div>
+      <div className="bg-card border p-3 rounded-lg shadow-sm">
+        <div className="flex items-center gap-2 flex-wrap">
           <Select
             value={plantFilter ?? "__all__"}
             onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
           >
-            <SelectTrigger className="h-9 w-44 text-sm">
-              <SelectValue placeholder="Plant: All" />
+            <SelectTrigger className="h-9 w-32 text-sm">
+              <SelectValue placeholder="Plant" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="__all__">All</SelectItem>
+              <SelectItem value="__all__">All Plants</SelectItem>
               {plants.map((p) => (
                 <SelectItem key={p} value={p}>
                   {p}
@@ -214,92 +201,29 @@ export default function PermitFilters({
               ))}
             </SelectContent>
           </Select>
-        </div>
 
-        <div className="flex flex-col">
-          <div className="text-md text-gray-700">
-            <p>
-              <strong>Dept:</strong>
-            </p>
-          </div>
           <Select
-            value={deptFilter ?? "__all__"}
-            onValueChange={(v) => setDeptFilter(v === "__all__" ? null : v)}
+            value={statusFilter ?? "__all__"}
+            onValueChange={(v) => setStatusFilter(v === "__all__" ? null : v)}
           >
-            <SelectTrigger className="h-9 w-44 text-sm">
-              <SelectValue placeholder="Dept: All" />
+            <SelectTrigger className="h-9 w-36 text-sm">
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="__all__">All</SelectItem>
-              {depts.map((d) => (
-                <SelectItem key={d} value={d}>
-                  {d}
+              <SelectItem value="__all__">All Status</SelectItem>
+              {statuses.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, " ")}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </div>
 
-        <div className="flex flex-col">
-          <div className="text-md text-gray-700">
-            <p>
-              <strong>Status:</strong>
-            </p>
-          </div>
-          <div className="inline-flex gap-2 items-center">
-            <button
-              className={cn(
-                "px-3 py-2 rounded-md text-sm",
-                statusFilter === null ? "bg-primary text-white" : "bg-gray-100",
-              )}
-              onClick={() => setStatusFilter(null)}
-            >
-              All
-            </button>
-            {statuses.map((s) => (
-              <button
-                key={s}
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm",
-                  statusFilter === s ? "bg-primary text-white" : "bg-gray-100",
-                )}
-                onClick={() => setStatusFilter(statusFilter === s ? null : s)}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-sm text-muted-foreground mb-1">&nbsp;</label>
-          <button
-            type="button"
-            onClick={() => {
-              setSearch("");
-              setPlantFilter(null);
-              setDeptFilter(null);
-              setStatusFilter(null);
-              setDateFrom(null);
-              setDateTo(null);
-            }}
-            className="flex items-center bg-white border border-gray-200 rounded-md text-sm font-medium gap-2 h-11 px-4"
-          >
-            Reset
-          </button>
-        </div>
-
-        <div className="flex flex-col">
-          <div className="text-sm text-gray-700">
-            <p>
-              <strong>Rows:</strong>
-            </p>
-          </div>
           <Select
             value={String(pageSize)}
             onValueChange={(v) => setPageSize(Number(v))}
           >
-            <SelectTrigger className="h-9 w-24 text-sm">
+            <SelectTrigger className="h-9 w-20 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -308,29 +232,29 @@ export default function PermitFilters({
               <SelectItem value="50">50</SelectItem>
             </SelectContent>
           </Select>
-        </div>
 
-        <div className="flex items-center">
-          <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm">
+          <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm ml-auto">
             <button
               onClick={() => setPage(1)}
               disabled={page === 1}
-              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
               aria-label="First page"
+              title="First page"
             >
               «
             </button>
             <button
               onClick={goPrev}
               disabled={page <= 1}
-              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
               aria-label="Previous page"
+              title="Previous page"
             >
               ‹
             </button>
             {pageRange(page, totalPages).map((p, idx) =>
               typeof p === "string" ? (
-                <span key={idx} className="px-2 text-sm text-muted-foreground">
+                <span key={idx} className="px-2 text-xs text-muted-foreground">
                   {p}
                 </span>
               ) : (
@@ -338,10 +262,10 @@ export default function PermitFilters({
                   key={p}
                   onClick={() => setPage(Number(p))}
                   className={cn(
-                    "px-3 py-1 rounded text-sm",
+                    "px-2 py-1 rounded text-xs",
                     p === page
                       ? "bg-primary text-white shadow"
-                      : "hover:bg-gray-50",
+                      : "hover:bg-gray-100",
                   )}
                   aria-current={p === page}
                 >
@@ -352,16 +276,18 @@ export default function PermitFilters({
             <button
               onClick={goNext}
               disabled={page >= totalPages}
-              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
               aria-label="Next page"
+              title="Next page"
             >
               ›
             </button>
             <button
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
-              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
               aria-label="Last page"
+              title="Last page"
             >
               »
             </button>
@@ -403,7 +329,11 @@ export default function PermitFilters({
           )}
           {statusFilter && (
             <div className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm flex items-center gap-2">
-              <span>Status: {statusFilter}</span>
+              <span>
+                Status:{" "}
+                {statusFilter.charAt(0).toUpperCase() +
+                  statusFilter.slice(1).replace(/_/g, " ")}
+              </span>
               <button
                 onClick={() => setStatusFilter(null)}
                 aria-label="Clear status"

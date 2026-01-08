@@ -21,9 +21,13 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import PermitFilters from "@/components/permit/PermitFilters";
 
-export type PermitStatus = "approved" | "pending" | "rejected" | "in_progress" | "closed";
+export type PermitStatus =
+  | "approved"
+  | "pending"
+  | "rejected"
+  | "in_progress"
+  | "closed";
 
 export type PermitItem = {
   id: string;
@@ -178,7 +182,16 @@ export function PermitStatusTable({
     const s = new Set<string>();
     data.forEach((d) => s.add(d.status));
     // Ensure all statuses are included even if no data has them yet
-    return Array.from(new Set([...Array.from(s), 'approved', 'pending', 'rejected', 'in_progress', 'closed']));
+    return Array.from(
+      new Set([
+        ...Array.from(s),
+        "approved",
+        "pending",
+        "rejected",
+        "in_progress",
+        "closed",
+      ]),
+    );
   }, [data]);
 
   const applyPreset = React.useCallback(
@@ -310,32 +323,6 @@ export function PermitStatusTable({
 
   return (
     <div className="relative">
-      <PermitFilters
-        search={search}
-        setSearch={setSearch}
-        debouncedSearch={debouncedSearch}
-        plantFilter={plantFilter}
-        setPlantFilter={setPlantFilter}
-        deptFilter={deptFilter}
-        setDeptFilter={setDeptFilter}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        dateFrom={dateFrom}
-        setDateFrom={setDateFrom}
-        dateTo={dateTo}
-        setDateTo={setDateTo}
-        applyPreset={applyPreset}
-        plants={plants}
-        depts={depts}
-        statuses={statuses}
-        pageSize={pageSize}
-        setPageSize={setPageSize}
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-        activeFilterCount={activeFilterCount}
-      />
-
       <div className="overflow-x-auto rounded-lg border shadow-sm">
         <Table className="min-w-[1200px] table-fixed text-[13px] md:text-[12px] lg:text-sm">
           <TableHeader>

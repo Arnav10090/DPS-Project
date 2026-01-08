@@ -81,11 +81,33 @@ export default function WorkClosureRequest() {
     setFileError(null);
     if (!list) return;
     const arr = Array.from(list);
-    const currentCount = files.length;
-    if (currentCount + arr.length > 10) {
-      setFileError("Maximum 10 files allowed");
+
+    // Count existing photos and documents
+    const existingPhotos = files.filter((f) => f.file.type.startsWith("image/")).length;
+    const existingDocs = files.filter((f) => !f.file.type.startsWith("image/")).length;
+
+    let photosToAdd = 0;
+    let docsToAdd = 0;
+
+    // Count how many new photos and documents are being added
+    for (const f of arr) {
+      if (f.type.startsWith("image/")) {
+        photosToAdd++;
+      } else {
+        docsToAdd++;
+      }
+    }
+
+    // Validate limits
+    if (existingPhotos + photosToAdd > 2) {
+      setFileError("Maximum 2 photos allowed");
       return;
     }
+    if (existingDocs + docsToAdd > 1) {
+      setFileError("Maximum 1 document allowed");
+      return;
+    }
+
     const next: UploadedFile[] = [];
     for (const f of arr) {
       if (f.size > 5 * 1024 * 1024) {

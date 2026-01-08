@@ -475,10 +475,8 @@ const RequesterMergedChart: React.FC = () => {
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend
-                wrapperStyle={{ paddingTop: "20px" }}
-                height={40}
-                layout="horizontal"
-                align="center"
+                wrapperStyle={{ display: "none" }}
+                height={0}
               />
 
               {/* Bar Charts */}

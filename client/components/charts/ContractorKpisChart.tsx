@@ -55,7 +55,7 @@ export default function ContractorKpisChart() {
             <Legend />
             {show.time && <Line type="monotone" dataKey="returnedOnTime" name="Returned on time %" stroke="#4caf50" strokeWidth={2} dot={false} />}
             {show.approval && <Line type="monotone" dataKey="approvalMins" name="Time for approval (mins)" stroke="#1976d2" strokeWidth={2} dot={false} />}
-            {show.safety && <Line type="monotone" dataKey="safetyIssues" name="Safety issues qty" stroke="#ff9800" strokeWidth={2} dot />}
+            {show.safety && <Line type="monotone" dataKey="safetyIssues" name="Safety issues on time" stroke="#ff9800" strokeWidth={2} dot />}
           </LineChart>
         </ResponsiveContainer>
       </div>

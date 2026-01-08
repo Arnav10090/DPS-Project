@@ -267,6 +267,64 @@ export default function PermitFilters({
             </SelectContent>
           </Select>
         </div>
+
+        <div className="flex items-center">
+          <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm">
+            <button
+              onClick={() => setPage(1)}
+              disabled={page === 1}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="First page"
+            >
+              «
+            </button>
+            <button
+              onClick={goPrev}
+              disabled={page <= 1}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="Previous page"
+            >
+              ‹
+            </button>
+            {pageRange(page, totalPages).map((p, idx) =>
+              typeof p === "string" ? (
+                <span key={idx} className="px-2 text-sm text-muted-foreground">
+                  {p}
+                </span>
+              ) : (
+                <button
+                  key={p}
+                  onClick={() => setPage(Number(p))}
+                  className={cn(
+                    "px-3 py-1 rounded text-sm",
+                    p === page
+                      ? "bg-primary text-white shadow"
+                      : "hover:bg-gray-50",
+                  )}
+                  aria-current={p === page}
+                >
+                  {p}
+                </button>
+              ),
+            )}
+            <button
+              onClick={goNext}
+              disabled={page >= totalPages}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="Next page"
+            >
+              ›
+            </button>
+            <button
+              onClick={() => setPage(totalPages)}
+              disabled={page === totalPages}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="Last page"
+            >
+              »
+            </button>
+          </nav>
+        </div>
       </div>
 
       <div className="mt-2">

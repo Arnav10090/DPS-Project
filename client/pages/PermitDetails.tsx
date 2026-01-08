@@ -11,6 +11,12 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  sendPermitSubmissionNotification,
+  sendCommentNotification,
+} from "@/lib/email-service";
+import { getEmailsByNames } from "@/lib/user-lookup";
+import { toast } from "sonner";
 
 type PermitType = "hot" | "cold" | "other";
 
@@ -1290,13 +1296,49 @@ export default function CreatePermit() {
     }
   };
 
-  const submit = () => {
+  const submit = async () => {
     try {
       const payload = { ...form, submittedAt: new Date().toISOString() };
       console.log("Submitting permit", payload);
-      alert(`Permit ${form.permitNumber} submitted`);
+
+      // Get approver and safety officer emails
+      const approvers = getEmailsByNames([
+        form.permitApprover1,
+        form.permitApprover2,
+      ]);
+      const safetyOfficers = getEmailsByNames([form.safetyManager]);
+
+      // Send email notifications to approvers and safety officers
+      if (approvers.length > 0 || safetyOfficers.length > 0) {
+        try {
+          await sendPermitSubmissionNotification({
+            requesterName: form.applicantName || "Unknown",
+            requesterEmail: "requester@dps.local",
+            permitType: "work",
+            permitId: form.permitNumber,
+            approvers,
+            safetyOfficers,
+            permitDetails: {
+              title: form.title,
+              location: form.location,
+              equipment: form.equipment,
+              startDate: form.startDate,
+              endDate: form.endDate,
+              description: form.description,
+              requesterComments: form.requesterCustomComments,
+            },
+          });
+          toast.success("Permit submitted and notifications sent!");
+        } catch (emailError) {
+          console.error("Failed to send notifications:", emailError);
+          toast.warning("Permit submitted but notifications may have failed");
+        }
+      } else {
+        toast.success(`Permit ${form.permitNumber} submitted`);
+      }
     } catch (e) {
-      alert("Failed to submit");
+      console.error("Failed to submit:", e);
+      toast.error("Failed to submit");
     }
   };
 
@@ -4339,7 +4381,7 @@ export default function CreatePermit() {
                               }
                             />
                             <button
-                              onClick={() => {
+                              onClick={async () => {
                                 const v = newRequesterComment.trim();
                                 if (!v) return;
                                 const prev = form.requesterCustomComments || [];
@@ -4350,6 +4392,39 @@ export default function CreatePermit() {
                                   ],
                                 });
                                 setNewRequesterComment("");
+
+                                // Send email notification to approvers and safety officers
+                                try {
+                                  const approvers = getEmailsByNames([
+                                    form.permitApprover1,
+                                    form.permitApprover2,
+                                  ]);
+                                  const safetyOfficers = getEmailsByNames([
+                                    form.safetyManager,
+                                  ]);
+                                  const recipients = [
+                                    ...approvers,
+                                    ...safetyOfficers,
+                                  ];
+
+                                  if (recipients.length > 0) {
+                                    await sendCommentNotification({
+                                      senderName:
+                                        form.applicantName || "Requester",
+                                      senderRole: "requester",
+                                      permitType: "work",
+                                      permitId: form.permitNumber,
+                                      comment: v,
+                                      recipients,
+                                    });
+                                    toast.success("Comment sent to reviewers");
+                                  }
+                                } catch (error) {
+                                  console.error(
+                                    "Failed to send comment notification:",
+                                    error,
+                                  );
+                                }
                               }}
                               className="px-3 py-1 rounded bg-white border text-sm"
                             >
@@ -4512,7 +4587,7 @@ export default function CreatePermit() {
                             />
                             <button
                               type="button"
-                              onClick={() => {
+                              onClick={async () => {
                                 const v = newRequesterSafetyComment.trim();
                                 if (!v) return;
                                 const prev =
@@ -4525,6 +4600,33 @@ export default function CreatePermit() {
                                   ],
                                 } as any);
                                 setNewRequesterSafetyComment("");
+
+                                // Send email notification to safety officer
+                                try {
+                                  const safetyOfficers = getEmailsByNames([
+                                    form.safetyManager,
+                                  ]);
+
+                                  if (safetyOfficers.length > 0) {
+                                    await sendCommentNotification({
+                                      senderName:
+                                        form.applicantName || "Requester",
+                                      senderRole: "requester",
+                                      permitType: "work",
+                                      permitId: form.permitNumber,
+                                      comment: v,
+                                      recipients: safetyOfficers,
+                                    });
+                                    toast.success(
+                                      "Comment sent to Safety Officer",
+                                    );
+                                  }
+                                } catch (error) {
+                                  console.error(
+                                    "Failed to send comment notification:",
+                                    error,
+                                  );
+                                }
                               }}
                               className="px-3 py-1 rounded bg-white border text-sm"
                             >

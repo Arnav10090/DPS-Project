@@ -2,6 +2,11 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import {
+  handleNotifyPermitSubmission,
+  handleNotifyComment,
+  handleNotifyApproval,
+} from "./routes/email";
 
 export function createServer() {
   const app = express();
@@ -18,6 +23,11 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Email notification routes
+  app.post("/api/notify/permit-submission", handleNotifyPermitSubmission);
+  app.post("/api/notify/comment", handleNotifyComment);
+  app.post("/api/notify/approval", handleNotifyApproval);
 
   return app;
 }

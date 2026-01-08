@@ -170,6 +170,207 @@ export default function AdminUsers() {
   const allSelected =
     filtered.length > 0 && filtered.every((u) => selected[u.id]);
 
+  // Parse CSV content
+  function parseCSV(text: string): string[][] {
+    const rows: string[][] = [];
+    let currentRow: string[] = [];
+    let currentField = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const nextChar = text[i + 1];
+
+      if (char === '"') {
+        if (insideQuotes && nextChar === '"') {
+          currentField += '"';
+          i++;
+        } else {
+          insideQuotes = !insideQuotes;
+        }
+      } else if (char === "," && !insideQuotes) {
+        currentRow.push(currentField.trim());
+        currentField = "";
+      } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+        if (currentField || currentRow.length > 0) {
+          currentRow.push(currentField.trim());
+          if (currentRow.length > 1 || currentRow[0]) {
+            rows.push(currentRow);
+          }
+          currentRow = [];
+          currentField = "";
+        }
+        if (char === "\r" && nextChar === "\n") {
+          i++;
+        }
+      } else {
+        currentField += char;
+      }
+    }
+
+    if (currentField || currentRow.length > 0) {
+      currentRow.push(currentField.trim());
+      if (currentRow.length > 1 || currentRow[0]) {
+        rows.push(currentRow);
+      }
+    }
+
+    return rows;
+  }
+
+  // Validate and map CSV row to ImportedUser
+  function validateRow(
+    headers: string[],
+    row: string[],
+    rowIndex: number,
+  ): ImportResult {
+    try {
+      const rowData: Record<string, string> = {};
+      headers.forEach((header, idx) => {
+        if (idx < row.length) {
+          rowData[header.toLowerCase().replace(/\s+/g, "")] = row[idx];
+        }
+      });
+
+      // Required fields
+      const name = rowData["fullname"] || rowData["name"];
+      const employeeId =
+        rowData["employeeid"] || rowData["id"] || rowData["employee"];
+      const email = rowData["email"];
+      const department = rowData["department"] || rowData["dept"];
+      const role = rowData["role"];
+      const password = rowData["password"] || "DefaultPass123!";
+      const statusStr = rowData["status"] || rowData["accountactive"] || "active";
+      const phone = rowData["phone"] || "";
+      const gender = rowData["gender"] || "";
+
+      // Validation
+      if (!name || name.length === 0)
+        return { success: false, row: rowIndex, error: "Name is required" };
+      if (!employeeId || employeeId.length === 0)
+        return {
+          success: false,
+          row: rowIndex,
+          error: "Employee ID is required",
+        };
+      if (!email || email.length === 0)
+        return { success: false, row: rowIndex, error: "Email is required" };
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+        return { success: false, row: rowIndex, error: "Invalid email format" };
+      if (!department || department.length === 0)
+        return {
+          success: false,
+          row: rowIndex,
+          error: "Department is required",
+        };
+      if (
+        !role ||
+        !["Requester", "Approver", "Safety Officer", "Administrator"].includes(
+          role,
+        )
+      )
+        return {
+          success: false,
+          row: rowIndex,
+          error: "Invalid role. Must be: Requester, Approver, Safety Officer, or Administrator",
+        };
+
+      const status =
+        statusStr.toLowerCase() === "inactive" ? "inactive" : "active";
+
+      return {
+        success: true,
+        row: rowIndex,
+        data: {
+          name,
+          employeeId,
+          email,
+          phone,
+          gender,
+          department,
+          role,
+          status,
+          password,
+        },
+      };
+    } catch (err) {
+      return {
+        success: false,
+        row: rowIndex,
+        error: err instanceof Error ? err.message : "Unknown error",
+      };
+    }
+  }
+
+  // Handle file import
+  async function handleFileImport(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImportInProgress(true);
+    setImportResults([]);
+
+    try {
+      const text = await file.text();
+      const rows = parseCSV(text);
+
+      if (rows.length < 2) {
+        setImportResults([
+          {
+            success: false,
+            row: 0,
+            error: "File must contain headers and at least one data row",
+          },
+        ]);
+        setImportInProgress(false);
+        return;
+      }
+
+      const headers = rows[0];
+      const results: ImportResult[] = [];
+      const newUsers: User[] = [];
+
+      // Validate all rows
+      for (let i = 1; i < rows.length; i++) {
+        const result = validateRow(headers, rows[i], i + 1);
+        results.push(result);
+
+        if (result.success && result.data) {
+          const user: User = {
+            id: `${users.length + newUsers.length + 1}`,
+            name: result.data.name,
+            employeeId: result.data.employeeId,
+            email: result.data.email,
+            department: result.data.department,
+            role: result.data.role,
+            status: result.data.status,
+          };
+          newUsers.push(user);
+        }
+      }
+
+      // Add all valid users to the list
+      if (newUsers.length > 0) {
+        setUsers((prev) => [...prev, ...newUsers]);
+      }
+
+      setImportResults(results);
+    } catch (err) {
+      setImportResults([
+        {
+          success: false,
+          row: 0,
+          error: err instanceof Error ? err.message : "Failed to read file",
+        },
+      ]);
+    } finally {
+      setImportInProgress(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }
+
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">

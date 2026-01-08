@@ -411,7 +411,7 @@ const RequesterMergedChart: React.FC = () => {
         </div>
 
         {/* Chart */}
-        <div className="h-screen">
+        <div className="h-[calc(100vh-280px)]">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={filteredData}

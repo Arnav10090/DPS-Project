@@ -93,20 +93,20 @@ export function ModernPagination({
 
   if (variant === "numbered") {
     return (
-      <div className="bg-white rounded-xl border shadow-sm mt-6 p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white rounded-xl border shadow-sm mt-6 p-4">
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Form Progress</h3>
           <div className="text-sm text-gray-500">
             {currentStep + 1} of {steps.length} completed
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="flex gap-2 overflow-x-auto pb-2">
           {normalizedSteps.map((step, index) => (
             <div
               key={index}
               className={`
-                relative p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer hover:shadow-md
+                relative p-3 rounded-lg border-2 transition-all duration-300 cursor-pointer hover:shadow-md flex-shrink-0
                 ${
                   index === currentStep
                     ? "border-blue-500 bg-blue-50 shadow-md"
@@ -115,12 +115,13 @@ export function ModernPagination({
                       : "border-gray-200 bg-gray-50 hover:border-gray-300"
                 }
               `}
+              style={{ minWidth: "120px" }}
               onClick={() => handleStepClick(index)}
             >
-              <div className="flex items-start gap-3">
+              <div className="flex flex-col items-center gap-2">
                 <div
                   className={`
-                  w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300
+                  w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 flex-shrink-0
                   ${
                     index === currentStep
                       ? "bg-blue-500 text-white"
@@ -131,15 +132,15 @@ export function ModernPagination({
                 `}
                 >
                   {step.completed && index !== currentStep ? (
-                    <Check className="w-4 h-4" />
+                    <Check className="w-3 h-3" />
                   ) : (
                     index + 1
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="text-center min-w-0">
                   <div
                     className={`
-                    text-sm font-medium truncate transition-colors duration-300
+                    text-xs font-medium truncate transition-colors duration-300
                     ${
                       index === currentStep
                         ? "text-blue-700"
@@ -151,11 +152,6 @@ export function ModernPagination({
                   >
                     {step.title}
                   </div>
-                  {step.description && (
-                    <div className="text-xs text-gray-500 mt-1">
-                      {step.description}
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -167,7 +163,7 @@ export function ModernPagination({
         </div>
 
         {showProgress && (
-          <div className="mt-6">
+          <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">
                 Overall Progress

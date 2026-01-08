@@ -310,32 +310,6 @@ export function PermitStatusTable({
 
   return (
     <div className="relative">
-      <PermitFilters
-        search={search}
-        setSearch={setSearch}
-        debouncedSearch={debouncedSearch}
-        plantFilter={plantFilter}
-        setPlantFilter={setPlantFilter}
-        deptFilter={deptFilter}
-        setDeptFilter={setDeptFilter}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        dateFrom={dateFrom}
-        setDateFrom={setDateFrom}
-        dateTo={dateTo}
-        setDateTo={setDateTo}
-        applyPreset={applyPreset}
-        plants={plants}
-        depts={depts}
-        statuses={statuses}
-        pageSize={pageSize}
-        setPageSize={setPageSize}
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-        activeFilterCount={activeFilterCount}
-      />
-
       <div className="overflow-x-auto rounded-lg border shadow-sm">
         <Table className="min-w-[1200px] table-fixed text-[13px] md:text-[12px] lg:text-sm">
           <TableHeader>

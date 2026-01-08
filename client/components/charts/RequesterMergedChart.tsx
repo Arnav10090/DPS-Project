@@ -11,6 +11,7 @@ import {
   Legend,
 } from "recharts";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface MergedChartData {
   period: string;
@@ -24,11 +25,14 @@ interface MergedChartData {
   totalTimeForPermit: number;
 }
 
-type FilterOption = "last12months" | "last6months" | "last5years" | "alltime";
+type FilterOption = "last12months" | "last6months" | "last5years" | "alltime" | "customDateRange";
 
 const RequesterMergedChart: React.FC = () => {
   const [selectedFilter, setSelectedFilter] =
     useState<FilterOption>("last12months");
+  const [customFromDate, setCustomFromDate] = useState<string>("");
+  const [customToDate, setCustomToDate] = useState<string>("");
+  const [showCustomDateInputs, setShowCustomDateInputs] = useState(false);
 
   // Sample data spanning multiple years
   const allData: MergedChartData[] = [

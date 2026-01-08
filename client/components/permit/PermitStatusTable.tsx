@@ -22,7 +22,12 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-export type PermitStatus = "approved" | "pending" | "rejected" | "in_progress" | "closed";
+export type PermitStatus =
+  | "approved"
+  | "pending"
+  | "rejected"
+  | "in_progress"
+  | "closed";
 
 export type PermitItem = {
   id: string;
@@ -177,7 +182,16 @@ export function PermitStatusTable({
     const s = new Set<string>();
     data.forEach((d) => s.add(d.status));
     // Ensure all statuses are included even if no data has them yet
-    return Array.from(new Set([...Array.from(s), 'approved', 'pending', 'rejected', 'in_progress', 'closed']));
+    return Array.from(
+      new Set([
+        ...Array.from(s),
+        "approved",
+        "pending",
+        "rejected",
+        "in_progress",
+        "closed",
+      ]),
+    );
   }, [data]);
 
   const applyPreset = React.useCallback(

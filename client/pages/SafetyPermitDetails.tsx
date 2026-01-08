@@ -128,7 +128,7 @@ export default function SafetyOfficerPermitDetails() {
     }
     return;
   }, [showPreviewModal]);
-  
+
   useEffect(() => {
     // Force safety role for this page
     try {
@@ -329,7 +329,6 @@ export default function SafetyOfficerPermitDetails() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
-
         {/* Section 1: Permit Overview - Detached */}
         <div className="rounded-xl border bg-white p-4 shadow-sm">
           <div className="space-y-6">
@@ -483,14 +482,24 @@ export default function SafetyOfficerPermitDetails() {
             <div
               className="absolute inset-0 bg-black/100 backdrop-blur-md"
               onClick={() => setShowPreviewModal(false)}
-              style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
             />
 
             <div className="relative bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto p-6 z-10">
               <div className="flex items-center justify-between mb-4">
                 <div />
                 <div>
-                  <Button variant="ghost" size="sm" onClick={() => setShowPreviewModal(false)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPreviewModal(false)}
+                  >
                     Close
                   </Button>
                 </div>

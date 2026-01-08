@@ -1296,7 +1296,6 @@ export default function GasPermit() {
                         </div>
                       </div>
 
-
                       {/* Editable comments sections - MOVED TO BOTTOM */}
                       <div className="mt-4 bg-yellow-50 p-3 rounded-md">
                         <div className="text-md font-medium">

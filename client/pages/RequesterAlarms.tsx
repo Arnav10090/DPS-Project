@@ -227,79 +227,157 @@ export default function RequesterAlarms() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
         <main>
           <Card>
-            <CardHeader className="flex flex-col gap-3">
-              <div className="flex items-center gap-3 w-full">
-                <Input 
-                  placeholder="Search permits..." 
-                  value={query} 
-                  onChange={(e) => setQuery(e.target.value)} 
-                />
-                <div className="flex items-center gap-2">
-                  <Input 
-                    type="date" 
-                    value={fromDate} 
-                    onChange={(e) => setFromDate(e.target.value)} 
-                    className="w-[160px]" 
-                  />
-                  <Input 
-                    type="date" 
-                    value={toDate} 
-                    onChange={(e) => setToDate(e.target.value)} 
-                    className="w-[160px]" 
-                  />
-                </div>
-                <div className="ml-auto flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => { setQuery(""); setFromDate(""); setToDate(""); }}
-                  >
-                    Reset
-                  </Button>
+            <CardHeader className="flex flex-col gap-4 pb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold">Alarms & Notifications</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Track and manage your permit notifications</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 overflow-x-auto">
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <button 
-                    className={`px-3 py-1 rounded whitespace-nowrap ${tab === "all" ? "bg-muted" : ""}`} 
-                    onClick={() => setTab("all")}
-                  >
-                    All ({stats.total})
-                  </button>
-                  <button 
-                    className={`px-3 py-1 rounded whitespace-nowrap ${tab === "action_required" ? "bg-muted" : ""}`} 
-                    onClick={() => setTab("action_required")}
-                  >
-                    Action Required ({stats.actionRequired})
-                  </button>
-                  <button 
-                    className={`px-3 py-1 rounded whitespace-nowrap ${tab === "approved" ? "bg-muted" : ""}`} 
-                    onClick={() => setTab("approved")}
-                  >
-                    Approved ({stats.approved})
-                  </button>
-                  <button 
-                    className={`px-3 py-1 rounded whitespace-nowrap ${tab === "rejected" ? "bg-muted" : ""}`} 
-                    onClick={() => setTab("rejected")}
-                  >
-                    Rejected ({stats.rejected})
-                  </button>
-                  <button 
-                    className={`px-3 py-1 rounded whitespace-nowrap ${tab === "under_review" ? "bg-muted" : ""}`} 
-                    onClick={() => setTab("under_review")}
-                  >
-                    Under Review ({stats.underReview})
-                  </button>
-                  <button 
-                    className={`px-3 py-1 rounded whitespace-nowrap ${tab === "closed" ? "bg-muted" : ""}`} 
-                    onClick={() => setTab("closed")}
-                  >
-                    Closed ({stats.closed})
-                  </button>
-                </div>
+              {/* Filter Section */}
+              <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-4 border border-slate-200">
+                <div className="space-y-3">
+                  {/* Search Row */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <div className="relative">
+                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          placeholder="Search by permit ID, title, or message..."
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          className="pl-9 bg-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-                <div className="ml-auto flex items-center gap-2 flex-shrink-0">
+                  {/* Date Range and Actions Row */}
+                  <div className="flex items-center gap-3">
+                    <label className="text-sm font-medium text-slate-700 min-w-fit">Date Range:</label>
+                    <Input
+                      type="date"
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      className="w-[140px] bg-white"
+                      title="From date"
+                    />
+                    <span className="text-slate-400">to</span>
+                    <Input
+                      type="date"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className="w-[140px] bg-white"
+                      title="To date"
+                    />
+                    <div className="ml-auto flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => { setQuery(""); setFromDate(""); setToDate(""); }}
+                        className="gap-2"
+                      >
+                        <X size={14} />
+                        Clear Filters
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Status Filters */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-medium text-slate-700">Filter by Status:</span>
+                    <button
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                        tab === "all"
+                          ? "bg-blue-600 text-white"
+                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
+                      }`}
+                      onClick={() => setTab("all")}
+                    >
+                      All ({stats.total})
+                    </button>
+                    <button
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                        tab === "action_required"
+                          ? "bg-orange-600 text-white"
+                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
+                      }`}
+                      onClick={() => setTab("action_required")}
+                    >
+                      Action Required ({stats.actionRequired})
+                    </button>
+                    <button
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                        tab === "approved"
+                          ? "bg-green-600 text-white"
+                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
+                      }`}
+                      onClick={() => setTab("approved")}
+                    >
+                      Approved ({stats.approved})
+                    </button>
+                    <button
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                        tab === "rejected"
+                          ? "bg-red-600 text-white"
+                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
+                      }`}
+                      onClick={() => setTab("rejected")}
+                    >
+                      Rejected ({stats.rejected})
+                    </button>
+                    <button
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                        tab === "under_review"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
+                      }`}
+                      onClick={() => setTab("under_review")}
+                    >
+                      Under Review ({stats.underReview})
+                    </button>
+                    <button
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                        tab === "closed"
+                          ? "bg-slate-600 text-white"
+                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
+                      }`}
+                      onClick={() => setTab("closed")}
+                    >
+                      Closed ({stats.closed})
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Table Actions */}
+              <div className="flex items-center gap-3 border-b pb-4">
+                <label className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      const next: Record<string, boolean> = {};
+                      filtered.forEach((n) => next[n.id] = checked);
+                      setSelected(next);
+                    }}
+                    checked={filtered.length > 0 && filtered.every(n => selected[n.id])}
+                  />
+                  <span className="text-sm font-medium">Select All</span>
+                </label>
+                {Object.values(selected).some(v => v) && (
+                  <>
+                    <span className="text-sm text-muted-foreground">|</span>
+                    <Button size="sm" variant="outline" onClick={bulkMarkRead}>
+                      Mark as Read
+                    </Button>
+                    <Button size="sm" variant="destructive" onClick={bulkClear}>
+                      Delete Selected
+                    </Button>
+                  </>
+                )}
+                <div className="ml-auto flex items-center gap-2">
                   <Button variant="ghost" size="sm" onClick={markAllRead}>
                     Mark All as Read
                   </Button>

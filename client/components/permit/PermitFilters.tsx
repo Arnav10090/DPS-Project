@@ -216,7 +216,10 @@ export default function PermitFilters({
               </button>
               {pageRange(page, totalPages).map((p, idx) =>
                 typeof p === "string" ? (
-                  <span key={idx} className="px-2 text-xs text-muted-foreground">
+                  <span
+                    key={idx}
+                    className="px-2 text-xs text-muted-foreground"
+                  >
                     {p}
                   </span>
                 ) : (

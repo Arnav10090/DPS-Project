@@ -48,13 +48,7 @@ export type PermitItem = {
 
 export type SortKey = keyof Pick<
   PermitItem,
-  | "sn"
-  | "plant"
-  | "dept"
-  | "date"
-  | "permitNo"
-  | "requester"
-  | "returnDate"
+  "sn" | "plant" | "dept" | "date" | "permitNo" | "requester" | "returnDate"
 >;
 
 export type SortState = { key: SortKey; dir: "asc" | "desc" };
@@ -338,8 +332,20 @@ export function PermitStatusTable({
                 setSort,
                 "w-40 sticky left-16 z-20 bg-gray-900 border-r border-gray-700",
               )}
-              {headerCell("Dept", "dept", sort, setSort, "w-40 border-r border-gray-700")}
-              {headerCell("Date", "date", sort, setSort, "w-36 border-r border-gray-700")}
+              {headerCell(
+                "Dept",
+                "dept",
+                sort,
+                setSort,
+                "w-40 border-r border-gray-700",
+              )}
+              {headerCell(
+                "Date",
+                "date",
+                sort,
+                setSort,
+                "w-36 border-r border-gray-700",
+              )}
               {headerCell(
                 "Permit No",
                 "permitNo",
@@ -347,23 +353,53 @@ export function PermitStatusTable({
                 setSort,
                 "w-40 sticky left-[14rem] z-20 bg-gray-900 border-r border-gray-700",
               )}
-              {headerCell("Requester", "requester", sort, setSort, "w-40 border-r border-gray-700")}
-              <TableHead className="w-32 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Total Approvers</TableHead>
-              <TableHead className="w-32 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Approvers Done</TableHead>
-              <TableHead className="w-40 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Pending with Approver</TableHead>
-              <TableHead className="w-36 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Total Safety Officers</TableHead>
-              <TableHead className="w-40 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Pending with Safety Officer</TableHead>
-              <TableHead className="w-36 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Safety Officers Done</TableHead>
-              {headerCell("Return Date", "returnDate", sort, setSort, "w-36 border-r border-gray-700")}
-              <TableHead className="w-32 bg-gray-900 text-white border-r border-gray-700">Days from Issued</TableHead>
+              {headerCell(
+                "Requester",
+                "requester",
+                sort,
+                setSort,
+                "w-40 border-r border-gray-700",
+              )}
+              <TableHead className="w-32 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">
+                Total Approvers
+              </TableHead>
+              <TableHead className="w-32 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">
+                Approvers Done
+              </TableHead>
+              <TableHead className="w-40 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">
+                Pending with Approver
+              </TableHead>
+              <TableHead className="w-36 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">
+                Total Safety Officers
+              </TableHead>
+              <TableHead className="w-40 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">
+                Pending with Safety Officer
+              </TableHead>
+              <TableHead className="w-36 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">
+                Safety Officers Done
+              </TableHead>
+              {headerCell(
+                "Return Date",
+                "returnDate",
+                sort,
+                setSort,
+                "w-36 border-r border-gray-700",
+              )}
+              <TableHead className="w-32 bg-gray-900 text-white border-r border-gray-700">
+                Days from Issued
+              </TableHead>
               <TableHead className="w-[26rem] bg-gray-900 text-white border-r border-gray-700">
                 Comments from Requester
               </TableHead>
               <TableHead className="w-[26rem] bg-gray-900 text-white border-r border-gray-700">
                 Comments from Approver
               </TableHead>
-              <TableHead className="w-28 bg-gray-900 text-white border-r border-gray-700">Status</TableHead>
-              <TableHead className="w-36 bg-gray-900 text-white">Actions</TableHead>
+              <TableHead className="w-28 bg-gray-900 text-white border-r border-gray-700">
+                Status
+              </TableHead>
+              <TableHead className="w-36 bg-gray-900 text-white">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -375,36 +411,53 @@ export function PermitStatusTable({
               return (
                 <TableRow key={row.id} className={cn("align-top", approvedBg)}>
                   <TableCell
-                    className={cn("w-16 sticky left-0 z-10 border-r border-gray-700", stickyBase)}
+                    className={cn(
+                      "w-16 sticky left-0 z-10 border-r border-gray-700",
+                      stickyBase,
+                    )}
                   >
                     {row.sn}
                   </TableCell>
                   <TableCell
-                    className={cn("w-40 sticky left-16 z-10 border-r border-gray-700", stickyBase)}
+                    className={cn(
+                      "w-40 sticky left-16 z-10 border-r border-gray-700",
+                      stickyBase,
+                    )}
                   >
                     {row.plant}
                   </TableCell>
-                  <TableCell className="w-40 border-r border-gray-700">{row.dept}</TableCell>
+                  <TableCell className="w-40 border-r border-gray-700">
+                    {row.dept}
+                  </TableCell>
                   <TableCell className="w-36 border-r border-gray-700">
                     {format(parseISO(row.date), "dd MMM yyyy")}
                   </TableCell>
                   <TableCell
-                    className={cn("w-40 sticky left-[14rem] z-10 border-r border-gray-700", stickyBase)}
+                    className={cn(
+                      "w-40 sticky left-[14rem] z-10 border-r border-gray-700",
+                      stickyBase,
+                    )}
                   >
                     {row.permitNo}
                   </TableCell>
-                  <TableCell className="w-40 border-r border-gray-700">{row.requester}</TableCell>
-                  <TableCell className="w-32 text-center border-r border-gray-700">
-                    {row.approver1 ? (row.approver2 ? 2 : 1) : 0}
+                  <TableCell className="w-40 border-r border-gray-700">
+                    {row.requester}
                   </TableCell>
                   <TableCell className="w-32 text-center border-r border-gray-700">
                     {row.approver1 ? (row.approver2 ? 2 : 1) : 0}
                   </TableCell>
-                  <TableCell className="w-40 text-center border-r border-gray-700">-</TableCell>
+                  <TableCell className="w-32 text-center border-r border-gray-700">
+                    {row.approver1 ? (row.approver2 ? 2 : 1) : 0}
+                  </TableCell>
+                  <TableCell className="w-40 text-center border-r border-gray-700">
+                    -
+                  </TableCell>
                   <TableCell className="w-36 text-center border-r border-gray-700">
                     {row.safetyApprover ? 1 : 0}
                   </TableCell>
-                  <TableCell className="w-40 text-center border-r border-gray-700">-</TableCell>
+                  <TableCell className="w-40 text-center border-r border-gray-700">
+                    -
+                  </TableCell>
                   <TableCell className="w-36 text-center border-r border-gray-700">
                     {row.safetyApprover ? 1 : 0}
                   </TableCell>
@@ -413,7 +466,9 @@ export function PermitStatusTable({
                       ? format(parseISO(row.returnDate), "dd MMM yyyy")
                       : "-"}
                   </TableCell>
-                  <TableCell className="w-32 text-center border-r border-gray-700">{days}</TableCell>
+                  <TableCell className="w-32 text-center border-r border-gray-700">
+                    {days}
+                  </TableCell>
                   <TableCell className="w-[26rem] border-r border-gray-700">
                     <div
                       className="line-clamp-2"

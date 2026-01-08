@@ -639,7 +639,15 @@ export default function AdminUsers() {
             onChange={handleFileImport}
             className="hidden"
           />
-          <Button variant="outline">Export User List</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setExportType("all");
+              setShowExportFormat(true);
+            }}
+          >
+            Export User List
+          </Button>
           <Button variant="ghost">User Activity Report</Button>
         </div>
       </header>

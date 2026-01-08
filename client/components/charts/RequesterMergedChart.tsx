@@ -357,7 +357,7 @@ const RequesterMergedChart: React.FC = () => {
         <h2 className="text-lg font-semibold">Requester Statistics</h2>
       </div>
 
-      <div className="px-6 py-6 pb-2">
+      <div className="px-6 py-6 pb-0">
         {/* Filter Buttons and Legend */}
         <div className="mb-6 flex items-center justify-between gap-3">
           {/* Filter Buttons - Left Side */}

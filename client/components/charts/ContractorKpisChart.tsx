@@ -42,7 +42,7 @@ export default function ContractorKpisChart() {
           className={`rounded-full px-3 py-1 text-xs border transition-colors ${show.safety ? "bg-[#ff9800] text-white" : "bg-white hover:bg-gray-50"}`}
           aria-pressed={show.safety}
         >
-          Safety issues qty
+          Safety issues on time
         </button>
       </div>
       <div className="h-80">

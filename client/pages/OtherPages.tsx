@@ -263,6 +263,71 @@ export function OverallStatus() {
     return () => clearTimeout(t);
   }, [role, currentUserName, statusFilter, plantFilter, deptFilter, debouncedSearch, dateFrom, dateTo]);
 
+  // Debounce search
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // Get unique values for filters from full dataset
+  const allData = React.useMemo(() => makeMockData(32), []);
+  const plants = React.useMemo(
+    () => Array.from(new Set(allData.map((item) => item.plant))).sort(),
+    [allData],
+  );
+  const depts = React.useMemo(
+    () => Array.from(new Set(allData.map((item) => item.dept))).sort(),
+    [allData],
+  );
+  const statuses = React.useMemo(
+    () =>
+      Array.from(new Set(allData.map((item) => item.status))).sort() as (
+        | "approved"
+        | "pending"
+        | "rejected"
+        | "in_progress"
+        | "closed"
+      )[],
+    [allData],
+  );
+
+  const totalPages = Math.ceil(data.length / pageSize);
+  const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
+
+  const applyPreset = (preset: "today" | "week" | "month" | "30") => {
+    const now = new Date();
+    let from: Date | null = null;
+    switch (preset) {
+      case "today":
+        from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case "week":
+        from = subDays(now, 7);
+        break;
+      case "month":
+        from = subDays(now, 30);
+        break;
+      case "30":
+        from = subDays(now, 30);
+        break;
+    }
+    if (from) {
+      setDateFrom(formatISO(from).split("T")[0]);
+      setDateTo(formatISO(now).split("T")[0]);
+    }
+  };
+
+  const activeFilterCount = [
+    search ? 1 : 0,
+    plantFilter ? 1 : 0,
+    deptFilter ? 1 : 0,
+    statusFilter ? 1 : 0,
+    dateFrom ? 1 : 0,
+    dateTo ? 1 : 0,
+  ].reduce((a, b) => a + b, 0);
+
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
@@ -270,6 +335,32 @@ export function OverallStatus() {
           Overall Permit Status
         </h2>
       </div>
+
+      <PermitFilters
+        search={search}
+        setSearch={setSearch}
+        debouncedSearch={debouncedSearch}
+        plantFilter={plantFilter}
+        setPlantFilter={setPlantFilter}
+        deptFilter={deptFilter}
+        setDeptFilter={setDeptFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        dateFrom={dateFrom}
+        setDateFrom={setDateFrom}
+        dateTo={dateTo}
+        setDateTo={setDateTo}
+        applyPreset={applyPreset}
+        plants={plants}
+        depts={depts}
+        statuses={statuses.map((s) => s)}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        activeFilterCount={activeFilterCount}
+      />
 
       {/* Desktop (xl+) and Tablets (md-lg): Responsive table with horizontal scroll */}
       <div className="hidden md:block">
@@ -280,7 +371,7 @@ export function OverallStatus() {
             ))}
           </div>
         ) : (
-          <PermitStatusTable data={data} sort={sort} setSort={setSort} />
+          <PermitStatusTable data={paginatedData} sort={sort} setSort={setSort} />
         )}
       </div>
 
@@ -294,7 +385,7 @@ export function OverallStatus() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3">
-            {data.map((item) => (
+            {paginatedData.map((item) => (
               <PermitStatusCard key={item.id} item={item} />
             ))}
           </div>

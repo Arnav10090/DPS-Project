@@ -236,120 +236,107 @@ export default function RequesterAlarms() {
               </div>
 
               {/* Filter Section */}
-              <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-4 border border-slate-200">
-                <div className="space-y-3">
-                  {/* Search Row */}
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1">
-                      <div className="relative">
-                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                          placeholder="Search by permit ID, title, or message..."
-                          value={query}
-                          onChange={(e) => setQuery(e.target.value)}
-                          className="pl-9 bg-white"
-                        />
-                      </div>
+              <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-3 border border-slate-200">
+                <div className="flex items-center gap-3">
+                  {/* Search Input */}
+                  <div className="w-64">
+                    <div className="relative">
+                      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Search permits..."
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        className="pl-9 h-9 bg-white text-sm"
+                      />
                     </div>
                   </div>
 
-                  {/* Date Range and Actions Row */}
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm font-medium text-slate-700 min-w-fit">Date Range:</label>
+                  {/* Date Range */}
+                  <div className="flex items-center gap-2">
                     <Input
                       type="date"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
-                      className="w-[140px] bg-white"
+                      className="h-9 bg-white text-sm w-[130px]"
                       title="From date"
                     />
-                    <span className="text-slate-400">to</span>
+                    <span className="text-slate-400 text-sm">to</span>
                     <Input
                       type="date"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
-                      className="w-[140px] bg-white"
+                      className="h-9 bg-white text-sm w-[130px]"
                       title="To date"
                     />
-                    <div className="ml-auto flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => { setQuery(""); setFromDate(""); setToDate(""); }}
-                        className="gap-2"
-                      >
-                        <X size={14} />
-                        Clear Filters
-                      </Button>
-                    </div>
                   </div>
 
-                  {/* Status Filters */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-medium text-slate-700">Filter by Status:</span>
-                    <button
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                        tab === "all"
-                          ? "bg-blue-600 text-white"
-                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
-                      }`}
-                      onClick={() => setTab("all")}
+                  {/* Status Dropdown */}
+                  <div className="relative">
+                    <select
+                      value={tab}
+                      onChange={(e) => setTab(e.target.value as any)}
+                      className="h-9 px-3 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 cursor-pointer appearance-none pr-8"
                     >
-                      All ({stats.total})
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                        tab === "action_required"
-                          ? "bg-orange-600 text-white"
-                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
-                      }`}
-                      onClick={() => setTab("action_required")}
-                    >
-                      Action Required ({stats.actionRequired})
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                        tab === "approved"
-                          ? "bg-green-600 text-white"
-                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
-                      }`}
-                      onClick={() => setTab("approved")}
-                    >
-                      Approved ({stats.approved})
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                        tab === "rejected"
-                          ? "bg-red-600 text-white"
-                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
-                      }`}
-                      onClick={() => setTab("rejected")}
-                    >
-                      Rejected ({stats.rejected})
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                        tab === "under_review"
-                          ? "bg-blue-500 text-white"
-                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
-                      }`}
-                      onClick={() => setTab("under_review")}
-                    >
-                      Under Review ({stats.underReview})
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                        tab === "closed"
-                          ? "bg-slate-600 text-white"
-                          : "bg-white border border-slate-300 hover:border-slate-400 text-slate-700"
-                      }`}
-                      onClick={() => setTab("closed")}
-                    >
-                      Closed ({stats.closed})
-                    </button>
+                      <option value="all">All ({stats.total})</option>
+                      <option value="action_required">Action Required ({stats.actionRequired})</option>
+                      <option value="approved">Approved ({stats.approved})</option>
+                      <option value="rejected">Rejected ({stats.rejected})</option>
+                      <option value="under_review">Under Review ({stats.underReview})</option>
+                      <option value="closed">Closed ({stats.closed})</option>
+                    </select>
+                    <ChevronDown size={16} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500" />
                   </div>
                 </div>
               </div>
+
+              {/* Applied Filters Section */}
+              {(query || fromDate || toDate || tab !== "all") && (
+                <div className="flex items-center gap-3 bg-blue-50 rounded-lg p-3 border border-blue-200">
+                  <span className="text-sm font-medium text-blue-900">Applied Filters:</span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {query && (
+                      <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                        Search: "{query}"
+                        <button onClick={() => setQuery("")} className="hover:text-blue-900">
+                          <X size={12} />
+                        </button>
+                      </span>
+                    )}
+                    {fromDate && (
+                      <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                        From: {format(new Date(fromDate), 'MMM dd, yyyy')}
+                        <button onClick={() => setFromDate("")} className="hover:text-blue-900">
+                          <X size={12} />
+                        </button>
+                      </span>
+                    )}
+                    {toDate && (
+                      <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                        To: {format(new Date(toDate), 'MMM dd, yyyy')}
+                        <button onClick={() => setToDate("")} className="hover:text-blue-900">
+                          <X size={12} />
+                        </button>
+                      </span>
+                    )}
+                    {tab !== "all" && (
+                      <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                        Status: {tab === "action_required" ? "Action Required" : tab.charAt(0).toUpperCase() + tab.slice(1).replace("_", " ")}
+                        <button onClick={() => setTab("all")} className="hover:text-blue-900">
+                          <X size={12} />
+                        </button>
+                      </span>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => { setQuery(""); setFromDate(""); setToDate(""); setTab("all"); }}
+                    className="ml-auto text-blue-600 hover:text-blue-800 h-8"
+                  >
+                    Clear All
+                  </Button>
+                </div>
+              )}
 
               {/* Table Actions */}
               <div className="flex items-center gap-3 border-b pb-4">

@@ -358,56 +358,87 @@ const RequesterMergedChart: React.FC = () => {
       </div>
 
       <div className="p-6">
-        {/* Filter Buttons */}
-        <div className="mb-6 flex flex-wrap gap-3">
-          <Button
-            variant={selectedFilter === "last12months" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("last12months")}
-            className={
-              selectedFilter === "last12months"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            Last 12 Months
-          </Button>
-          <Button
-            variant={selectedFilter === "last6months" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("last6months")}
-            className={
-              selectedFilter === "last6months"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            Last 6 Months
-          </Button>
-          <Button
-            variant={selectedFilter === "last5years" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("last5years")}
-            className={
-              selectedFilter === "last5years"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            Last 5 Years
-          </Button>
-          <Button
-            variant={selectedFilter === "alltime" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedFilter("alltime")}
-            className={
-              selectedFilter === "alltime"
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : ""
-            }
-          >
-            All Time
-          </Button>
+        {/* Filter Buttons and Legend */}
+        <div className="mb-6 flex items-center justify-between gap-3">
+          {/* Filter Buttons - Left Side */}
+          <div className="flex flex-wrap gap-3">
+            <Button
+              variant={selectedFilter === "last12months" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("last12months")}
+              className={
+                selectedFilter === "last12months"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Last 12 Months
+            </Button>
+            <Button
+              variant={selectedFilter === "last6months" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("last6months")}
+              className={
+                selectedFilter === "last6months"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Last 6 Months
+            </Button>
+            <Button
+              variant={selectedFilter === "last5years" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("last5years")}
+              className={
+                selectedFilter === "last5years"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Last 5 Years
+            </Button>
+            <Button
+              variant={selectedFilter === "alltime" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFilter("alltime")}
+              className={
+                selectedFilter === "alltime"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              All Time
+            </Button>
+          </div>
+
+          {/* Legend - Right Side */}
+          <div className="flex flex-wrap gap-4 justify-end text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: "#3b82f6" }} />
+              <span>totalPermits</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: "#10b981" }} />
+              <span>permitsApproved</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: "#f59e0b" }} />
+              <span>permitsRejected</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3" style={{ borderTop: "2px solid #8b5cf6" }} />
+              <span>Returned on time %</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3" style={{ borderTop: "2px solid #ec4899" }} />
+              <span>Time for approval (mins)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3" style={{ borderTop: "2px solid #06b6d4" }} />
+              <span>Total time for permit (hours)</span>
+            </div>
+          </div>
         </div>
 
         {/* Chart */}

@@ -109,8 +109,27 @@ const sampleUsers: User[] = [
   },
 ];
 
+type ImportedUser = {
+  name: string;
+  employeeId: string;
+  email: string;
+  phone?: string;
+  gender?: string;
+  department: string;
+  role: string;
+  status: "active" | "inactive";
+  password: string;
+};
+
+type ImportResult = {
+  success: boolean;
+  row: number;
+  data?: ImportedUser;
+  error?: string;
+};
+
 export default function AdminUsers() {
-  const [users] = useState<User[]>(sampleUsers);
+  const [users, setUsers] = useState<User[]>(sampleUsers);
   const [query, setQuery] = useState("");
   const [department, setDepartment] = useState<string | null>(null);
   const [roles, setRoles] = useState<Record<string, boolean>>({
@@ -122,6 +141,10 @@ export default function AdminUsers() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [showCreate, setShowCreate] = useState(false);
+  const [showBulkImport, setShowBulkImport] = useState(false);
+  const [importResults, setImportResults] = useState<ImportResult[]>([]);
+  const [importInProgress, setImportInProgress] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const departments = useMemo(
     () => Array.from(new Set(users.map((u) => u.department))),

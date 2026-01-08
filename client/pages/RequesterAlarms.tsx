@@ -463,10 +463,10 @@ export default function RequesterAlarms() {
                                 <span className="text-slate-700">{config.alarmType}</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600 max-w-xs">
+                            <td className="px-4 py-3 text-sm text-slate-600 max-w-xs border-r border-slate-400">
                               <div className="line-clamp-2">{n.message}</div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-sm text-slate-600 whitespace-nowrap border-r border-slate-400">
                               <div>{format(new Date(n.createdAt), 'MMM dd, yyyy')}</div>
                               <div className="text-xs text-slate-500">{format(new Date(n.createdAt), 'HH:mm')}</div>
                             </td>

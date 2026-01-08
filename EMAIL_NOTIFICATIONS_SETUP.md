@@ -3,6 +3,7 @@
 ## Overview
 
 The Digital Permit System (DPS) now includes automatic email notifications for:
+
 1. **New Permit Submissions** - Notifies approvers and safety officers when a requester submits a permit
 2. **Comments on Permits** - Notifies relevant stakeholders when comments are added at any stage
 3. **Approval Status Updates** - Notifies affected parties when a permit is approved, rejected, or pending
@@ -32,6 +33,7 @@ The email notification system consists of three main components:
 ### Email Flow Example
 
 **When a Requester Submits a Permit:**
+
 ```
 Requester fills form → Click "Submit Permit"
   ↓
@@ -156,8 +158,10 @@ Currently, the system uses sample user data in `client/lib/user-lookup.ts`. To i
    - Example:
 
 ```typescript
-export const findUserByName = async (name: string): Promise<UserData | undefined> => {
-  const response = await fetch('/api/users?search=' + encodeURIComponent(name));
+export const findUserByName = async (
+  name: string,
+): Promise<UserData | undefined> => {
+  const response = await fetch("/api/users?search=" + encodeURIComponent(name));
   const users = await response.json();
   return users[0];
 };
@@ -176,6 +180,7 @@ The system includes three pre-built email templates:
 **Sent to:** Approvers and Safety Officers
 **When:** A requester submits a new permit
 **Includes:**
+
 - Permit details (ID, type, location)
 - Requester information
 - Permit description
@@ -186,6 +191,7 @@ The system includes three pre-built email templates:
 **Sent to:** Relevant stakeholders
 **When:** Anyone adds a comment at any stage
 **Includes:**
+
 - Sender name and role (Requester, Approver, or Safety Officer)
 - Comment text (formatted with line breaks)
 - Permit ID and type
@@ -196,6 +202,7 @@ The system includes three pre-built email templates:
 **Sent to:** Requester and other stakeholders
 **When:** Approver or Safety Officer updates the permit status
 **Includes:**
+
 - Approval status (Approved/Rejected/Pending)
 - Reviewer name
 - Status color indicator
@@ -210,9 +217,9 @@ export const emailTemplates = {
   newPermitRequest: (data) => {
     return {
       subject: `Custom subject`,
-      html: `<h1>Custom HTML template</h1>`
+      html: `<h1>Custom HTML template</h1>`,
     };
-  }
+  },
 };
 ```
 
@@ -221,6 +228,7 @@ export const emailTemplates = {
 ### Emails Not Sending
 
 1. **Check environment variables:**
+
    ```bash
    # In DevServerControl, verify EMAIL_USER and EMAIL_HOST are set
    ```
@@ -237,6 +245,7 @@ export const emailTemplates = {
 ### "EAUTH: Authentication failed"
 
 This usually means incorrect email credentials:
+
 - Gmail: Enable 2FA and use App Password
 - SendGrid: Verify API key is correct
 - Other: Test SMTP credentials using telnet or online SMTP tools
@@ -244,6 +253,7 @@ This usually means incorrect email credentials:
 ### "ECONNREFUSED"
 
 SMTP server is not reachable:
+
 - Verify EMAIL_HOST is correct
 - Check if firewall is blocking port 587 or 465
 - Verify network connectivity
@@ -285,6 +295,7 @@ docker run \
 ### On Other Platforms:
 
 Use your platform's environment variable management:
+
 - Vercel: Project Settings → Environment Variables
 - Heroku: Config Vars
 - AWS: Environment variables in Lambda/CodeBuild
@@ -377,6 +388,7 @@ Potential improvements to the email notification system:
 ## Support
 
 For issues or questions:
+
 1. Check the troubleshooting section above
 2. Review server console logs for error messages
 3. Test email credentials using SMTP diagnostic tools

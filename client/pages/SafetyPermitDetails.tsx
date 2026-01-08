@@ -1701,17 +1701,23 @@ export function SafetyHTPermitDetailsSection() {
 
                         if (recipients.length > 0) {
                           await sendCommentNotification({
-                            senderName: form.safetyOfficerName || "Safety Officer",
+                            senderName:
+                              form.safetyOfficerName || "Safety Officer",
                             senderRole: "safety",
                             permitType: "work",
                             permitId: form.permitNumber,
                             comment: v,
                             recipients,
                           });
-                          toast.success("Comment sent to Requester and Approver");
+                          toast.success(
+                            "Comment sent to Requester and Approver",
+                          );
                         }
                       } catch (error) {
-                        console.error("Failed to send comment notification:", error);
+                        console.error(
+                          "Failed to send comment notification:",
+                          error,
+                        );
                       }
                     }}
                   >
@@ -2323,17 +2329,23 @@ export function SafetyGLPermitDetailsSection() {
 
                         if (recipients.length > 0) {
                           await sendCommentNotification({
-                            senderName: form.safetyOfficerName || "Safety Officer",
+                            senderName:
+                              form.safetyOfficerName || "Safety Officer",
                             senderRole: "safety",
                             permitType: "work",
                             permitId: form.permitNumber,
                             comment: v,
                             recipients,
                           });
-                          toast.success("Comment sent to Requester and Approver");
+                          toast.success(
+                            "Comment sent to Requester and Approver",
+                          );
                         }
                       } catch (error) {
-                        console.error("Failed to send comment notification:", error);
+                        console.error(
+                          "Failed to send comment notification:",
+                          error,
+                        );
                       }
                     }}
                   >

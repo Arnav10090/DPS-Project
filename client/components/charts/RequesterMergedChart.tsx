@@ -25,7 +25,12 @@ interface MergedChartData {
   totalTimeForPermit: number;
 }
 
-type FilterOption = "last12months" | "last6months" | "last5years" | "alltime" | "customDateRange";
+type FilterOption =
+  | "last12months"
+  | "last6months"
+  | "last5years"
+  | "alltime"
+  | "customDateRange";
 
 const RequesterMergedChart: React.FC = () => {
   const [selectedFilter, setSelectedFilter] =
@@ -459,7 +464,10 @@ const RequesterMergedChart: React.FC = () => {
           {showCustomDateInputs && (
             <div className="flex flex-wrap gap-3 mb-4 items-end">
               <div className="flex flex-col gap-1">
-                <label htmlFor="from-date" className="text-xs font-medium text-gray-700">
+                <label
+                  htmlFor="from-date"
+                  className="text-xs font-medium text-gray-700"
+                >
                   From Date
                 </label>
                 <input
@@ -471,7 +479,10 @@ const RequesterMergedChart: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label htmlFor="to-date" className="text-xs font-medium text-gray-700">
+                <label
+                  htmlFor="to-date"
+                  className="text-xs font-medium text-gray-700"
+                >
                   To Date
                 </label>
                 <input
@@ -486,18 +497,22 @@ const RequesterMergedChart: React.FC = () => {
           )}
 
           {/* Applied Filters Section */}
-          {(selectedFilter !== "last12months" || (selectedFilter === "customDateRange" && (customFromDate || customToDate))) && (
+          {(selectedFilter !== "last12months" ||
+            (selectedFilter === "customDateRange" &&
+              (customFromDate || customToDate))) && (
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <div className="text-xs font-semibold text-blue-900 mb-2">Applied Filters:</div>
+              <div className="text-xs font-semibold text-blue-900 mb-2">
+                Applied Filters:
+              </div>
               <div className="flex flex-wrap gap-2">
                 {selectedFilter === "last12months" && (
                   <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
                     <span>Last 12 Months</span>
                     <button
                       onClick={() => {
-                setSelectedFilter("last12months");
-                setShowCustomDateInputs(false);
-              }}
+                        setSelectedFilter("last12months");
+                        setShowCustomDateInputs(false);
+                      }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove last 12 months filter"
                     >
@@ -510,9 +525,9 @@ const RequesterMergedChart: React.FC = () => {
                     <span>Last 6 Months</span>
                     <button
                       onClick={() => {
-                setSelectedFilter("last12months");
-                setShowCustomDateInputs(false);
-              }}
+                        setSelectedFilter("last12months");
+                        setShowCustomDateInputs(false);
+                      }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove last 6 months filter"
                     >
@@ -525,9 +540,9 @@ const RequesterMergedChart: React.FC = () => {
                     <span>Last 5 Years</span>
                     <button
                       onClick={() => {
-                setSelectedFilter("last12months");
-                setShowCustomDateInputs(false);
-              }}
+                        setSelectedFilter("last12months");
+                        setShowCustomDateInputs(false);
+                      }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove last 5 years filter"
                     >
@@ -540,9 +555,9 @@ const RequesterMergedChart: React.FC = () => {
                     <span>All Time</span>
                     <button
                       onClick={() => {
-                setSelectedFilter("last12months");
-                setShowCustomDateInputs(false);
-              }}
+                        setSelectedFilter("last12months");
+                        setShowCustomDateInputs(false);
+                      }}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Remove all time filter"
                     >
@@ -550,26 +565,28 @@ const RequesterMergedChart: React.FC = () => {
                     </button>
                   </div>
                 )}
-                {selectedFilter === "customDateRange" && customFromDate && customToDate && (
-                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
-                    <span>
-                      {new Date(customFromDate).toLocaleDateString()} to{" "}
-                      {new Date(customToDate).toLocaleDateString()}
-                    </span>
-                    <button
-                      onClick={() => {
-                        setSelectedFilter("last12months");
-                        setCustomFromDate("");
-                        setCustomToDate("");
-                        setShowCustomDateInputs(false);
-                      }}
-                      className="text-blue-600 hover:text-blue-800"
-                      aria-label="Remove date range filter"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                )}
+                {selectedFilter === "customDateRange" &&
+                  customFromDate &&
+                  customToDate && (
+                    <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
+                      <span>
+                        {new Date(customFromDate).toLocaleDateString()} to{" "}
+                        {new Date(customToDate).toLocaleDateString()}
+                      </span>
+                      <button
+                        onClick={() => {
+                          setSelectedFilter("last12months");
+                          setCustomFromDate("");
+                          setCustomToDate("");
+                          setShowCustomDateInputs(false);
+                        }}
+                        className="text-blue-600 hover:text-blue-800"
+                        aria-label="Remove date range filter"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  )}
               </div>
             </div>
           )}

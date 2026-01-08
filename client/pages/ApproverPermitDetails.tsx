@@ -8,7 +8,10 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { sendCommentNotification, sendApprovalNotification } from "@/lib/email-service";
+import {
+  sendCommentNotification,
+  sendApprovalNotification,
+} from "@/lib/email-service";
 import { getEmailsByNames } from "@/lib/user-lookup";
 import { toast } from "sonner";
 
@@ -835,10 +838,15 @@ export default function ApproverPermitDetails() {
                                 comment: v,
                                 recipients,
                               });
-                              toast.success("Comment sent to Requester and Safety Officer");
+                              toast.success(
+                                "Comment sent to Requester and Safety Officer",
+                              );
                             }
                           } catch (error) {
-                            console.error("Failed to send comment notification:", error);
+                            console.error(
+                              "Failed to send comment notification:",
+                              error,
+                            );
                           }
                         }}
                       >
@@ -1572,7 +1580,10 @@ export function ApproverHTPermitDetailsSection() {
                           toast.success("Comment sent to Safety Officer");
                         }
                       } catch (error) {
-                        console.error("Failed to send comment notification:", error);
+                        console.error(
+                          "Failed to send comment notification:",
+                          error,
+                        );
                       }
                     }}
                   >
@@ -2126,7 +2137,10 @@ export function ApproverGLPermitDetailsSection() {
                           toast.success("Comment sent to Safety Officer");
                         }
                       } catch (error) {
-                        console.error("Failed to send comment notification:", error);
+                        console.error(
+                          "Failed to send comment notification:",
+                          error,
+                        );
                       }
                     }}
                   >

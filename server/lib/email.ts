@@ -6,7 +6,7 @@ const createTransporter = () => {
   // Using environment variables for email credentials
   // For development, you can use Gmail with App Passwords
   // For production, use SendGrid, Mailgun, or your own SMTP server
-  
+
   const emailConfig = {
     // Example: Gmail SMTP
     host: process.env.EMAIL_HOST || "smtp.gmail.com",
@@ -42,7 +42,8 @@ export const sendEmail = async (options: EmailOptions) => {
     }
 
     const result = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER || "noreply@dps.local",
+      from:
+        process.env.EMAIL_FROM || process.env.EMAIL_USER || "noreply@dps.local",
       ...options,
     });
 

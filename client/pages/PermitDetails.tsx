@@ -11,7 +11,10 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { sendPermitSubmissionNotification, sendCommentNotification } from "@/lib/email-service";
+import {
+  sendPermitSubmissionNotification,
+  sendCommentNotification,
+} from "@/lib/email-service";
 import { getEmailsByNames } from "@/lib/user-lookup";
 import { toast } from "sonner";
 
@@ -4406,7 +4409,8 @@ export default function CreatePermit() {
 
                                   if (recipients.length > 0) {
                                     await sendCommentNotification({
-                                      senderName: form.applicantName || "Requester",
+                                      senderName:
+                                        form.applicantName || "Requester",
                                       senderRole: "requester",
                                       permitType: "work",
                                       permitId: form.permitNumber,
@@ -4416,7 +4420,10 @@ export default function CreatePermit() {
                                     toast.success("Comment sent to reviewers");
                                   }
                                 } catch (error) {
-                                  console.error("Failed to send comment notification:", error);
+                                  console.error(
+                                    "Failed to send comment notification:",
+                                    error,
+                                  );
                                 }
                               }}
                               className="px-3 py-1 rounded bg-white border text-sm"
@@ -4602,17 +4609,23 @@ export default function CreatePermit() {
 
                                   if (safetyOfficers.length > 0) {
                                     await sendCommentNotification({
-                                      senderName: form.applicantName || "Requester",
+                                      senderName:
+                                        form.applicantName || "Requester",
                                       senderRole: "requester",
                                       permitType: "work",
                                       permitId: form.permitNumber,
                                       comment: v,
                                       recipients: safetyOfficers,
                                     });
-                                    toast.success("Comment sent to Safety Officer");
+                                    toast.success(
+                                      "Comment sent to Safety Officer",
+                                    );
                                   }
                                 } catch (error) {
-                                  console.error("Failed to send comment notification:", error);
+                                  console.error(
+                                    "Failed to send comment notification:",
+                                    error,
+                                  );
                                 }
                               }}
                               className="px-3 py-1 rounded bg-white border text-sm"

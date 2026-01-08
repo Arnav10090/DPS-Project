@@ -13,7 +13,7 @@ export interface NotifyPermitSubmissionRequest {
 
 export const handleNotifyPermitSubmission = async (
   req: Request<unknown, unknown, NotifyPermitSubmissionRequest>,
-  res: Response
+  res: Response,
 ) => {
   try {
     const {
@@ -59,20 +59,18 @@ export const handleNotifyPermitSubmission = async (
       sendEmail({
         to: email,
         ...emailContent,
-      })
+      }),
     );
 
     const results = await Promise.allSettled(emailPromises);
 
     // Count successful sends
-    const successCount = results.filter(
-      (r) => r.status === "fulfilled"
-    ).length;
+    const successCount = results.filter((r) => r.status === "fulfilled").length;
     const failureCount = results.filter((r) => r.status === "rejected").length;
 
     if (failureCount > 0) {
       console.error(
-        `Failed to send ${failureCount} emails, ${successCount} succeeded`
+        `Failed to send ${failureCount} emails, ${successCount} succeeded`,
       );
     }
 
@@ -102,7 +100,7 @@ export interface NotifyCommentRequest {
 
 export const handleNotifyComment = async (
   req: Request<unknown, unknown, NotifyCommentRequest>,
-  res: Response
+  res: Response,
 ) => {
   try {
     const {
@@ -144,15 +142,13 @@ export const handleNotifyComment = async (
       sendEmail({
         to: email,
         ...emailContent,
-      })
+      }),
     );
 
     const results = await Promise.allSettled(emailPromises);
 
     // Count successful sends
-    const successCount = results.filter(
-      (r) => r.status === "fulfilled"
-    ).length;
+    const successCount = results.filter((r) => r.status === "fulfilled").length;
     const failureCount = results.filter((r) => r.status === "rejected").length;
 
     res.json({
@@ -181,7 +177,7 @@ export interface NotifyApprovalRequest {
 
 export const handleNotifyApproval = async (
   req: Request<unknown, unknown, NotifyApprovalRequest>,
-  res: Response
+  res: Response,
 ) => {
   try {
     const {
@@ -223,15 +219,13 @@ export const handleNotifyApproval = async (
       sendEmail({
         to: email,
         ...emailContent,
-      })
+      }),
     );
 
     const results = await Promise.allSettled(emailPromises);
 
     // Count successful sends
-    const successCount = results.filter(
-      (r) => r.status === "fulfilled"
-    ).length;
+    const successCount = results.filter((r) => r.status === "fulfilled").length;
     const failureCount = results.filter((r) => r.status === "rejected").length;
 
     res.json({

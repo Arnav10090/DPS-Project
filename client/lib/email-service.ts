@@ -32,7 +32,7 @@ export interface SendApprovalNotificationPayload {
  * Send email notification when a permit is submitted
  */
 export const sendPermitSubmissionNotification = async (
-  payload: SendPermitNotificationPayload
+  payload: SendPermitNotificationPayload,
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}/notify/permit-submission`, {
@@ -44,7 +44,9 @@ export const sendPermitSubmissionNotification = async (
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to send permit notification: ${response.statusText}`);
+      throw new Error(
+        `Failed to send permit notification: ${response.statusText}`,
+      );
     }
 
     const data = await response.json();
@@ -60,7 +62,7 @@ export const sendPermitSubmissionNotification = async (
  * Send email notification when a comment is added
  */
 export const sendCommentNotification = async (
-  payload: SendCommentNotificationPayload
+  payload: SendCommentNotificationPayload,
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}/notify/comment`, {
@@ -73,7 +75,7 @@ export const sendCommentNotification = async (
 
     if (!response.ok) {
       throw new Error(
-        `Failed to send comment notification: ${response.statusText}`
+        `Failed to send comment notification: ${response.statusText}`,
       );
     }
 
@@ -90,7 +92,7 @@ export const sendCommentNotification = async (
  * Send email notification when a permit is approved/rejected/pending
  */
 export const sendApprovalNotification = async (
-  payload: SendApprovalNotificationPayload
+  payload: SendApprovalNotificationPayload,
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}/notify/approval`, {
@@ -102,7 +104,9 @@ export const sendApprovalNotification = async (
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to send approval notification: ${response.statusText}`);
+      throw new Error(
+        `Failed to send approval notification: ${response.statusText}`,
+      );
     }
 
     const data = await response.json();

@@ -91,7 +91,7 @@ export const SAMPLE_USERS: UserData[] = [
 export const findUserByName = (name: string): UserData | undefined => {
   if (!name || typeof name !== "string") return undefined;
   return SAMPLE_USERS.find(
-    (u) => u.name.toLowerCase().trim() === name.toLowerCase().trim()
+    (u) => u.name.toLowerCase().trim() === name.toLowerCase().trim(),
   );
 };
 
@@ -122,7 +122,7 @@ export const getEmailsByNames = (names: (string | undefined)[]): string[] => {
  */
 export const getUsersByRole = (role: string): UserData[] => {
   return SAMPLE_USERS.filter(
-    (u) => u.role.toLowerCase() === role.toLowerCase()
+    (u) => u.role.toLowerCase() === role.toLowerCase(),
   );
 };
 

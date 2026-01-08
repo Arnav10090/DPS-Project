@@ -192,6 +192,184 @@ export default function PermitFilters({
       </div>
 
 
+      <div className="flex items-center gap-6 flex-wrap">
+        <div className="flex flex-col">
+          <div className="text-md text-gray-700">
+            <p>
+              <strong>Plant:</strong>
+            </p>
+          </div>
+          <Select
+            value={plantFilter ?? "__all__"}
+            onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
+          >
+            <SelectTrigger className="h-9 w-44 text-sm">
+              <SelectValue placeholder="Plant: All" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">All</SelectItem>
+              {plants.map((p) => (
+                <SelectItem key={p} value={p}>
+                  {p}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="text-md text-gray-700">
+            <p>
+              <strong>Dept:</strong>
+            </p>
+          </div>
+          <Select
+            value={deptFilter ?? "__all__"}
+            onValueChange={(v) => setDeptFilter(v === "__all__" ? null : v)}
+          >
+            <SelectTrigger className="h-9 w-44 text-sm">
+              <SelectValue placeholder="Dept: All" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">All</SelectItem>
+              {depts.map((d) => (
+                <SelectItem key={d} value={d}>
+                  {d}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="text-md text-gray-700">
+            <p>
+              <strong>Status:</strong>
+            </p>
+          </div>
+          <div className="inline-flex gap-2 items-center">
+            <button
+              className={cn(
+                "px-3 py-2 rounded-md text-sm",
+                statusFilter === null ? "bg-primary text-white" : "bg-gray-100",
+              )}
+              onClick={() => setStatusFilter(null)}
+            >
+              All
+            </button>
+            {statuses.map((s) => (
+              <button
+                key={s}
+                className={cn(
+                  "px-3 py-2 rounded-md text-sm",
+                  statusFilter === s ? "bg-primary text-white" : "bg-gray-100",
+                )}
+                onClick={() => setStatusFilter(statusFilter === s ? null : s)}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm text-muted-foreground mb-1">&nbsp;</label>
+          <button
+            type="button"
+            onClick={() => {
+              setSearch("");
+              setPlantFilter(null);
+              setDeptFilter(null);
+              setStatusFilter(null);
+              setDateFrom(null);
+              setDateTo(null);
+            }}
+            className="flex items-center bg-white border border-gray-200 rounded-md text-sm font-medium gap-2 h-11 px-4"
+          >
+            Reset
+          </button>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="text-sm text-gray-700">
+            <p>
+              <strong>Rows:</strong>
+            </p>
+          </div>
+          <Select
+            value={String(pageSize)}
+            onValueChange={(v) => setPageSize(Number(v))}
+          >
+            <SelectTrigger className="h-9 w-24 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center">
+          <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm">
+            <button
+              onClick={() => setPage(1)}
+              disabled={page === 1}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="First page"
+            >
+              «
+            </button>
+            <button
+              onClick={goPrev}
+              disabled={page <= 1}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="Previous page"
+            >
+              ‹
+            </button>
+            {pageRange(page, totalPages).map((p, idx) =>
+              typeof p === "string" ? (
+                <span key={idx} className="px-2 text-sm text-muted-foreground">
+                  {p}
+                </span>
+              ) : (
+                <button
+                  key={p}
+                  onClick={() => setPage(Number(p))}
+                  className={cn(
+                    "px-3 py-1 rounded text-sm",
+                    p === page
+                      ? "bg-primary text-white shadow"
+                      : "hover:bg-gray-50",
+                  )}
+                  aria-current={p === page}
+                >
+                  {p}
+                </button>
+              ),
+            )}
+            <button
+              onClick={goNext}
+              disabled={page >= totalPages}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="Next page"
+            >
+              ›
+            </button>
+            <button
+              onClick={() => setPage(totalPages)}
+              disabled={page === totalPages}
+              className="px-2 py-1 text-sm rounded disabled:opacity-50"
+              aria-label="Last page"
+            >
+              »
+            </button>
+          </nav>
+        </div>
+      </div>
+
       <div className="mt-2">
         <div className="flex flex-wrap gap-2">
           {debouncedSearch && (

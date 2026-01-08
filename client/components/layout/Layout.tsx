@@ -11,7 +11,7 @@ export default function Layout() {
       <NavTabs />
       <AlertTicker />
       <main className="flex-1 w-full overflow-hidden">
-        <div className="w-full h-full px-4 py-4 overflow-y-auto">
+        <div className="w-full h-full px-4 py-4 pb-20 overflow-y-auto">
           <Outlet />
         </div>
       </main>

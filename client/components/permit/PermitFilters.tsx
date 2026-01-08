@@ -139,20 +139,6 @@ export default function PermitFilters({
           </div>
 
           <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="h-9 w-16 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
             value={plantFilter ?? "__all__"}
             onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
           >
@@ -193,6 +179,20 @@ export default function PermitFilters({
               </span>
             </div>
           )}
+
+          <Select
+            value={String(pageSize)}
+            onValueChange={(v) => setPageSize(Number(v))}
+          >
+            <SelectTrigger className="h-9 w-16 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
 
           <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm ml-auto">
             <button

@@ -228,13 +228,6 @@ export default function RequesterAlarms() {
         <main>
           <Card>
             <CardHeader className="flex flex-col gap-4 pb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold">Alarms & Notifications</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Track and manage your permit notifications</p>
-                </div>
-              </div>
-
               {/* Filter Section */}
               <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-3 border border-slate-200">
                 <div className="flex items-center gap-3">

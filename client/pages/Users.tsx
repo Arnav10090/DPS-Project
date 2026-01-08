@@ -143,6 +143,9 @@ export default function AdminUsers() {
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [showCreate, setShowCreate] = useState(false);
   const [showBulkImport, setShowBulkImport] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editFormData, setEditFormData] = useState<User | null>(null);
   const [importResults, setImportResults] = useState<ImportResult[]>([]);
   const [importInProgress, setImportInProgress] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);

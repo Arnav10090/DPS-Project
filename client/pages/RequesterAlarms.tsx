@@ -470,7 +470,7 @@ export default function RequesterAlarms() {
                               <div>{format(new Date(n.createdAt), 'MMM dd, yyyy')}</div>
                               <div className="text-xs text-slate-500">{format(new Date(n.createdAt), 'HH:mm')}</div>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 border-r border-slate-400">
                               <div className="flex flex-col gap-1">
                                 <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium w-fit ${statusBgColor[n.type]}`}>
                                   {config.label}

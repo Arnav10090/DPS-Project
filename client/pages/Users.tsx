@@ -148,6 +148,10 @@ export default function AdminUsers() {
   const [editFormData, setEditFormData] = useState<User | null>(null);
   const [importResults, setImportResults] = useState<ImportResult[]>([]);
   const [importInProgress, setImportInProgress] = useState(false);
+  const [showExportFormat, setShowExportFormat] = useState(false);
+  const [exportType, setExportType] = useState<"all" | "selected">("all");
+  const [showChangeDept, setShowChangeDept] = useState(false);
+  const [selectedDeptChange, setSelectedDeptChange] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const departments = useMemo(

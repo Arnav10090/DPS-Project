@@ -348,7 +348,7 @@ export default function AdminUsers() {
     if (!editFormData) return;
 
     setUsers((prev) =>
-      prev.map((u) => (u.id === editFormData.id ? editFormData : u))
+      prev.map((u) => (u.id === editFormData.id ? editFormData : u)),
     );
     setShowEdit(false);
     setEditingUser(null);
@@ -361,8 +361,8 @@ export default function AdminUsers() {
       prev.map((u) =>
         u.id === userId
           ? { ...u, status: u.status === "active" ? "inactive" : "active" }
-          : u
-      )
+          : u,
+      ),
     );
   }
 
@@ -393,7 +393,7 @@ export default function AdminUsers() {
           u.lastLogin
             ? format(new Date(u.lastLogin), "yyyy-MM-dd HH:mm:ss")
             : "",
-        ].join(",")
+        ].join(","),
       ),
     ].join("\n");
 
@@ -438,7 +438,7 @@ export default function AdminUsers() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
     XLSX.writeFile(
       workbook,
-      `users_${format(new Date(), "yyyy-MM-dd_HHmmss")}.xlsx`
+      `users_${format(new Date(), "yyyy-MM-dd_HHmmss")}.xlsx`,
     );
   }
 
@@ -479,8 +479,8 @@ export default function AdminUsers() {
           prev.map((u) =>
             selectedUsers.some((su) => su.id === u.id)
               ? { ...u, status: "active" }
-              : u
-          )
+              : u,
+          ),
         );
         setSelected({});
         break;
@@ -490,8 +490,8 @@ export default function AdminUsers() {
           prev.map((u) =>
             selectedUsers.some((su) => su.id === u.id)
               ? { ...u, status: "inactive" }
-              : u
-          )
+              : u,
+          ),
         );
         setSelected({});
         break;
@@ -507,7 +507,7 @@ export default function AdminUsers() {
 
       case "notify":
         alert(
-          `Notifications sent to ${selectedUsers.length} user(s): ${selectedUsers.map((u) => u.email).join(", ")}`
+          `Notifications sent to ${selectedUsers.length} user(s): ${selectedUsers.map((u) => u.email).join(", ")}`,
         );
         setSelected({});
         break;
@@ -539,7 +539,9 @@ export default function AdminUsers() {
         const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         rows = data.map((row: unknown) => {
           if (Array.isArray(row)) {
-            return row.map((cell) => (cell === null || cell === undefined ? "" : String(cell)));
+            return row.map((cell) =>
+              cell === null || cell === undefined ? "" : String(cell),
+            );
           }
           return [];
         });
@@ -945,7 +947,10 @@ export default function AdminUsers() {
                   <Input
                     value={editFormData.email}
                     onChange={(e) =>
-                      setEditFormData({ ...editFormData, email: e.target.value })
+                      setEditFormData({
+                        ...editFormData,
+                        email: e.target.value,
+                      })
                     }
                     placeholder="Email"
                   />
@@ -992,8 +997,12 @@ export default function AdminUsers() {
                     <SelectContent>
                       <SelectItem value="Requester">Requester</SelectItem>
                       <SelectItem value="Approver">Approver</SelectItem>
-                      <SelectItem value="Safety Officer">Safety Officer</SelectItem>
-                      <SelectItem value="Administrator">Administrator</SelectItem>
+                      <SelectItem value="Safety Officer">
+                        Safety Officer
+                      </SelectItem>
+                      <SelectItem value="Administrator">
+                        Administrator
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1069,7 +1078,10 @@ export default function AdminUsers() {
             <p className="text-sm text-muted-foreground">
               Select the department to move the selected users to:
             </p>
-            <Select value={selectedDeptChange} onValueChange={setSelectedDeptChange}>
+            <Select
+              value={selectedDeptChange}
+              onValueChange={setSelectedDeptChange}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Department" />
               </SelectTrigger>
@@ -1100,14 +1112,14 @@ export default function AdminUsers() {
                     }
 
                     const selectedUsers = filtered.filter(
-                      (u) => selected[u.id]
+                      (u) => selected[u.id],
                     );
                     setUsers((prev) =>
                       prev.map((u) =>
                         selectedUsers.some((su) => su.id === u.id)
                           ? { ...u, department: selectedDeptChange }
-                          : u
-                      )
+                          : u,
+                      ),
                     );
 
                     setSelected({});

@@ -363,7 +363,9 @@ const RequesterMergedChart: React.FC = () => {
           {/* Filter Buttons - Left Side */}
           <div className="flex flex-wrap gap-3">
             <Button
-              variant={selectedFilter === "last12months" ? "default" : "outline"}
+              variant={
+                selectedFilter === "last12months" ? "default" : "outline"
+              }
               size="sm"
               onClick={() => setSelectedFilter("last12months")}
               className={
@@ -415,27 +417,45 @@ const RequesterMergedChart: React.FC = () => {
           {/* Legend - Right Side */}
           <div className="flex flex-wrap gap-6 justify-end text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded" style={{ backgroundColor: "#3b82f6" }} />
+              <div
+                className="w-5 h-5 rounded"
+                style={{ backgroundColor: "#3b82f6" }}
+              />
               <span className="font-medium">totalPermits</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded" style={{ backgroundColor: "#10b981" }} />
+              <div
+                className="w-5 h-5 rounded"
+                style={{ backgroundColor: "#10b981" }}
+              />
               <span className="font-medium">permitsApproved</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded" style={{ backgroundColor: "#f59e0b" }} />
+              <div
+                className="w-5 h-5 rounded"
+                style={{ backgroundColor: "#f59e0b" }}
+              />
               <span className="font-medium">permitsRejected</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-3" style={{ borderTop: "3px solid #8b5cf6" }} />
+              <div
+                className="w-5 h-3"
+                style={{ borderTop: "3px solid #8b5cf6" }}
+              />
               <span className="font-medium">Returned on time %</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-3" style={{ borderTop: "3px solid #ec4899" }} />
+              <div
+                className="w-5 h-3"
+                style={{ borderTop: "3px solid #ec4899" }}
+              />
               <span className="font-medium">Time for approval (mins)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-3" style={{ borderTop: "3px solid #06b6d4" }} />
+              <div
+                className="w-5 h-3"
+                style={{ borderTop: "3px solid #06b6d4" }}
+              />
               <span className="font-medium">Total time for permit (hours)</span>
             </div>
           </div>
@@ -474,10 +494,7 @@ const RequesterMergedChart: React.FC = () => {
                 }}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend
-                wrapperStyle={{ display: "none" }}
-                height={0}
-              />
+              <Legend wrapperStyle={{ display: "none" }} height={0} />
 
               {/* Bar Charts */}
               <Bar

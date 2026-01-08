@@ -229,10 +229,11 @@ export default function RequesterAlarms() {
           <Card>
             <CardHeader className="flex flex-col gap-4 pb-4">
               {/* Filter Section */}
-              <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-3 border border-slate-200">
-                <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-4 border border-slate-200">
+                <div className="flex items-end gap-4">
                   {/* Search Input */}
-                  <div className="w-64">
+                  <div className="flex-1 min-w-64">
+                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Search</label>
                     <div className="relative">
                       <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                       <Input
@@ -245,39 +246,47 @@ export default function RequesterAlarms() {
                   </div>
 
                   {/* Date Range */}
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="date"
-                      value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
-                      className="h-9 bg-white text-sm w-[130px]"
-                      title="From date"
-                    />
-                    <span className="text-slate-400 text-sm">to</span>
-                    <Input
-                      type="date"
-                      value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
-                      className="h-9 bg-white text-sm w-[130px]"
-                      title="To date"
-                    />
+                  <div className="flex items-end gap-3 flex-1 min-w-96">
+                    <div className="flex-1">
+                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">From</label>
+                      <Input
+                        type="date"
+                        value={fromDate}
+                        onChange={(e) => setFromDate(e.target.value)}
+                        className="h-9 bg-white text-sm w-full"
+                        title="From date"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">To</label>
+                      <Input
+                        type="date"
+                        value={toDate}
+                        onChange={(e) => setToDate(e.target.value)}
+                        className="h-9 bg-white text-sm w-full"
+                        title="To date"
+                      />
+                    </div>
                   </div>
 
                   {/* Status Dropdown */}
-                  <div className="relative">
-                    <select
-                      value={tab}
-                      onChange={(e) => setTab(e.target.value as any)}
-                      className="h-9 px-3 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 cursor-pointer appearance-none pr-8"
-                    >
-                      <option value="all">All ({stats.total})</option>
-                      <option value="action_required">Action Required ({stats.actionRequired})</option>
-                      <option value="approved">Approved ({stats.approved})</option>
-                      <option value="rejected">Rejected ({stats.rejected})</option>
-                      <option value="under_review">Under Review ({stats.underReview})</option>
-                      <option value="closed">Closed ({stats.closed})</option>
-                    </select>
-                    <ChevronDown size={16} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500" />
+                  <div className="flex-1 min-w-64">
+                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Status</label>
+                    <div className="relative">
+                      <select
+                        value={tab}
+                        onChange={(e) => setTab(e.target.value as any)}
+                        className="h-9 px-3 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 cursor-pointer appearance-none pr-8 w-full"
+                      >
+                        <option value="all">All ({stats.total})</option>
+                        <option value="action_required">Action Required ({stats.actionRequired})</option>
+                        <option value="approved">Approved ({stats.approved})</option>
+                        <option value="rejected">Rejected ({stats.rejected})</option>
+                        <option value="under_review">Under Review ({stats.underReview})</option>
+                        <option value="closed">Closed ({stats.closed})</option>
+                      </select>
+                      <ChevronDown size={16} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500" />
+                    </div>
                   </div>
                 </div>
               </div>

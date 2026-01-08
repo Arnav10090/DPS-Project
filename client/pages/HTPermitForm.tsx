@@ -521,14 +521,16 @@ export default function HTPermitForm() {
           )}
         </div>
       </header>
-      <div className="w-full px-4 pb-6 space-y-6">
-        <FormWizard
-          initial={initial}
-          onSaveDraft={onSaveDraft}
-          onSubmit={onSubmit}
-          onPreviewRequest={() => setShowPreview(true)}
-        />
-        <div className="bg-white">
+      <div className="w-full px-4 pb-6">
+        <div className="space-y-6">
+          <FormWizard
+            initial={initial}
+            onSaveDraft={onSaveDraft}
+            onSubmit={onSubmit}
+            onPreviewRequest={() => setShowPreview(true)}
+          />
+        </div>
+        <div className="bg-white mt-0">
           <div className="w-full px-4 py-4 flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
               <img
@@ -576,7 +578,7 @@ export default function HTPermitForm() {
             </div>
           </div>
         </div>
-        <div className="text-xs text-gray-500">
+        <div className="mt-6 text-xs text-gray-500">
           Use Ctrl/Cmd+P to generate a print-ready PDF.
         </div>
         {showPreview && (

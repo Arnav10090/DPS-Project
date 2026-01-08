@@ -641,10 +641,18 @@ export default function AdminUsers() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Button size="sm" variant="ghost">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleEditUser(u)}
+                      >
                         Edit
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleToggleUserStatus(u.id)}
+                      >
                         {u.status === "active" ? "Deactivate" : "Activate"}
                       </Button>
                     </div>

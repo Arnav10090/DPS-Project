@@ -138,41 +138,6 @@ export default function PermitFilters({
             />
           </div>
 
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => applyPreset("today")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Today"
-            >
-              Today
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("week")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Last 7 days"
-            >
-              Week
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("month")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Last 30 days"
-            >
-              Month
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("30")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Last 30 days"
-            >
-              30d
-            </button>
-          </div>
-
           {activeFilterCount > 0 && (
             <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs ml-auto">
               <span>
@@ -185,6 +150,20 @@ export default function PermitFilters({
 
       <div className="bg-card border p-3 rounded-lg shadow-sm">
         <div className="flex items-center gap-2 flex-wrap">
+          <Select
+            value={String(pageSize)}
+            onValueChange={(v) => setPageSize(Number(v))}
+          >
+            <SelectTrigger className="h-9 w-20 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
+
           <Select
             value={plantFilter ?? "__all__"}
             onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
@@ -216,20 +195,6 @@ export default function PermitFilters({
                   {s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, " ")}
                 </SelectItem>
               ))}
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="h-9 w-20 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
             </SelectContent>
           </Select>
 

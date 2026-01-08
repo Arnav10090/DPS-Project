@@ -82,7 +82,7 @@ export default function PermitFilters({
     <div className="mb-4 space-y-2">
       <div className="bg-card border p-3 rounded-lg shadow-sm">
         <div className="flex items-center gap-8">
-          <div className="relative w-40">
+          <div className="relative w-64">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <svg
                 className="w-4 h-4 text-muted-foreground"

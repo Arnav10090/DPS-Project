@@ -4378,7 +4378,7 @@ export default function CreatePermit() {
                               }
                             />
                             <button
-                              onClick={() => {
+                              onClick={async () => {
                                 const v = newRequesterComment.trim();
                                 if (!v) return;
                                 const prev = form.requesterCustomComments || [];
@@ -4389,6 +4389,35 @@ export default function CreatePermit() {
                                   ],
                                 });
                                 setNewRequesterComment("");
+
+                                // Send email notification to approvers and safety officers
+                                try {
+                                  const approvers = getEmailsByNames([
+                                    form.permitApprover1,
+                                    form.permitApprover2,
+                                  ]);
+                                  const safetyOfficers = getEmailsByNames([
+                                    form.safetyManager,
+                                  ]);
+                                  const recipients = [
+                                    ...approvers,
+                                    ...safetyOfficers,
+                                  ];
+
+                                  if (recipients.length > 0) {
+                                    await sendCommentNotification({
+                                      senderName: form.applicantName || "Requester",
+                                      senderRole: "requester",
+                                      permitType: "work",
+                                      permitId: form.permitNumber,
+                                      comment: v,
+                                      recipients,
+                                    });
+                                    toast.success("Comment sent to reviewers");
+                                  }
+                                } catch (error) {
+                                  console.error("Failed to send comment notification:", error);
+                                }
                               }}
                               className="px-3 py-1 rounded bg-white border text-sm"
                             >

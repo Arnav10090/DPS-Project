@@ -388,149 +388,158 @@ export default function RequesterAlarms() {
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-3">
-              {/* Bulk actions */}
-              <div className="flex items-center gap-3">
-                <label className="inline-flex items-center gap-2">
-                  <input 
-                    type="checkbox" 
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      const next: Record<string, boolean> = {};
-                      filtered.forEach((n) => next[n.id] = checked);
-                      setSelected(next);
-                    }} 
-                  />
-                  <span className="text-sm text-muted-foreground">Select All</span>
-                </label>
-                <Button size="sm" variant="outline" onClick={bulkMarkRead}>
-                  Mark Selected as Read
-                </Button>
-                <Button size="sm" variant="destructive" onClick={bulkClear}>
-                  Clear Selected
-                </Button>
-              </div>
+            <CardContent className="pt-0">
+              {filtered.length === 0 ? (
+                <div className="py-12 text-center text-muted-foreground">
+                  <Bell size={32} className="mx-auto mb-4 text-slate-300" />
+                  <div className="mb-2 text-lg font-medium">No notifications found</div>
+                  <div className="mb-4 text-sm">Create a new permit request to get updates on your permits.</div>
+                  <Button onClick={() => navigate('/alarms')}>
+                    Create New Permit Request
+                  </Button>
+                </div>
+              ) : (
+                <div className="overflow-x-auto border rounded-lg">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b bg-slate-50">
+                        <th className="px-4 py-3 text-left">
+                          <input
+                            type="checkbox"
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              const next: Record<string, boolean> = {};
+                              filtered.forEach((n) => next[n.id] = checked);
+                              setSelected(next);
+                            }}
+                            checked={filtered.length > 0 && filtered.every(n => selected[n.id])}
+                          />
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Permit ID</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Alarm Name</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Type</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Description</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Date & Time</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Status</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filtered.map((n, index) => {
+                        const config = TYPE_CONFIG[n.type];
+                        const Icon = config.icon;
+                        const statusBgColor = {
+                          approved: "bg-green-100 text-green-800",
+                          rejected: "bg-red-100 text-red-800",
+                          under_review: "bg-blue-100 text-blue-800",
+                          closed: "bg-slate-100 text-slate-800",
+                          action_required: "bg-orange-100 text-orange-800",
+                          expiring: "bg-yellow-100 text-yellow-800",
+                          system: "bg-slate-100 text-slate-800",
+                        };
 
-              {/* Notification list */}
-              <div className="flex flex-col">
-                {filtered.length === 0 ? (
-                  <div className="p-6 text-center text-muted-foreground">
-                    <div className="mb-3 text-lg font-medium">No notifications found</div>
-                    <div className="mb-3">Create a new permit request to get updates on your permits.</div>
-                    <div className="flex justify-center">
-                      <Button onClick={() => navigate('/alarms')}>
-                        Create New Permit Request
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  filtered.map((n) => {
-                    const config = TYPE_CONFIG[n.type];
-                    const Icon = config.icon;
-                    
-                    return (
-                      <div 
-                        key={n.id} 
-                        className={`mb-3 rounded-md bg-white p-4 shadow-sm ${config.color} flex items-start gap-3`} 
-                        role="article" 
-                        aria-labelledby={`notif-${n.id}`}
-                      >
-                        <div className="flex-shrink-0 mt-1">
-                          <Icon size={16} className="text-muted-foreground" />
-                        </div>
-                        
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`inline-block h-3 w-3 rounded-full ${PRIORITY_COLOR[n.priority]}`} />
-                                <span className="text-xs text-muted-foreground">{config.label}</span>
-                                {n.actionRequired && (
-                                  <span className="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-800">
-                                    Action Required
-                                  </span>
-                                )}
-                                {!n.read && (
-                                  <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
-                                    New
-                                  </span>
-                                )}
-                              </div>
-                              
-                              <div id={`notif-${n.id}`} className={`${n.read ? 'text-foreground' : 'font-semibold'} mb-1`}>
-                                {n.title}
-                              </div>
-                              
-                              <div className="text-sm text-muted-foreground mb-2">
-                                {n.message}
-                              </div>
-                              
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                <span>Permit: {n.permitId}</span>
-                                <span>•</span>
-                                <span>{formatDistanceToNow(new Date(n.createdAt), { addSuffix: true })}</span>
-                                {n.dueDate && (
-                                  <>
-                                    <span>•</span>
-                                    <span className="text-orange-600 font-medium">
-                                      Due: {formatDistanceToNow(new Date(n.dueDate), { addSuffix: true })}
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center gap-2 ml-4">
-                              <input 
-                                type="checkbox" 
-                                checked={!!selected[n.id]} 
+                        return (
+                          <tr
+                            key={n.id}
+                            className={`border-b hover:bg-slate-50 transition-colors ${!n.read ? 'bg-blue-50' : ''}`}
+                          >
+                            <td className="px-4 py-3">
+                              <input
+                                type="checkbox"
+                                checked={!!selected[n.id]}
                                 onChange={(e) => toggleSelect(n.id, e.target.checked)}
                                 aria-label={`Select notification ${n.id}`}
                               />
-                            </div>
-                          </div>
-                          
-                          <div className="mt-3 flex items-center gap-2">
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              onClick={() => navigate('/alarms')}
-                            >
-                              <Eye size={14} className="mr-1" />
-                              View Permit
-                            </Button>
-                            
-                            {n.actionRequired && (
-                              <Button 
-                                size="sm" 
-                                onClick={() => handlePermitAction(n)}
-                                className="bg-orange-600 hover:bg-orange-700"
-                              >
-                                Take Action
-                              </Button>
-                            )}
-                            
-                            <button 
-                              onClick={() => toggleRead(n.id)}
-                              className="text-xs px-2 py-1 rounded border hover:bg-gray-50"
-                            >
-                              {n.read ? 'Mark Unread' : 'Mark Read'}
-                            </button>
-                            
-                            <button 
-                              onClick={() => dismiss(n.id)}
-                              className="text-red-600 p-1 rounded hover:bg-red-50"
-                              title="Dismiss notification"
-                            >
-                              <Trash size={14} />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm font-medium text-slate-900">
+                              <span className="inline-flex items-center gap-1 bg-slate-100 px-2 py-1 rounded">
+                                {n.permitId}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className={`text-sm ${n.read ? 'text-slate-700' : 'font-semibold text-slate-900'}`}>
+                                {n.title}
+                              </div>
+                              {!n.read && (
+                                <span className="inline-flex items-center rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                  New
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-sm">
+                              <div className="flex items-center gap-2">
+                                <Icon size={14} className="text-slate-500" />
+                                <span className="text-slate-700">{config.label}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600 max-w-xs">
+                              <div className="line-clamp-2">{n.message}</div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">
+                              <div>{format(new Date(n.createdAt), 'MMM dd, yyyy')}</div>
+                              <div className="text-xs text-slate-500">{format(new Date(n.createdAt), 'HH:mm')}</div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex flex-col gap-1">
+                                <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium w-fit ${statusBgColor[n.type]}`}>
+                                  {config.label}
+                                </span>
+                                {n.actionRequired && (
+                                  <span className="inline-flex items-center rounded-full bg-orange-600 px-3 py-1 text-xs font-medium text-white w-fit">
+                                    Action Required
+                                  </span>
+                                )}
+                                {n.dueDate && (
+                                  <span className="inline-flex items-center rounded-full bg-yellow-600 px-3 py-1 text-xs font-medium text-white w-fit">
+                                    Due: {formatDistanceToNow(new Date(n.dueDate), { addSuffix: false })}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-8 px-2"
+                                  onClick={() => navigate('/alarms')}
+                                  title="View permit details"
+                                >
+                                  <Eye size={14} />
+                                </Button>
+                                <button
+                                  onClick={() => toggleRead(n.id)}
+                                  className="h-8 px-2 rounded border border-slate-300 hover:bg-slate-100 text-xs font-medium transition-colors"
+                                  title={n.read ? "Mark as unread" : "Mark as read"}
+                                >
+                                  {n.read ? '👁' : '✓'}
+                                </button>
+                                <button
+                                  onClick={() => dismiss(n.id)}
+                                  className="h-8 px-2 rounded border border-red-300 text-red-600 hover:bg-red-50 transition-colors"
+                                  title="Delete notification"
+                                >
+                                  <Trash size={14} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Table Footer - Results Info */}
+              {filtered.length > 0 && (
+                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground border-t pt-4">
+                  <span>Showing {filtered.length} of {notifications.length} alarms</span>
+                  {query || fromDate || toDate ? (
+                    <span className="text-xs">Filters applied - <button className="text-blue-600 hover:underline" onClick={() => { setQuery(""); setFromDate(""); setToDate(""); }}>Clear</button></span>
+                  ) : null}
+                </div>
+              )}
             </CardContent>
           </Card>
         </main>

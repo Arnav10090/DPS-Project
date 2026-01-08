@@ -329,44 +329,41 @@ export function PermitStatusTable({
                 "sn",
                 sort,
                 setSort,
-                "w-16 sticky left-0 z-20 bg-gray-900",
+                "w-16 sticky left-0 z-20 bg-gray-900 border-r border-gray-700",
               )}
               {headerCell(
                 "Plant",
                 "plant",
                 sort,
                 setSort,
-                "w-40 sticky left-16 z-20 bg-gray-900",
+                "w-40 sticky left-16 z-20 bg-gray-900 border-r border-gray-700",
               )}
-              {headerCell("Dept", "dept", sort, setSort, "w-40")}
-              {headerCell("Date", "date", sort, setSort, "w-36")}
+              {headerCell("Dept", "dept", sort, setSort, "w-40 border-r border-gray-700")}
+              {headerCell("Date", "date", sort, setSort, "w-36 border-r border-gray-700")}
               {headerCell(
                 "Permit No",
                 "permitNo",
                 sort,
                 setSort,
-                "w-40 sticky left-[14rem] z-20 bg-gray-900",
+                "w-40 sticky left-[14rem] z-20 bg-gray-900 border-r border-gray-700",
               )}
-              {headerCell("Requester", "requester", sort, setSort, "w-40")}
-              {headerCell("Approver 1", "approver1", sort, setSort, "w-40")}
-              {headerCell("Approver 2", "approver2", sort, setSort, "w-40")}
-              {headerCell(
-                "Safety Approver",
-                "safetyApprover",
-                sort,
-                setSort,
-                "w-44",
-              )}
-              {headerCell("Return Date", "returnDate", sort, setSort, "w-36")}
-              <TableHead className="w-32">Days from Issued</TableHead>
-              <TableHead className="w-[26rem]">
+              {headerCell("Requester", "requester", sort, setSort, "w-40 border-r border-gray-700")}
+              <TableHead className="w-32 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Total Approvers</TableHead>
+              <TableHead className="w-32 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Approvers Done</TableHead>
+              <TableHead className="w-40 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Pending with Approver</TableHead>
+              <TableHead className="w-36 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Total Safety Officers</TableHead>
+              <TableHead className="w-40 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Pending with Safety Officer</TableHead>
+              <TableHead className="w-36 bg-gray-900 text-white whitespace-nowrap border-r border-gray-700">Safety Officers Done</TableHead>
+              {headerCell("Return Date", "returnDate", sort, setSort, "w-36 border-r border-gray-700")}
+              <TableHead className="w-32 bg-gray-900 text-white border-r border-gray-700">Days from Issued</TableHead>
+              <TableHead className="w-[26rem] bg-gray-900 text-white border-r border-gray-700">
                 Comments from Requester
               </TableHead>
-              <TableHead className="w-[26rem]">
+              <TableHead className="w-[26rem] bg-gray-900 text-white border-r border-gray-700">
                 Comments from Approver
               </TableHead>
-              <TableHead className="w-28">Status</TableHead>
-              <TableHead className="w-36">Actions</TableHead>
+              <TableHead className="w-28 bg-gray-900 text-white border-r border-gray-700">Status</TableHead>
+              <TableHead className="w-36 bg-gray-900 text-white">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

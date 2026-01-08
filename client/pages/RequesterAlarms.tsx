@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { formatDistanceToNow } from "date-fns";
-import { Bell, Search, Trash, Eye, FileText, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { formatDistanceToNow, format } from "date-fns";
+import { Bell, Search, Trash, Eye, FileText, Clock, CheckCircle, XCircle, AlertCircle, ChevronDown, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type NotificationType = "approved" | "rejected" | "under_review" | "closed" | "action_required" | "expiring" | "system";

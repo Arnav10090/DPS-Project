@@ -299,6 +299,7 @@ export function OverallStatus() {
         | "rejected"
         | "in_progress"
         | "closed"
+        | "new"
       )[],
     [allData],
   );

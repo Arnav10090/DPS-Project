@@ -1684,13 +1684,35 @@ export function SafetyHTPermitDetailsSection() {
                   />
                   <button
                     className="px-3 py-1 rounded bg-white border text-sm"
-                    onClick={() => {
+                    onClick={async () => {
                       const v = newSafetyToApproverComment.trim();
                       if (!v) return;
                       const prev = form.safetyToApproverCustomComments || [];
                       const next = [...prev, { text: v, checked: false }];
                       update({ safetyToApproverCustomComments: next });
                       setNewSafetyToApproverComment("");
+
+                      // Send email notification to requester and approver
+                      try {
+                        const recipients = getEmailsByNames([
+                          form.requesterName,
+                          form.approverName,
+                        ]);
+
+                        if (recipients.length > 0) {
+                          await sendCommentNotification({
+                            senderName: form.safetyOfficerName || "Safety Officer",
+                            senderRole: "safety",
+                            permitType: "work",
+                            permitId: form.permitNumber,
+                            comment: v,
+                            recipients,
+                          });
+                          toast.success("Comment sent to Requester and Approver");
+                        }
+                      } catch (error) {
+                        console.error("Failed to send comment notification:", error);
+                      }
                     }}
                   >
                     Add
@@ -2284,13 +2306,35 @@ export function SafetyGLPermitDetailsSection() {
                   />
                   <button
                     className="px-3 py-1 rounded bg-white border text-sm"
-                    onClick={() => {
+                    onClick={async () => {
                       const v = newSafetyToApproverComment.trim();
                       if (!v) return;
                       const prev = form.safetyToApproverCustomComments || [];
                       const next = [...prev, { text: v, checked: false }];
                       update({ safetyToApproverCustomComments: next });
                       setNewSafetyToApproverComment("");
+
+                      // Send email notification to requester and approver
+                      try {
+                        const recipients = getEmailsByNames([
+                          form.requesterName,
+                          form.approverName,
+                        ]);
+
+                        if (recipients.length > 0) {
+                          await sendCommentNotification({
+                            senderName: form.safetyOfficerName || "Safety Officer",
+                            senderRole: "safety",
+                            permitType: "work",
+                            permitId: form.permitNumber,
+                            comment: v,
+                            recipients,
+                          });
+                          toast.success("Comment sent to Requester and Approver");
+                        }
+                      } catch (error) {
+                        console.error("Failed to send comment notification:", error);
+                      }
                     }}
                   >
                     Add

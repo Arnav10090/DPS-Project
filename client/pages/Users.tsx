@@ -719,7 +719,7 @@ export default function AdminUsers() {
                   Select All
                 </span>
               </label>
-              <Select>
+              <Select onValueChange={handleBulkAction}>
                 <SelectTrigger className="w-[200px]">
                   <SelectValue placeholder="Bulk actions" />
                 </SelectTrigger>

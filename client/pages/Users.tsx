@@ -225,28 +225,27 @@ export default function AdminUsers() {
     rowIndex: number,
   ): ImportResult {
     try {
-      const rowData: Record<string, string> = {};
+      // Expected column order based on Excel file:
+      // Full Name, Employee ID, Email, Password, Phone, Gender, Department, Role
+      const columnMap: Record<string, number> = {};
       headers.forEach((header, idx) => {
-        if (idx < row.length) {
-          rowData[header.toLowerCase().replace(/\s+/g, "")] = row[idx];
-        }
+        const normalized = header.toLowerCase().trim();
+        columnMap[normalized] = idx;
       });
 
-      // Required fields
-      const name = rowData["fullname"] || rowData["name"];
-      const employeeId =
-        rowData["employeeid"] || rowData["id"] || rowData["employee"];
-      const email = rowData["email"];
-      const department = rowData["department"] || rowData["dept"];
-      const role = rowData["role"];
-      const password = rowData["password"] || "DefaultPass123!";
-      const statusStr = rowData["status"] || rowData["accountactive"] || "active";
-      const phone = rowData["phone"] || "";
-      const gender = rowData["gender"] || "";
+      // Extract values based on column positions
+      const name = row[columnMap["full name"] ?? 0] || "";
+      const employeeId = row[columnMap["employee id"] ?? 1] || "";
+      const email = row[columnMap["email"] ?? 2] || "";
+      const password = row[columnMap["password"] ?? 3] || "DefaultPass123!";
+      const phone = row[columnMap["phone"] ?? 4] || "";
+      const gender = row[columnMap["gender"] ?? 5] || "";
+      const department = row[columnMap["department"] ?? 6] || "";
+      const role = row[columnMap["role"] ?? 7] || "";
 
       // Validation
       if (!name || name.length === 0)
-        return { success: false, row: rowIndex, error: "Name is required" };
+        return { success: false, row: rowIndex, error: "Full Name is required" };
       if (!employeeId || employeeId.length === 0)
         return {
           success: false,
@@ -275,8 +274,7 @@ export default function AdminUsers() {
           error: "Invalid role. Must be: Requester, Approver, Safety Officer, or Administrator",
         };
 
-      const status =
-        statusStr.toLowerCase() === "inactive" ? "inactive" : "active";
+      const status = "active";
 
       return {
         success: true,

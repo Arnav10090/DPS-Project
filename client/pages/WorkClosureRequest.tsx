@@ -83,8 +83,12 @@ export default function WorkClosureRequest() {
     const arr = Array.from(list);
 
     // Count existing photos and documents
-    const existingPhotos = files.filter((f) => f.file.type.startsWith("image/")).length;
-    const existingDocs = files.filter((f) => !f.file.type.startsWith("image/")).length;
+    const existingPhotos = files.filter((f) =>
+      f.file.type.startsWith("image/"),
+    ).length;
+    const existingDocs = files.filter(
+      (f) => !f.file.type.startsWith("image/"),
+    ).length;
 
     let photosToAdd = 0;
     let docsToAdd = 0;

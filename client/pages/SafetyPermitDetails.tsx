@@ -1065,31 +1065,35 @@ export default function SafetyOfficerPermitDetails() {
           </button>
           <button
             onClick={() => alert("Reject (placeholder)")}
-            disabled={!(() => {
-              // Check if at least one comment is selected for Requester
-              const requesterCommentChecked = (form.safetyToApproverCustomComments || []).some(
-                (item: any) => typeof item === "object" && item.checked
-              );
+            disabled={
+              !(() => {
+                // Check if at least one comment is selected for Requester
+                const requesterCommentChecked = (
+                  form.safetyToApproverCustomComments || []
+                ).some((item: any) => typeof item === "object" && item.checked);
 
-              // Check if at least one comment is selected for Approver
-              const approverCommentChecked = (form.SafetyOfficerCustomComments || []).some(
-                (item: any) => typeof item === "object" && item.checked
-              );
+                // Check if at least one comment is selected for Approver
+                const approverCommentChecked = (
+                  form.SafetyOfficerCustomComments || []
+                ).some((item: any) => typeof item === "object" && item.checked);
 
-              // Also include the boolean flags as valid selections
-              const requesterHasSelection = requesterCommentChecked ||
-                form.safetyToApproverRequireUrgent ||
-                form.safetyToApproverSafetyManagerApproval ||
-                form.safetyToApproverPlannedShutdown;
+                // Also include the boolean flags as valid selections
+                const requesterHasSelection =
+                  requesterCommentChecked ||
+                  form.safetyToApproverRequireUrgent ||
+                  form.safetyToApproverSafetyManagerApproval ||
+                  form.safetyToApproverPlannedShutdown;
 
-              const approverHasSelection = approverCommentChecked ||
-                form.SafetyOfficerRequireUrgent ||
-                form.SafetyOfficerSafetyManagerApproval ||
-                form.SafetyOfficerPlannedShutdown;
+                const approverHasSelection =
+                  approverCommentChecked ||
+                  form.SafetyOfficerRequireUrgent ||
+                  form.SafetyOfficerSafetyManagerApproval ||
+                  form.SafetyOfficerPlannedShutdown;
 
-              // Both sections must have at least one comment selected
-              return requesterHasSelection && approverHasSelection;
-            })()}
+                // Both sections must have at least one comment selected
+                return requesterHasSelection && approverHasSelection;
+              })()
+            }
             className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed"
           >
             Reject

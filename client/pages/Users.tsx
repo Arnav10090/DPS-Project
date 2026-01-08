@@ -253,7 +253,8 @@ export default function AdminUsers() {
 
       // Extract values safely
       const name = nameIdx >= 0 ? (row[nameIdx] || "").trim() : "";
-      const employeeId = employeeIdx >= 0 ? (row[employeeIdx] || "").trim() : "";
+      const employeeId =
+        employeeIdx >= 0 ? (row[employeeIdx] || "").trim() : "";
       const email = emailIdx >= 0 ? (row[emailIdx] || "").trim() : "";
       const password =
         passwordIdx >= 0 && row[passwordIdx]
@@ -261,12 +262,17 @@ export default function AdminUsers() {
           : "DefaultPass123!";
       const phone = phoneIdx >= 0 ? (row[phoneIdx] || "").trim() : "";
       const gender = genderIdx >= 0 ? (row[genderIdx] || "").trim() : "";
-      const department = departmentIdx >= 0 ? (row[departmentIdx] || "").trim() : "";
+      const department =
+        departmentIdx >= 0 ? (row[departmentIdx] || "").trim() : "";
       const role = roleIdx >= 0 ? (row[roleIdx] || "").trim() : "";
 
       // Validation
       if (!name || name.length === 0)
-        return { success: false, row: rowIndex, error: "Full Name is required" };
+        return {
+          success: false,
+          row: rowIndex,
+          error: "Full Name is required",
+        };
       if (!employeeId || employeeId.length === 0)
         return {
           success: false,
@@ -292,7 +298,8 @@ export default function AdminUsers() {
         return {
           success: false,
           row: rowIndex,
-          error: "Invalid role. Must be: Requester, Approver, Safety Officer, or Administrator",
+          error:
+            "Invalid role. Must be: Requester, Approver, Safety Officer, or Administrator",
         };
 
       const status = "active";
@@ -616,7 +623,9 @@ export default function AdminUsers() {
                   <SelectItem value="Male">Male</SelectItem>
                   <SelectItem value="Female">Female</SelectItem>
                   <SelectItem value="Other">Other</SelectItem>
-                  <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+                  <SelectItem value="Prefer not to say">
+                    Prefer not to say
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -735,7 +744,8 @@ export default function AdminUsers() {
             <div className="rounded-lg bg-blue-50 p-3 text-xs text-blue-900">
               <strong>Expected Excel/CSV Column Order:</strong>
               <div className="mt-1 font-mono text-xs">
-                Full Name | Employee ID | Email | Password | Phone | Gender | Department | Role
+                Full Name | Employee ID | Email | Password | Phone | Gender |
+                Department | Role
               </div>
               <div className="mt-2">
                 <strong>Required Fields:</strong>
@@ -744,13 +754,17 @@ export default function AdminUsers() {
                   <li>Employee ID</li>
                   <li>Email (must be valid format)</li>
                   <li>Department</li>
-                  <li>Role (Requester, Approver, Safety Officer, or Administrator)</li>
+                  <li>
+                    Role (Requester, Approver, Safety Officer, or Administrator)
+                  </li>
                 </ul>
               </div>
               <div className="mt-2">
                 <strong>Optional Fields:</strong>
                 <ul className="mt-1 list-inside list-disc space-y-1">
-                  <li>Password (defaults to "DefaultPass123!" if left empty)</li>
+                  <li>
+                    Password (defaults to "DefaultPass123!" if left empty)
+                  </li>
                   <li>Phone</li>
                   <li>Gender</li>
                 </ul>

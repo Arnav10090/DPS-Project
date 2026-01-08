@@ -982,8 +982,12 @@ export default function ApproverClosure() {
                 </div>
                 <div className="grid grid-cols-3 gap-3 mt-3">
                   {(() => {
-                    const photos = files.filter((f) => f.name.match(/\.(jpg|jpeg|png|webp)$/i)).slice(0, 2);
-                    const docs = files.filter((f) => f.name.match(/\.(pdf|doc|docx)$/i)).slice(0, 1);
+                    const photos = files
+                      .filter((f) => f.name.match(/\.(jpg|jpeg|png|webp)$/i))
+                      .slice(0, 2);
+                    const docs = files
+                      .filter((f) => f.name.match(/\.(pdf|doc|docx)$/i))
+                      .slice(0, 1);
                     return [...photos, ...docs];
                   })().map((f) => (
                     <div

@@ -4580,7 +4580,7 @@ export default function CreatePermit() {
                             />
                             <button
                               type="button"
-                              onClick={() => {
+                              onClick={async () => {
                                 const v = newRequesterSafetyComment.trim();
                                 if (!v) return;
                                 const prev =
@@ -4593,6 +4593,27 @@ export default function CreatePermit() {
                                   ],
                                 } as any);
                                 setNewRequesterSafetyComment("");
+
+                                // Send email notification to safety officer
+                                try {
+                                  const safetyOfficers = getEmailsByNames([
+                                    form.safetyManager,
+                                  ]);
+
+                                  if (safetyOfficers.length > 0) {
+                                    await sendCommentNotification({
+                                      senderName: form.applicantName || "Requester",
+                                      senderRole: "requester",
+                                      permitType: "work",
+                                      permitId: form.permitNumber,
+                                      comment: v,
+                                      recipients: safetyOfficers,
+                                    });
+                                    toast.success("Comment sent to Safety Officer");
+                                  }
+                                } catch (error) {
+                                  console.error("Failed to send comment notification:", error);
+                                }
                               }}
                               className="px-3 py-1 rounded bg-white border text-sm"
                             >

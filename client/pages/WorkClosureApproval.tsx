@@ -978,10 +978,18 @@ export default function ApproverClosure() {
 
               <div className="mt-4">
                 <div className="text-sm font-semibold">
-                  Uploaded Files ({files.length} items)
+                  Uploaded Files (2 photos, 1 document)
                 </div>
                 <div className="grid grid-cols-3 gap-3 mt-3">
-                  {files.map((f, idx) => (
+                  {(() => {
+                    const photos = files
+                      .filter((f) => f.name.match(/\.(jpg|jpeg|png|webp)$/i))
+                      .slice(0, 2);
+                    const docs = files
+                      .filter((f) => f.name.match(/\.(pdf|doc|docx)$/i))
+                      .slice(0, 1);
+                    return [...photos, ...docs];
+                  })().map((f) => (
                     <div
                       key={f.id}
                       className="border rounded overflow-hidden bg-white"
@@ -991,7 +999,7 @@ export default function ApproverClosure() {
                         alt={f.name}
                         className="h-[120px] w-full object-cover cursor-pointer"
                         onClick={() => {
-                          setGalleryIndex(idx);
+                          setGalleryIndex(files.indexOf(f));
                           setGalleryOpen(true);
                         }}
                       />

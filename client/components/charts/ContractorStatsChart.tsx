@@ -24,7 +24,7 @@ export default function ContractorStatsChart() {
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" label={{ value: "X axis - Different contractor name", position: "insideBottom", offset: -5 }} />
-          <YAxis label={{ value: "Y axis - Permits issued qty, Permits returned qty time qty", angle: -90, position: "insideLeft", offset: 30 }} />
+          <YAxis label={{ value: "Y axis - Permits issued qty, Permits returned qty time qty", angle: -90, position: "insideLeft", offset: 10 }} />
           <Tooltip />
           <Legend />
           <Bar dataKey="issued" name="Permits issued qty" fill="#1976d2" radius={[4, 4, 0, 0]} />

@@ -11,6 +11,9 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { sendCommentNotification } from "@/lib/email-service";
+import { getEmailsByNames } from "@/lib/user-lookup";
+import { toast } from "sonner";
 
 type SafetyOfficerPermitForm = {
   // Requester-side flags (read-only here, shown as plain text)

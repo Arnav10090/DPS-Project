@@ -45,7 +45,7 @@ export default function ContractorKpisChart() {
           Safety issues on time
         </button>
       </div>
-      <div className="h-80">
+      <div className="h-[450px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={raw}>
             <CartesianGrid strokeDasharray="3 3" />

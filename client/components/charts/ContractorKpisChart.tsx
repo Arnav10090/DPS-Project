@@ -19,7 +19,11 @@ const raw = [
 ];
 
 export default function ContractorKpisChart() {
-  const [show, setShow] = useState({ time: true, approval: true, safety: true });
+  const [show, setShow] = useState({
+    time: true,
+    approval: true,
+    safety: true,
+  });
   return (
     <div className="w-full">
       <div className="flex flex-wrap gap-2 mb-2">
@@ -42,20 +46,60 @@ export default function ContractorKpisChart() {
           className={`rounded-full px-3 py-1 text-xs border transition-colors ${show.safety ? "bg-[#ff9800] text-white" : "bg-white hover:bg-gray-50"}`}
           aria-pressed={show.safety}
         >
-          Safety issues qty
+          Safety issues on time
         </button>
       </div>
-      <div className="h-80">
+      <div className="h-[450px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={raw}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" label={{ value: "X axis - Different contractor name", position: "insideBottom", offset: -5 }} />
-            <YAxis label={{ value: "Y axis - KPIs", angle: -90, position: "insideLeft" }} />
+            <XAxis
+              dataKey="name"
+              label={{
+                value: "X axis - Different contractor name",
+                position: "insideBottom",
+                offset: -5,
+              }}
+            />
+            <YAxis
+              label={{
+                value: "Y axis - Time",
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
             <Tooltip />
             <Legend />
-            {show.time && <Line type="monotone" dataKey="returnedOnTime" name="Returned on time %" stroke="#4caf50" strokeWidth={2} dot={false} />}
-            {show.approval && <Line type="monotone" dataKey="approvalMins" name="Time for approval (mins)" stroke="#1976d2" strokeWidth={2} dot={false} />}
-            {show.safety && <Line type="monotone" dataKey="safetyIssues" name="Safety issues qty" stroke="#ff9800" strokeWidth={2} dot />}
+            {show.time && (
+              <Line
+                type="monotone"
+                dataKey="returnedOnTime"
+                name="Returned on time %"
+                stroke="#4caf50"
+                strokeWidth={2}
+                dot={false}
+              />
+            )}
+            {show.approval && (
+              <Line
+                type="monotone"
+                dataKey="approvalMins"
+                name="Time for approval (mins)"
+                stroke="#1976d2"
+                strokeWidth={2}
+                dot={false}
+              />
+            )}
+            {show.safety && (
+              <Line
+                type="monotone"
+                dataKey="safetyIssues"
+                name="Safety issues on time"
+                stroke="#ff9800"
+                strokeWidth={2}
+                dot
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>

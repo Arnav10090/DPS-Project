@@ -98,6 +98,33 @@ export default function ApproverPermitDetails() {
     useState("");
   const navigate = useNavigate();
 
+  // Helper function to check if at least one comment is selected for requester
+  const hasRequesterComment = () => {
+    const hasCheckedOption =
+      form.approverRequireUrgent ||
+      form.approverSafetyManagerApproval ||
+      form.approverPlannedShutdown;
+    const hasCheckedCustom = (form.approverCustomComments || []).some(
+      (item: any) => typeof item !== "string" && item.checked,
+    );
+    return hasCheckedOption || hasCheckedCustom;
+  };
+
+  // Helper function to check if at least one comment is selected for safety officer
+  const hasSafetyOfficerComment = () => {
+    const hasCheckedOption =
+      form.approverToSafetyRequireUrgent ||
+      form.approverToSafetySafetyManagerApproval ||
+      form.approverToSafetyPlannedShutdown;
+    const hasCheckedCustom = (form.approverToSafetyCustomComments || []).some(
+      (item: any) => typeof item !== "string" && item.checked,
+    );
+    return hasCheckedOption || hasCheckedCustom;
+  };
+
+  // Check if Reject button should be enabled
+  const isRejectEnabled = hasRequesterComment() && hasSafetyOfficerComment();
+
   useEffect(() => {
     // Force approver role for this page
     try {
@@ -963,7 +990,17 @@ export default function ApproverPermitDetails() {
           </button>
           <button
             onClick={() => alert("Reject (placeholder)")}
-            className="px-4 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700"
+            disabled={!isRejectEnabled}
+            className={`px-4 py-2 rounded text-white text-sm transition-colors ${
+              isRejectEnabled
+                ? "bg-red-600 hover:bg-red-700 cursor-pointer"
+                : "bg-gray-400 cursor-not-allowed opacity-60"
+            }`}
+            title={
+              !isRejectEnabled
+                ? "Select at least one comment for Requester and Safety Officer to enable Reject"
+                : undefined
+            }
           >
             Reject
           </button>

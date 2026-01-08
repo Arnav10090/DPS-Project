@@ -33,6 +33,7 @@ function makeMockData(count = 24): PermitItem[] {
     "pending",
     "rejected",
     "in_progress",
+    "new",
   ];
 
   const openPermits = Array.from({ length: count }).map((_, i) => {
@@ -196,7 +197,7 @@ export function OverallStatus() {
         approved: "approved",
         pending: "pending",
         rejected: "rejected",
-        new: "pending",
+        new: "new",
         returned: "in_progress",
         hold: "in_progress",
         all: null,
@@ -298,6 +299,7 @@ export function OverallStatus() {
         | "rejected"
         | "in_progress"
         | "closed"
+        | "new"
       )[],
     [allData],
   );

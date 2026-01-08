@@ -8,6 +8,13 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { formatDistanceToNow, format } from "date-fns";
 import {
   Bell,
@@ -19,7 +26,6 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  ChevronDown,
   X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -389,32 +395,29 @@ export default function RequesterAlarms() {
                     <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                       Status
                     </label>
-                    <div className="relative">
-                      <select
-                        value={tab}
-                        onChange={(e) => setTab(e.target.value as any)}
-                        className="h-9 px-3 rounded-lg border-2 border-slate-300 bg-white text-sm font-medium text-slate-700 cursor-pointer appearance-none pr-8 w-full transition-all duration-200 hover:border-slate-400 focus:outline-none focus:border-blue-500 focus:shadow-md focus:ring-2 focus:ring-blue-200"
-                      >
-                        <option value="all">All ({stats.total})</option>
-                        <option value="action_required">
+                    <Select value={tab} onValueChange={(v) => setTab(v as any)}>
+                      <SelectTrigger className="h-9">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All ({stats.total})</SelectItem>
+                        <SelectItem value="action_required">
                           Action Required ({stats.actionRequired})
-                        </option>
-                        <option value="approved">
+                        </SelectItem>
+                        <SelectItem value="approved">
                           Approved ({stats.approved})
-                        </option>
-                        <option value="rejected">
+                        </SelectItem>
+                        <SelectItem value="rejected">
                           Rejected ({stats.rejected})
-                        </option>
-                        <option value="under_review">
+                        </SelectItem>
+                        <SelectItem value="under_review">
                           Under Review ({stats.underReview})
-                        </option>
-                        <option value="closed">Closed ({stats.closed})</option>
-                      </select>
-                      <ChevronDown
-                        size={16}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"
-                      />
-                    </div>
+                        </SelectItem>
+                        <SelectItem value="closed">
+                          Closed ({stats.closed})
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Action Buttons */}

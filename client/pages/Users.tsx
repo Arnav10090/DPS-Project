@@ -652,6 +652,104 @@ export default function AdminUsers() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Bulk Import Results Modal */}
+      <Dialog
+        open={importResults.length > 0}
+        onOpenChange={() => {
+          if (!importInProgress) {
+            setImportResults([]);
+          }
+        }}
+      >
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Bulk Import Results</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="rounded-lg bg-blue-50 p-4 text-center">
+                <div className="text-2xl font-bold text-blue-600">
+                  {importResults.length}
+                </div>
+                <div className="text-xs text-blue-700">Total Rows</div>
+              </div>
+              <div className="rounded-lg bg-green-50 p-4 text-center">
+                <div className="text-2xl font-bold text-green-600">
+                  {importResults.filter((r) => r.success).length}
+                </div>
+                <div className="text-xs text-green-700">Imported</div>
+              </div>
+              <div className="rounded-lg bg-red-50 p-4 text-center">
+                <div className="text-2xl font-bold text-red-600">
+                  {importResults.filter((r) => !r.success).length}
+                </div>
+                <div className="text-xs text-red-700">Failed</div>
+              </div>
+            </div>
+
+            <div className="max-h-80 space-y-2 overflow-y-auto">
+              {importResults.map((result, idx) => (
+                <div
+                  key={idx}
+                  className={`rounded-lg border p-3 text-sm ${
+                    result.success
+                      ? "border-green-200 bg-green-50 text-green-800"
+                      : "border-red-200 bg-red-50 text-red-800"
+                  }`}
+                >
+                  <div className="font-medium">
+                    Row {result.row}: {result.success ? "✓ Success" : "✗ Error"}
+                  </div>
+                  {result.success && result.data && (
+                    <div className="mt-1 text-xs">
+                      {result.data.name} ({result.data.email})
+                    </div>
+                  )}
+                  {!result.success && result.error && (
+                    <div className="mt-1 text-xs">{result.error}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-lg bg-blue-50 p-3 text-xs text-blue-900">
+              <strong>Expected CSV Format:</strong>
+              <div className="mt-1 font-mono">
+                Full Name, Employee ID, Email, Phone, Gender, Department, Role, Status, Password
+              </div>
+              <div className="mt-2">
+                <strong>Notes:</strong>
+                <ul className="mt-1 list-inside list-disc space-y-1">
+                  <li>All fields except Phone, Gender, and Password are required</li>
+                  <li>Email must be valid format</li>
+                  <li>Role must be: Requester, Approver, Safety Officer, or Administrator</li>
+                  <li>Status must be: active or inactive (defaults to active)</li>
+                  <li>Password defaults to "DefaultPass123!" if not provided</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setImportResults([])}
+              disabled={importInProgress}
+            >
+              Close
+            </Button>
+            {importResults.some((r) => r.success) && (
+              <Button
+                onClick={() => setImportResults([])}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                Done
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

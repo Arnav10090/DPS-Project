@@ -232,7 +232,7 @@ export default function RequesterAlarms() {
               <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-4 border border-slate-200">
                 <div className="flex items-end gap-4">
                   {/* Search Input */}
-                  <div className="flex-1 min-w-64">
+                  <div className="w-48">
                     <label className="block text-xs font-semibold text-slate-700 mb-1.5">Search</label>
                     <div className="relative">
                       <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />

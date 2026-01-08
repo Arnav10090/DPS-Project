@@ -414,7 +414,7 @@ export default function WorkClosureRequest() {
                 </label>
                 <div className="text-xs text-muted-foreground">
                   Upload photos of completed work, before/after images,
-                  certificates, etc. (Max 10 files, 5MB each)
+                  certificates, etc. (Max 2 photos, 1 document, 5MB each)
                 </div>
                 <div
                   ref={dropRef}

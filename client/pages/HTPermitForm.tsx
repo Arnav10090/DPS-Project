@@ -574,7 +574,6 @@ export default function HTPermitForm() {
           initial={initial}
           onSaveDraft={onSaveDraft}
           onSubmit={onSubmit}
-          renderHeader={() => <HTPermitHeader />}
           onPreviewRequest={() => setShowPreview(true)}
         />
         <div className="text-xs text-gray-500">

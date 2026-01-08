@@ -332,6 +332,36 @@ export default function AdminUsers() {
     }
   }
 
+  // Handle edit user
+  function handleEditUser(user: User) {
+    setEditingUser(user);
+    setEditFormData({ ...user });
+    setShowEdit(true);
+  }
+
+  // Handle save edited user
+  function handleSaveEditUser() {
+    if (!editFormData) return;
+
+    setUsers((prev) =>
+      prev.map((u) => (u.id === editFormData.id ? editFormData : u))
+    );
+    setShowEdit(false);
+    setEditingUser(null);
+    setEditFormData(null);
+  }
+
+  // Handle deactivate/activate user
+  function handleToggleUserStatus(userId: string) {
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === userId
+          ? { ...u, status: u.status === "active" ? "inactive" : "active" }
+          : u
+      )
+    );
+  }
+
   // Handle file import
   async function handleFileImport(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];

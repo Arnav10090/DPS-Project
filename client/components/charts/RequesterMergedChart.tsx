@@ -446,7 +446,7 @@ const RequesterMergedChart: React.FC = () => {
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={filteredData}
-              margin={{ top: 20, right: 30, left: 100, bottom: 100 }}
+              margin={{ top: 20, right: 30, left: 100, bottom: 80 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis

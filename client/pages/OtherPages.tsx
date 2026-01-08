@@ -33,6 +33,7 @@ function makeMockData(count = 24): PermitItem[] {
     "pending",
     "rejected",
     "in_progress",
+    "new",
   ];
 
   const openPermits = Array.from({ length: count }).map((_, i) => {

@@ -246,7 +246,7 @@ export default function RequesterAlarms() {
                   </div>
 
                   {/* Date Range */}
-                  <div className="flex items-end gap-3 flex-1 min-w-96">
+                  <div className="flex items-end gap-3 w-80">
                     <div className="flex-1">
                       <label className="block text-xs font-semibold text-slate-700 mb-1.5">From</label>
                       <Input
@@ -270,13 +270,13 @@ export default function RequesterAlarms() {
                   </div>
 
                   {/* Status Dropdown */}
-                  <div className="flex-1 min-w-64">
+                  <div className="w-64">
                     <label className="block text-xs font-semibold text-slate-700 mb-1.5">Status</label>
                     <div className="relative">
                       <select
                         value={tab}
                         onChange={(e) => setTab(e.target.value as any)}
-                        className="h-9 px-3 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 cursor-pointer appearance-none pr-8 w-full"
+                        className="h-9 px-3 rounded-lg border-2 border-slate-300 bg-white text-sm font-medium text-slate-700 cursor-pointer appearance-none pr-8 w-full transition-all duration-200 hover:border-slate-400 focus:outline-none focus:border-blue-500 focus:shadow-md focus:ring-2 focus:ring-blue-200"
                       >
                         <option value="all">All ({stats.total})</option>
                         <option value="action_required">Action Required ({stats.actionRequired})</option>
@@ -285,7 +285,7 @@ export default function RequesterAlarms() {
                         <option value="under_review">Under Review ({stats.underReview})</option>
                         <option value="closed">Closed ({stats.closed})</option>
                       </select>
-                      <ChevronDown size={16} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500" />
+                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500" />
                     </div>
                   </div>
                 </div>

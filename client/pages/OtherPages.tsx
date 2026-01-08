@@ -197,7 +197,7 @@ export function OverallStatus() {
         approved: "approved",
         pending: "pending",
         rejected: "rejected",
-        new: "pending",
+        new: "new",
         returned: "in_progress",
         hold: "in_progress",
         all: null,

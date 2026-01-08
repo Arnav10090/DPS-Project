@@ -157,6 +157,7 @@ function makeMockData(count = 24): PermitItem[] {
 
 export function OverallStatus() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<PermitItem[]>([]);
   const [sort, setSort] = React.useState<SortState | null>({
@@ -169,12 +170,40 @@ export function OverallStatus() {
     null,
   );
 
+  // Filter state
+  const [search, setSearch] = React.useState("");
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  const [plantFilter, setPlantFilter] = React.useState<string | null>(null);
+  const [deptFilter, setDeptFilter] = React.useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = React.useState<string | null>(null);
+  const [dateFrom, setDateFrom] = React.useState<string | null>(null);
+  const [dateTo, setDateTo] = React.useState<string | null>(null);
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(10);
+
   React.useEffect(() => {
     const storedRole = localStorage.getItem("dps_role");
     const storedUserName = localStorage.getItem("dps_user_name");
     setRole(storedRole);
     setCurrentUserName(storedUserName);
   }, []);
+
+  // Initialize status filter from URL parameter
+  React.useEffect(() => {
+    const filterParam = searchParams.get("filter");
+    if (filterParam) {
+      const filterMap: Record<string, string> = {
+        approved: "approved",
+        pending: "pending",
+        rejected: "rejected",
+        new: "pending",
+        returned: "in_progress",
+        hold: "in_progress",
+        all: "",
+      };
+      setStatusFilter(filterMap[filterParam] || "");
+    }
+  }, [searchParams]);
 
   React.useEffect(() => {
     const t = setTimeout(() => {

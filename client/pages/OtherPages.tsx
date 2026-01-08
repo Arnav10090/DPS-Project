@@ -192,16 +192,16 @@ export function OverallStatus() {
   React.useEffect(() => {
     const filterParam = searchParams.get("filter");
     if (filterParam) {
-      const filterMap: Record<string, string | null> = {
+      const filterMap: Record<string, string> = {
         approved: "approved",
         pending: "pending",
         rejected: "rejected",
         new: "pending",
         returned: "in_progress",
         hold: "in_progress",
-        all: null,
+        all: "",
       };
-      setStatusFilter(filterMap[filterParam] ?? null);
+      setStatusFilter(filterMap[filterParam] || "");
     }
   }, [searchParams]);
 

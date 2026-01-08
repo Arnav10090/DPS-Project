@@ -526,7 +526,7 @@ export default function GasPermit() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      <header className="mb-4 flex items-center justify-between mx-auto max-w-7xl px-4 pt-6">
+      <header className="mb-4 flex items-center justify-between w-full px-4 pt-6">
         <div>
           <h1 className="text-[20px] font-semibold">
             Gas Line Work Permit Form
@@ -591,7 +591,7 @@ export default function GasPermit() {
           )}
         </div>
       </header>
-      <div className="mx-auto max-w-7xl px-4 pb-6 space-y-6">
+      <div className="w-full px-4 pb-6 space-y-6">
         {!isRestricted && (
           <ModernPagination
             steps={uiSteps.map((s) => s.name)}
@@ -603,82 +603,57 @@ export default function GasPermit() {
           />
         )}
 
-        <div className="bg-white border-b">
-          {isRestricted ? (
-            <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/placeholder.svg"
-                  alt="AM/NS INDIA logo"
-                  className="h-[60px] w-auto"
+        <div className="bg-white mt-3">
+          <div className="w-full px-4 py-4 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg"
+                alt="AM/NS INDIA logo"
+                className="h-[60px] w-auto"
+              />
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-gray-900">
+                ArcelorMittal Nippon Steel India Limited
+              </div>
+              <div className="text-gray-600">HAZIRA</div>
+              <div className="mt-1 text-[20px] font-bold text-gray-900">
+                ADDITIONAL WORK PERMIT FOR GAS LINE / EQUIPMENT
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 w-[240px]">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Certificate No.
+                </label>
+                <input
+                  value={form.header.certificateNo}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      header: { ...prev.header, certificateNo: e.target.value },
+                    }))
+                  }
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
                 />
               </div>
-              <div className="text-center">
-                <div className="font-bold text-gray-900">
-                  ArcelorMittal Nippon Steel India Limited
-                </div>
-                <div className="text-gray-600">HAZIRA</div>
-                <div className="mt-1 text-[20px] font-bold text-gray-900">
-                  ADDITIONAL WORK PERMIT FOR GAS LINE / EQUIPMENT
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 w-[240px]">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Certificate No.
-                  </label>
-                  <input
-                    value={form.header.certificateNo}
-                    readOnly
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Permit No.
-                  </label>
-                  <input
-                    value={form.header.permitNo}
-                    readOnly
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Permit No.
+                </label>
+                <input
+                  value={form.header.permitNo}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      header: { ...prev.header, permitNo: e.target.value },
+                    }))
+                  }
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-2 focus:border-blue-600 focus:outline-none"
+                />
               </div>
             </div>
-          ) : (
-            <div className="mx-auto max-w-7xl px-4 py-4 flex items-start justify-between">
-              <div className="text-left">
-                <div className="text-sm font-semibold">AM/NS INDIA</div>
-                <div className="text-lg font-bold">
-                  ArcelorMittal Nippon Steel India Limited
-                </div>
-                <div className="text-sm text-gray-600">HAZIRA</div>
-                <div className="mt-2 text-xl font-bold">
-                  ADDITIONAL WORK PERMIT FOR GAS LINE / EQUIPMENT
-                </div>
-              </div>
-              <div className="w-56">
-                <div className="mb-2">
-                  <label className="text-sm text-gray-700">
-                    Certificate No.
-                  </label>
-                  <input
-                    value={form.header.certificateNo}
-                    readOnly
-                    className="w-full rounded-md border px-2 py-2 text-sm bg-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-700">Permit No.</label>
-                  <input
-                    value={form.header.permitNo}
-                    readOnly
-                    className="w-full rounded-md border px-2 py-2 text-sm bg-white"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
 
         {!isRestricted && current === 0 && (

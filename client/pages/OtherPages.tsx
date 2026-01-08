@@ -1,6 +1,6 @@
 import React from "react";
 import { Wifi } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   PermitItem,
   PermitStatusTable,
@@ -14,6 +14,7 @@ import ApproverAlarms from "./ApproverAlarms";
 import SafetyAlarms from "./SafetyAlarms.tsx";
 import AdminAlarms from "./AdminAlarms";
 import { Role } from "@/lib/roles"; // Add this line
+import PermitFilters from "@/components/permit/PermitFilters";
 
 function makeMockData(count = 24): PermitItem[] {
   const plants = ["HSM-1", "HSM-2", "CRM", "BOF", "DRI", "Sinter", "Utilities"];
@@ -156,6 +157,7 @@ function makeMockData(count = 24): PermitItem[] {
 
 export function OverallStatus() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<PermitItem[]>([]);
   const [sort, setSort] = React.useState<SortState | null>({
@@ -168,12 +170,40 @@ export function OverallStatus() {
     null,
   );
 
+  // Filter state
+  const [search, setSearch] = React.useState("");
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  const [plantFilter, setPlantFilter] = React.useState<string | null>(null);
+  const [deptFilter, setDeptFilter] = React.useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = React.useState<string | null>(null);
+  const [dateFrom, setDateFrom] = React.useState<string | null>(null);
+  const [dateTo, setDateTo] = React.useState<string | null>(null);
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(10);
+
   React.useEffect(() => {
     const storedRole = localStorage.getItem("dps_role");
     const storedUserName = localStorage.getItem("dps_user_name");
     setRole(storedRole);
     setCurrentUserName(storedUserName);
   }, []);
+
+  // Initialize status filter from URL parameter
+  React.useEffect(() => {
+    const filterParam = searchParams.get("filter");
+    if (filterParam) {
+      const filterMap: Record<string, string> = {
+        approved: "approved",
+        pending: "pending",
+        rejected: "rejected",
+        new: "pending",
+        returned: "in_progress",
+        hold: "in_progress",
+        all: "",
+      };
+      setStatusFilter(filterMap[filterParam] || "");
+    }
+  }, [searchParams]);
 
   React.useEffect(() => {
     const t = setTimeout(() => {
@@ -186,35 +216,126 @@ export function OverallStatus() {
         );
       }
 
-      // Apply filter from KPI card click
-      const filterParam = searchParams.get("filter");
-      if (filterParam) {
-        mockData = mockData.filter((item) => {
-          switch (filterParam) {
-            case "approved":
-              return item.status === "approved";
-            case "pending":
-              return item.status === "pending";
-            case "rejected":
-              return item.status === "rejected";
-            case "new":
-              return item.status === "pending"; // New = pending approval
-            case "returned":
-              return item.status === "in_progress"; // Returned = in progress
-            case "hold":
-              return item.status === "in_progress"; // Hold = in progress
-            case "all":
-            default:
-              return true;
-          }
-        });
+      // Apply status filter
+      if (statusFilter) {
+        mockData = mockData.filter((item) => item.status === statusFilter);
+      }
+
+      // Apply plant filter
+      if (plantFilter) {
+        mockData = mockData.filter((item) => item.plant === plantFilter);
+      }
+
+      // Apply department filter
+      if (deptFilter) {
+        mockData = mockData.filter((item) => item.dept === deptFilter);
+      }
+
+      // Apply search filter
+      if (debouncedSearch) {
+        mockData = mockData.filter(
+          (item) =>
+            item.permitNo
+              .toLowerCase()
+              .includes(debouncedSearch.toLowerCase()) ||
+            item.requester
+              .toLowerCase()
+              .includes(debouncedSearch.toLowerCase()),
+        );
+      }
+
+      // Apply date filters
+      if (dateFrom) {
+        mockData = mockData.filter(
+          (item) => new Date(item.date) >= new Date(dateFrom),
+        );
+      }
+      if (dateTo) {
+        mockData = mockData.filter(
+          (item) => new Date(item.date) <= new Date(dateTo),
+        );
       }
 
       setData(mockData);
       setLoading(false);
+      setPage(1); // Reset to first page when filters change
     }, 600);
     return () => clearTimeout(t);
-  }, [role, currentUserName, searchParams]);
+  }, [
+    role,
+    currentUserName,
+    statusFilter,
+    plantFilter,
+    deptFilter,
+    debouncedSearch,
+    dateFrom,
+    dateTo,
+  ]);
+
+  // Debounce search
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // Get unique values for filters from full dataset
+  const allData = React.useMemo(() => makeMockData(32), []);
+  const plants = React.useMemo(
+    () => Array.from(new Set(allData.map((item) => item.plant))).sort(),
+    [allData],
+  );
+  const depts = React.useMemo(
+    () => Array.from(new Set(allData.map((item) => item.dept))).sort(),
+    [allData],
+  );
+  const statuses = React.useMemo(
+    () =>
+      Array.from(new Set(allData.map((item) => item.status))).sort() as (
+        | "approved"
+        | "pending"
+        | "rejected"
+        | "in_progress"
+        | "closed"
+      )[],
+    [allData],
+  );
+
+  const totalPages = Math.ceil(data.length / pageSize);
+  const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
+
+  const applyPreset = (preset: "today" | "week" | "month" | "30") => {
+    const now = new Date();
+    let from: Date | null = null;
+    switch (preset) {
+      case "today":
+        from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case "week":
+        from = subDays(now, 7);
+        break;
+      case "month":
+        from = subDays(now, 30);
+        break;
+      case "30":
+        from = subDays(now, 30);
+        break;
+    }
+    if (from) {
+      setDateFrom(formatISO(from).split("T")[0]);
+      setDateTo(formatISO(now).split("T")[0]);
+    }
+  };
+
+  const activeFilterCount = [
+    search ? 1 : 0,
+    plantFilter ? 1 : 0,
+    deptFilter ? 1 : 0,
+    statusFilter ? 1 : 0,
+    dateFrom ? 1 : 0,
+    dateTo ? 1 : 0,
+  ].reduce((a, b) => a + b, 0);
 
   return (
     <section className="space-y-4">
@@ -223,6 +344,32 @@ export function OverallStatus() {
           Overall Permit Status
         </h2>
       </div>
+
+      <PermitFilters
+        search={search}
+        setSearch={setSearch}
+        debouncedSearch={debouncedSearch}
+        plantFilter={plantFilter}
+        setPlantFilter={setPlantFilter}
+        deptFilter={deptFilter}
+        setDeptFilter={setDeptFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        dateFrom={dateFrom}
+        setDateFrom={setDateFrom}
+        dateTo={dateTo}
+        setDateTo={setDateTo}
+        applyPreset={applyPreset}
+        plants={plants}
+        depts={depts}
+        statuses={statuses.map((s) => s)}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        activeFilterCount={activeFilterCount}
+      />
 
       {/* Desktop (xl+) and Tablets (md-lg): Responsive table with horizontal scroll */}
       <div className="hidden md:block">
@@ -233,7 +380,11 @@ export function OverallStatus() {
             ))}
           </div>
         ) : (
-          <PermitStatusTable data={data} sort={sort} setSort={setSort} />
+          <PermitStatusTable
+            data={paginatedData}
+            sort={sort}
+            setSort={setSort}
+          />
         )}
       </div>
 
@@ -247,7 +398,7 @@ export function OverallStatus() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3">
-            {data.map((item) => (
+            {paginatedData.map((item) => (
               <PermitStatusCard key={item.id} item={item} />
             ))}
           </div>

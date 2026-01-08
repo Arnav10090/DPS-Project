@@ -371,9 +371,9 @@ const RequesterMergedChart: React.FC = () => {
 
       <div className="px-6 py-6 pb-0">
         {/* Filter Buttons and Legend */}
-        <div className="mb-6 flex items-center justify-between gap-3">
-          {/* Filter Buttons - Left Side */}
-          <div className="flex flex-wrap gap-3">
+        <div className="mb-6">
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap gap-3 mb-4">
             <Button
               variant={
                 selectedFilter === "last12months" ? "default" : "outline"
@@ -424,9 +424,133 @@ const RequesterMergedChart: React.FC = () => {
             >
               All Time
             </Button>
+            <Button
+              variant={
+                selectedFilter === "customDateRange" ? "default" : "outline"
+              }
+              size="sm"
+              onClick={() => {
+                setSelectedFilter("customDateRange");
+                setShowCustomDateInputs(true);
+              }}
+              className={
+                selectedFilter === "customDateRange"
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : ""
+              }
+            >
+              Custom Date Range
+            </Button>
           </div>
 
-          {/* Legend - Right Side */}
+          {/* Custom Date Inputs */}
+          {showCustomDateInputs && (
+            <div className="flex flex-wrap gap-3 mb-4 items-end">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="from-date" className="text-xs font-medium text-gray-700">
+                  From Date
+                </label>
+                <input
+                  id="from-date"
+                  type="date"
+                  value={customFromDate}
+                  onChange={(e) => setCustomFromDate(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="to-date" className="text-xs font-medium text-gray-700">
+                  To Date
+                </label>
+                <input
+                  id="to-date"
+                  type="date"
+                  value={customToDate}
+                  onChange={(e) => setCustomToDate(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Applied Filters Section */}
+          {(selectedFilter !== "last12months" || (selectedFilter === "customDateRange" && (customFromDate || customToDate))) && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+              <div className="text-xs font-semibold text-blue-900 mb-2">Applied Filters:</div>
+              <div className="flex flex-wrap gap-2">
+                {selectedFilter === "last12months" && (
+                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
+                    <span>Last 12 Months</span>
+                    <button
+                      onClick={() => setSelectedFilter("last12months")}
+                      className="text-blue-600 hover:text-blue-800"
+                      aria-label="Remove last 12 months filter"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+                {selectedFilter === "last6months" && (
+                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
+                    <span>Last 6 Months</span>
+                    <button
+                      onClick={() => setSelectedFilter("last12months")}
+                      className="text-blue-600 hover:text-blue-800"
+                      aria-label="Remove last 6 months filter"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+                {selectedFilter === "last5years" && (
+                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
+                    <span>Last 5 Years</span>
+                    <button
+                      onClick={() => setSelectedFilter("last12months")}
+                      className="text-blue-600 hover:text-blue-800"
+                      aria-label="Remove last 5 years filter"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+                {selectedFilter === "alltime" && (
+                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
+                    <span>All Time</span>
+                    <button
+                      onClick={() => setSelectedFilter("last12months")}
+                      className="text-blue-600 hover:text-blue-800"
+                      aria-label="Remove all time filter"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+                {selectedFilter === "customDateRange" && customFromDate && customToDate && (
+                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm border border-blue-300">
+                    <span>
+                      {new Date(customFromDate).toLocaleDateString()} to{" "}
+                      {new Date(customToDate).toLocaleDateString()}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setSelectedFilter("last12months");
+                        setCustomFromDate("");
+                        setCustomToDate("");
+                        setShowCustomDateInputs(false);
+                      }}
+                      className="text-blue-600 hover:text-blue-800"
+                      aria-label="Remove date range filter"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Legend */}
           <div className="flex flex-wrap gap-6 justify-end text-sm">
             <div className="flex items-center gap-2">
               <div

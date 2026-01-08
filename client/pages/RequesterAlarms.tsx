@@ -394,7 +394,7 @@ export default function RequesterAlarms() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b bg-slate-50">
-                        <th className="px-4 py-3 text-left">
+                        <th className="px-4 py-3 text-left border-r border-slate-400">
                           <input
                             type="checkbox"
                             onChange={(e) => {
@@ -406,12 +406,12 @@ export default function RequesterAlarms() {
                             checked={filtered.length > 0 && filtered.every(n => selected[n.id])}
                           />
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Permit ID</th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Alarm Name</th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Type</th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Description</th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Date & Time</th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Status</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 border-r border-slate-400">Permit ID</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 border-r border-slate-400">Alarm Name</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 border-r border-slate-400">Type</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 border-r border-slate-400">Description</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 border-r border-slate-400">Date & Time</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 border-r border-slate-400">Status</th>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Actions</th>
                       </tr>
                     </thead>

@@ -29,7 +29,7 @@ export default function ContractorStatsChart() {
           <Legend />
           <Bar dataKey="issued" name="Permits issued qty" fill="#1976d2" radius={[4, 4, 0, 0]} />
           <Bar dataKey="returned" name="Permits returned qty" fill="#4caf50" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="time" name="Time qty" fill="#ff9800" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="time" name="Permits returned on time" fill="#ff9800" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

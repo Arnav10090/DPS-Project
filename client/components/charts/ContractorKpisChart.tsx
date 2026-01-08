@@ -50,7 +50,7 @@ export default function ContractorKpisChart() {
           <LineChart data={raw}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" label={{ value: "X axis - Different contractor name", position: "insideBottom", offset: -5 }} />
-            <YAxis label={{ value: "Y axis - KPIs", angle: -100, position: "insideLeft" }} />
+            <YAxis label={{ value: "Y axis - KPIs", angle: -90, position: "insideLeft" }} />
             <Tooltip />
             <Legend />
             {show.time && <Line type="monotone" dataKey="returnedOnTime" name="Returned on time %" stroke="#4caf50" strokeWidth={2} dot={false} />}

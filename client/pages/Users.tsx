@@ -225,23 +225,44 @@ export default function AdminUsers() {
     rowIndex: number,
   ): ImportResult {
     try {
-      // Expected column order based on Excel file:
-      // Full Name, Employee ID, Email, Password, Phone, Gender, Department, Role
-      const columnMap: Record<string, number> = {};
-      headers.forEach((header, idx) => {
-        const normalized = header.toLowerCase().trim();
-        columnMap[normalized] = idx;
-      });
+      // Find column indices by fuzzy matching
+      const findColumnIndex = (target: string[]): number => {
+        for (let i = 0; i < headers.length; i++) {
+          const normalized = headers[i]
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .replace(/[^a-z0-9]/g, "");
+          for (const t of target) {
+            if (normalized.includes(t) || t.includes(normalized)) {
+              return i;
+            }
+          }
+        }
+        return -1;
+      };
 
-      // Extract values based on column positions
-      const name = row[columnMap["full name"] ?? 0] || "";
-      const employeeId = row[columnMap["employee id"] ?? 1] || "";
-      const email = row[columnMap["email"] ?? 2] || "";
-      const password = row[columnMap["password"] ?? 3] || "DefaultPass123!";
-      const phone = row[columnMap["phone"] ?? 4] || "";
-      const gender = row[columnMap["gender"] ?? 5] || "";
-      const department = row[columnMap["department"] ?? 6] || "";
-      const role = row[columnMap["role"] ?? 7] || "";
+      // Find column indices with fuzzy matching
+      const nameIdx = findColumnIndex(["fullname", "name"]);
+      const employeeIdx = findColumnIndex(["employeeid", "id", "employee"]);
+      const emailIdx = findColumnIndex(["email"]);
+      const passwordIdx = findColumnIndex(["password", "pass"]);
+      const phoneIdx = findColumnIndex(["phone"]);
+      const genderIdx = findColumnIndex(["gender"]);
+      const departmentIdx = findColumnIndex(["department", "dept"]);
+      const roleIdx = findColumnIndex(["role"]);
+
+      // Extract values safely
+      const name = nameIdx >= 0 ? (row[nameIdx] || "").trim() : "";
+      const employeeId = employeeIdx >= 0 ? (row[employeeIdx] || "").trim() : "";
+      const email = emailIdx >= 0 ? (row[emailIdx] || "").trim() : "";
+      const password =
+        passwordIdx >= 0 && row[passwordIdx]
+          ? (row[passwordIdx] || "").trim()
+          : "DefaultPass123!";
+      const phone = phoneIdx >= 0 ? (row[phoneIdx] || "").trim() : "";
+      const gender = genderIdx >= 0 ? (row[genderIdx] || "").trim() : "";
+      const department = departmentIdx >= 0 ? (row[departmentIdx] || "").trim() : "";
+      const role = roleIdx >= 0 ? (row[roleIdx] || "").trim() : "";
 
       // Validation
       if (!name || name.length === 0)

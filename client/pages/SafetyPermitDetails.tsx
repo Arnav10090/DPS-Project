@@ -740,47 +740,6 @@ export default function SafetyOfficerPermitDetails() {
                   </div>
                 </div>
 
-                {/* Comments from Approver — read-only, shows approver-saved items */}
-                <div className="mt-2 bg-yellow-50 p-3 rounded-md">
-                  <div className="text-md font-medium">
-                    Comments from Approver:
-                  </div>
-                  <div className="mt-2 space-y-1 text-sm">
-                    {form.approverToSafetyRequireUrgent && (
-                      <div>Require on urgent basis</div>
-                    )}
-                    {form.approverToSafetySafetyManagerApproval && (
-                      <div>Safety Manager approval required</div>
-                    )}
-                    {(form.approverToSafetyPlannedShutdown ||
-                      form.approverToSafetyPlannedShutdownDate) && (
-                      <div>
-                        Planned shutdown on:{" "}
-                        {form.approverToSafetyPlannedShutdownDate || ""}
-                      </div>
-                    )}
-                    {(form.approverToSafetyCustomComments || []).map(
-                      (it, idx) => (
-                        <div key={`app-sfty-${idx}`}>
-                          - {typeof it === "string" ? it : it.text}
-                        </div>
-                      ),
-                    )}
-                    {!form.approverToSafetyRequireUrgent &&
-                      !form.approverToSafetySafetyManagerApproval &&
-                      !(
-                        form.approverToSafetyPlannedShutdown ||
-                        form.approverToSafetyPlannedShutdownDate
-                      ) &&
-                      (form.approverToSafetyCustomComments || []).length ===
-                        0 && (
-                        <div className="text-gray-500">
-                          No comments from Approver yet.
-                        </div>
-                      )}
-                  </div>
-                </div>
-
                 {/* Specific Comments for Requester — SafetyOfficer can set */}
                 <div className="mt-4 bg-yellow-50 p-3 rounded-md">
                   <div className="text-md font-medium">

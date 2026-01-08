@@ -712,18 +712,26 @@ export default function AdminUsers() {
             </div>
 
             <div className="rounded-lg bg-blue-50 p-3 text-xs text-blue-900">
-              <strong>Expected CSV Format:</strong>
-              <div className="mt-1 font-mono">
-                Full Name, Employee ID, Email, Phone, Gender, Department, Role, Status, Password
+              <strong>Expected Excel/CSV Column Order:</strong>
+              <div className="mt-1 font-mono text-xs">
+                Full Name | Employee ID | Email | Password | Phone | Gender | Department | Role
               </div>
               <div className="mt-2">
-                <strong>Notes:</strong>
+                <strong>Required Fields:</strong>
                 <ul className="mt-1 list-inside list-disc space-y-1">
-                  <li>All fields except Phone, Gender, and Password are required</li>
-                  <li>Email must be valid format</li>
-                  <li>Role must be: Requester, Approver, Safety Officer, or Administrator</li>
-                  <li>Status must be: active or inactive (defaults to active)</li>
-                  <li>Password defaults to "DefaultPass123!" if not provided</li>
+                  <li>Full Name</li>
+                  <li>Employee ID</li>
+                  <li>Email (must be valid format)</li>
+                  <li>Department</li>
+                  <li>Role (Requester, Approver, Safety Officer, or Administrator)</li>
+                </ul>
+              </div>
+              <div className="mt-2">
+                <strong>Optional Fields:</strong>
+                <ul className="mt-1 list-inside list-disc space-y-1">
+                  <li>Password (defaults to "DefaultPass123!" if left empty)</li>
+                  <li>Phone</li>
+                  <li>Gender</li>
                 </ul>
               </div>
             </div>

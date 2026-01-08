@@ -434,7 +434,7 @@ export default function RequesterAlarms() {
                             key={n.id}
                             className={`border-b hover:bg-slate-50 transition-colors ${!n.read ? 'bg-blue-50' : ''}`}
                           >
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 border-r border-slate-400">
                               <input
                                 type="checkbox"
                                 checked={!!selected[n.id]}
@@ -442,12 +442,12 @@ export default function RequesterAlarms() {
                                 aria-label={`Select notification ${n.id}`}
                               />
                             </td>
-                            <td className="px-4 py-3 text-sm font-medium text-slate-900">
+                            <td className="px-4 py-3 text-sm font-medium text-slate-900 border-r border-slate-400">
                               <span className="inline-flex items-center gap-1 bg-slate-100 px-2 py-1 rounded">
                                 {n.permitId}
                               </span>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 border-r border-slate-400">
                               <div className={`text-sm ${n.read ? 'text-slate-700' : 'font-semibold text-slate-900'}`}>
                                 {n.title}
                               </div>

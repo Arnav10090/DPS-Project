@@ -1031,6 +1031,98 @@ export default function AdminUsers() {
         </DialogContent>
       </Dialog>
 
+      {/* Export Format Dialog */}
+      <Dialog open={showExportFormat} onOpenChange={setShowExportFormat}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Export Users</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Select the format you'd like to export the users in:
+            </p>
+            <div className="flex gap-3">
+              <Button
+                className="flex-1"
+                onClick={() => handleExportUsers("csv")}
+              >
+                Export as CSV
+              </Button>
+              <Button
+                className="flex-1"
+                onClick={() => handleExportUsers("xlsx")}
+              >
+                Export as Excel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change Department Dialog */}
+      <Dialog open={showChangeDept} onOpenChange={setShowChangeDept}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Change Department</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Select the department to move the selected users to:
+            </p>
+            <Select value={selectedDeptChange} onValueChange={setSelectedDeptChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Department" />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.map((d) => (
+                  <SelectItem key={d} value={d}>
+                    {d}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <DialogFooter>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowChangeDept(false);
+                    setSelectedDeptChange("");
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (!selectedDeptChange) {
+                      alert("Please select a department");
+                      return;
+                    }
+
+                    const selectedUsers = filtered.filter(
+                      (u) => selected[u.id]
+                    );
+                    setUsers((prev) =>
+                      prev.map((u) =>
+                        selectedUsers.some((su) => su.id === u.id)
+                          ? { ...u, department: selectedDeptChange }
+                          : u
+                      )
+                    );
+
+                    setSelected({});
+                    setShowChangeDept(false);
+                    setSelectedDeptChange("");
+                  }}
+                >
+                  Change Department
+                </Button>
+              </div>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Bulk Import Results Modal */}
       <Dialog
         open={importResults.length > 0}

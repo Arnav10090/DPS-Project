@@ -98,6 +98,33 @@ export default function ApproverPermitDetails() {
     useState("");
   const navigate = useNavigate();
 
+  // Helper function to check if at least one comment is selected for requester
+  const hasRequesterComment = () => {
+    const hasCheckedOption =
+      form.approverRequireUrgent ||
+      form.approverSafetyManagerApproval ||
+      form.approverPlannedShutdown;
+    const hasCheckedCustom = (form.approverCustomComments || []).some(
+      (item: any) => typeof item !== "string" && item.checked,
+    );
+    return hasCheckedOption || hasCheckedCustom;
+  };
+
+  // Helper function to check if at least one comment is selected for safety officer
+  const hasSafetyOfficerComment = () => {
+    const hasCheckedOption =
+      form.approverToSafetyRequireUrgent ||
+      form.approverToSafetySafetyManagerApproval ||
+      form.approverToSafetyPlannedShutdown;
+    const hasCheckedCustom = (form.approverToSafetyCustomComments || []).some(
+      (item: any) => typeof item !== "string" && item.checked,
+    );
+    return hasCheckedOption || hasCheckedCustom;
+  };
+
+  // Check if Reject button should be enabled
+  const isRejectEnabled = hasRequesterComment() && hasSafetyOfficerComment();
+
   useEffect(() => {
     // Force approver role for this page
     try {

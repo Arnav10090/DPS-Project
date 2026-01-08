@@ -81,8 +81,8 @@ export default function PermitFilters({
   return (
     <div className="mb-4 space-y-2">
       <div className="bg-card border p-3 rounded-lg shadow-sm">
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="relative flex-1 min-w-60">
+        <div className="flex items-center gap-8">
+          <div className="relative w-64">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <svg
                 className="w-4 h-4 text-muted-foreground"
@@ -99,7 +99,7 @@ export default function PermitFilters({
               </svg>
             </div>
             <Input
-              placeholder="Search permits, companies, or permit numbers..."
+              placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10 pr-10 w-full h-9 min-w-0 text-sm"
@@ -116,80 +116,33 @@ export default function PermitFilters({
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="text-xs text-gray-600 whitespace-nowrap">From:</div>
             <Input
               type="date"
               value={dateFrom || ""}
               onChange={(e) => setDateFrom(e.target.value || null)}
-              className="h-9 w-24 min-w-0 text-xs"
+              className="h-9 w-40 min-w-0 text-xs"
               aria-label="From date"
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="text-xs text-gray-600 whitespace-nowrap">To:</div>
             <Input
               type="date"
               value={dateTo || ""}
               onChange={(e) => setDateTo(e.target.value || null)}
-              className="h-9 w-24 min-w-0 text-xs"
+              className="h-9 w-40 min-w-0 text-xs"
               aria-label="To date"
             />
           </div>
 
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => applyPreset("today")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Today"
-            >
-              Today
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("week")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Last 7 days"
-            >
-              Week
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("month")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Last 30 days"
-            >
-              Month
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("30")}
-              className="text-xs px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
-              title="Last 30 days"
-            >
-              30d
-            </button>
-          </div>
-
-          {activeFilterCount > 0 && (
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs ml-auto">
-              <span>
-                {activeFilterCount} filter{activeFilterCount > 1 ? "s" : ""}
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="bg-card border p-3 rounded-lg shadow-sm">
-        <div className="flex items-center gap-2 flex-wrap">
           <Select
             value={plantFilter ?? "__all__"}
             onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
           >
-            <SelectTrigger className="h-9 w-32 text-sm">
+            <SelectTrigger className="h-9 w-48 text-sm">
               <SelectValue placeholder="Plant" />
             </SelectTrigger>
             <SelectContent>
@@ -206,7 +159,7 @@ export default function PermitFilters({
             value={statusFilter ?? "__all__"}
             onValueChange={(v) => setStatusFilter(v === "__all__" ? null : v)}
           >
-            <SelectTrigger className="h-9 w-36 text-sm">
+            <SelectTrigger className="h-9 w-48 text-sm">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -219,79 +172,92 @@ export default function PermitFilters({
             </SelectContent>
           </Select>
 
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="h-9 w-20 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-            </SelectContent>
-          </Select>
+          {activeFilterCount > 0 && (
+            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs">
+              <span>
+                {activeFilterCount} filter{activeFilterCount > 1 ? "s" : ""}
+              </span>
+            </div>
+          )}
 
-          <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm ml-auto">
-            <button
-              onClick={() => setPage(1)}
-              disabled={page === 1}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="First page"
-              title="First page"
+          <div className="flex items-center gap-2 ml-auto">
+            <Select
+              value={String(pageSize)}
+              onValueChange={(v) => setPageSize(Number(v))}
             >
-              «
-            </button>
-            <button
-              onClick={goPrev}
-              disabled={page <= 1}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="Previous page"
-              title="Previous page"
-            >
-              ‹
-            </button>
-            {pageRange(page, totalPages).map((p, idx) =>
-              typeof p === "string" ? (
-                <span key={idx} className="px-2 text-xs text-muted-foreground">
-                  {p}
-                </span>
-              ) : (
-                <button
-                  key={p}
-                  onClick={() => setPage(Number(p))}
-                  className={cn(
-                    "px-2 py-1 rounded text-xs",
-                    p === page
-                      ? "bg-primary text-white shadow"
-                      : "hover:bg-gray-100",
-                  )}
-                  aria-current={p === page}
-                >
-                  {p}
-                </button>
-              ),
-            )}
-            <button
-              onClick={goNext}
-              disabled={page >= totalPages}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="Next page"
-              title="Next page"
-            >
-              ›
-            </button>
-            <button
-              onClick={() => setPage(totalPages)}
-              disabled={page === totalPages}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="Last page"
-              title="Last page"
-            >
-              »
-            </button>
-          </nav>
+              <SelectTrigger className="h-9 w-16 text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm">
+              <button
+                onClick={() => setPage(1)}
+                disabled={page === 1}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="First page"
+                title="First page"
+              >
+                «
+              </button>
+              <button
+                onClick={goPrev}
+                disabled={page <= 1}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="Previous page"
+                title="Previous page"
+              >
+                ‹
+              </button>
+              {pageRange(page, totalPages).map((p, idx) =>
+                typeof p === "string" ? (
+                  <span
+                    key={idx}
+                    className="px-2 text-xs text-muted-foreground"
+                  >
+                    {p}
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => setPage(Number(p))}
+                    className={cn(
+                      "px-2 py-1 rounded text-xs",
+                      p === page
+                        ? "bg-primary text-white shadow"
+                        : "hover:bg-gray-100",
+                    )}
+                    aria-current={p === page}
+                  >
+                    {p}
+                  </button>
+                ),
+              )}
+              <button
+                onClick={goNext}
+                disabled={page >= totalPages}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="Next page"
+                title="Next page"
+              >
+                ›
+              </button>
+              <button
+                onClick={() => setPage(totalPages)}
+                disabled={page === totalPages}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="Last page"
+                title="Last page"
+              >
+                »
+              </button>
+            </nav>
+          </div>
         </div>
       </div>
 

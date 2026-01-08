@@ -191,6 +191,84 @@ export default function PermitFilters({
         </div>
       </div>
 
+      <div className="flex items-center gap-6 flex-wrap">
+        <div className="flex flex-col">
+          <div className="text-md text-gray-700">
+            <p>
+              <strong>Plant:</strong>
+            </p>
+          </div>
+          <Select
+            value={plantFilter ?? "__all__"}
+            onValueChange={(v) => setPlantFilter(v === "__all__" ? null : v)}
+          >
+            <SelectTrigger className="h-9 w-44 text-sm">
+              <SelectValue placeholder="Plant: All" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">All</SelectItem>
+              {plants.map((p) => (
+                <SelectItem key={p} value={p}>
+                  {p}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="text-md text-gray-700">
+            <p>
+              <strong>Status:</strong>
+            </p>
+          </div>
+          <div className="inline-flex gap-2 items-center">
+            <button
+              className={cn(
+                "px-3 py-2 rounded-md text-sm",
+                statusFilter === null ? "bg-primary text-white" : "bg-gray-100",
+              )}
+              onClick={() => setStatusFilter(null)}
+            >
+              All
+            </button>
+            {statuses.map((s) => (
+              <button
+                key={s}
+                className={cn(
+                  "px-3 py-2 rounded-md text-sm",
+                  statusFilter === s ? "bg-primary text-white" : "bg-gray-100",
+                )}
+                onClick={() => setStatusFilter(statusFilter === s ? null : s)}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="text-sm text-gray-700">
+            <p>
+              <strong>Rows:</strong>
+            </p>
+          </div>
+          <Select
+            value={String(pageSize)}
+            onValueChange={(v) => setPageSize(Number(v))}
+          >
+            <SelectTrigger className="h-9 w-24 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <div className="mt-2">
         <div className="flex flex-wrap gap-2">
           {debouncedSearch && (

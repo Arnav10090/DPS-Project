@@ -180,79 +180,81 @@ export default function PermitFilters({
             </div>
           )}
 
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="h-9 w-16 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2 ml-auto">
+            <Select
+              value={String(pageSize)}
+              onValueChange={(v) => setPageSize(Number(v))}
+            >
+              <SelectTrigger className="h-9 w-16 text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm ml-auto">
-            <button
-              onClick={() => setPage(1)}
-              disabled={page === 1}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="First page"
-              title="First page"
-            >
-              «
-            </button>
-            <button
-              onClick={goPrev}
-              disabled={page <= 1}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="Previous page"
-              title="Previous page"
-            >
-              ‹
-            </button>
-            {pageRange(page, totalPages).map((p, idx) =>
-              typeof p === "string" ? (
-                <span key={idx} className="px-2 text-xs text-muted-foreground">
-                  {p}
-                </span>
-              ) : (
-                <button
-                  key={p}
-                  onClick={() => setPage(Number(p))}
-                  className={cn(
-                    "px-2 py-1 rounded text-xs",
-                    p === page
-                      ? "bg-primary text-white shadow"
-                      : "hover:bg-gray-100",
-                  )}
-                  aria-current={p === page}
-                >
-                  {p}
-                </button>
-              ),
-            )}
-            <button
-              onClick={goNext}
-              disabled={page >= totalPages}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="Next page"
-              title="Next page"
-            >
-              ›
-            </button>
-            <button
-              onClick={() => setPage(totalPages)}
-              disabled={page === totalPages}
-              className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
-              aria-label="Last page"
-              title="Last page"
-            >
-              »
-            </button>
-          </nav>
+            <nav className="flex items-center gap-1 bg-white border rounded-md px-2 py-1 shadow-sm">
+              <button
+                onClick={() => setPage(1)}
+                disabled={page === 1}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="First page"
+                title="First page"
+              >
+                «
+              </button>
+              <button
+                onClick={goPrev}
+                disabled={page <= 1}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="Previous page"
+                title="Previous page"
+              >
+                ‹
+              </button>
+              {pageRange(page, totalPages).map((p, idx) =>
+                typeof p === "string" ? (
+                  <span key={idx} className="px-2 text-xs text-muted-foreground">
+                    {p}
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => setPage(Number(p))}
+                    className={cn(
+                      "px-2 py-1 rounded text-xs",
+                      p === page
+                        ? "bg-primary text-white shadow"
+                        : "hover:bg-gray-100",
+                    )}
+                    aria-current={p === page}
+                  >
+                    {p}
+                  </button>
+                ),
+              )}
+              <button
+                onClick={goNext}
+                disabled={page >= totalPages}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="Next page"
+                title="Next page"
+              >
+                ›
+              </button>
+              <button
+                onClick={() => setPage(totalPages)}
+                disabled={page === totalPages}
+                className="px-2 py-1 text-xs rounded disabled:opacity-50 hover:bg-gray-100"
+                aria-label="Last page"
+                title="Last page"
+              >
+                »
+              </button>
+            </nav>
+          </div>
         </div>
       </div>
 

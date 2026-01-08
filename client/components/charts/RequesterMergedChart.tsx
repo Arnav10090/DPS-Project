@@ -323,11 +323,19 @@ const RequesterMergedChart: React.FC = () => {
         });
       case "alltime":
         return allData;
+      case "customDateRange":
+        if (!customFromDate || !customToDate) return [];
+        const fromDate = new Date(customFromDate);
+        const toDate = new Date(customToDate);
+        return allData.filter((item) => {
+          const itemDate = new Date(item.year, item.month - 1);
+          return itemDate >= fromDate && itemDate <= toDate;
+        });
       case "last12months":
       default:
         return allData.slice(-12);
     }
-  }, [selectedFilter]);
+  }, [selectedFilter, customFromDate, customToDate]);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {

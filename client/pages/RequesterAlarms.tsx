@@ -457,10 +457,10 @@ export default function RequesterAlarms() {
                                 </span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-sm">
+                            <td className="px-4 py-3 text-sm border-r border-slate-400">
                               <div className="flex items-center gap-2">
                                 <Icon size={14} className="text-slate-500" />
-                                <span className="text-slate-700">{config.label}</span>
+                                <span className="text-slate-700">{config.alarmType}</span>
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-600 max-w-xs">
